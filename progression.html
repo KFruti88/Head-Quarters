@@ -1,1 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gainesville HQ | Master Progression Archive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        
+        :root {
+            --fs-dark: #0f1113;
+            --farm-orange: #ff4f00;
+            --farm-red: #c41e3a;
+            --canyon: #ea580c;
+        }
 
+        body {
+            background-color: transparent;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            font-size: 12px;
+            margin: 0;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(26, 29, 33, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            height: 750px;
+        }
+
+        .header-badge {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: monospace;
+            color: #94a3b8;
+        }
+
+        .meta-pill {
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: 900;
+            font-size: 8px;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-right: 4px;
+        }
+
+        /* Tactical Metadata Colors */
+        .badge-career { background: #f472b6; color: white; }
+        .badge-multi { background: #fbbf24; color: black; }
+        .badge-single { background: #ef4444; color: white; }
+        .badge-multiple { background: #2dd4bf; color: black; }
+        .badge-self { background: #a855f7; color: white; }
+        .badge-ai { background: var(--canyon); color: white; }
+
+        .progress-bar-sm { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; width: 100%; }
+        .progress-fill { height: 100%; transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .trophy-desc { font-size: 11px; line-height: 1.2; color: #94a3b8; margin-bottom: 8px; }
+        
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-screen-2xl mx-auto">
+        <!-- Werewolf (Farm 02) -->
+        <div class="glass-panel border-t-2 border-orange-600">
+            <div class="p-4 flex flex-col h-full">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-black uppercase tracking-widest text-orange-500">Werewolf Archive</h2>
+                    <span class="header-badge" id="ww-count">9 / 46</span>
+                </div>
+                <div id="werewolf-list" class="space-y-3 overflow-y-auto pr-1"></div>
+            </div>
+        </div>
+
+        <!-- Ray (Farm 01) -->
+        <div class="glass-panel border-t-2 border-red-600">
+            <div class="p-4 flex flex-col h-full">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="font-black uppercase tracking-widest text-red-500">Ray Archive</h2>
+                    <span class="header-badge" id="ray-count">19 / 46</span>
+                </div>
+                <div id="ray-list" class="space-y-3 overflow-y-auto pr-1"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BRIDGE_URL = "live_vault.xml";
+
+        // Current numerical stats (Mocked for initial load)
+        let LIVE_STATS = {
+            1: { hectares: 12, distance: 42, missions: 2, horse_jumps: 10, ai_hectares: 0, hours: 12, stones: 5, trees: 0, items: 10 },
+            2: { hectares: 95, distance: 88, missions: 9, horse_jumps: 0, ai_hectares: 0.8, hours: 44, stones: 90, trees: 12, items: 25 }
+        };
+
+        const TROPHIES = [
+            { id: "T1", title: "Farming is in our nature", total: 100, unit: "ha", stat: "hectares", mp: true, session: "Multiple", help: "AI", desc: "Plant today - harvest tomorrow." },
+            { id: "T2", title: "Road Trip", total: 100, unit: "km", stat: "distance", mp: true, session: "Multiple", help: "Self", desc: "That thing wouldn't have fit onto the street anyway." },
+            { id: "T3", title: "Plant get enough", total: 1, unit: "ha", stat: "hectares", mp: true, session: "Multiple", help: "AI", desc: "A little help can go a long way." },
+            { id: "T4", title: "The plot thickens", total: 1, unit: "ha", stat: "hectares", mp: true, session: "Multiple", help: "AI", desc: "Reach maximum efficiency." },
+            { id: "T5", title: "Allez hopp", total: 1, unit: "jump", stat: "horse_jumps", mp: true, session: "Single", help: "Self", desc: "Oh, they can do THAT as well?" },
+            { id: "T6", title: "You are not a kangaroo", total: 100, unit: "jumps", stat: "horse_jumps", mp: true, session: "Multiple", help: "Self", desc: "Seriously, think of the animal!" },
+            { id: "T7", title: "Giddy-up!", total: 1, unit: "ride", stat: null, mp: true, session: "Single", help: "Self", desc: "Used to getting around like this…" },
+            { id: "T8", title: "Thoroughbred!", total: 100, unit: "%", stat: null, mp: true, session: "Multiple", help: "Self", desc: "I'm a real cowboy, mom!" },
+            { id: "T9", title: "Help me to help you", total: 1, unit: "job", stat: "missions", mp: true, session: "Single", help: "Both", desc: "Sure, I can take care of that, neighbour." },
+            { id: "T10", title: "Helper A does not stop … ever", total: 1, unit: "ha", stat: "ai_hectares", mp: true, session: "Multiple", help: "AI", desc: "Worker harvests 1ha on owned land." },
+            { id: "T11", title: "It's just the beginning", total: 1, unit: "hr", stat: "hours", mp: true, session: "Single", help: "Self", desc: "Never felt happier than here." },
+            { id: "T12", title: "Just a sprinkle", total: 100, unit: "ha", stat: null, mp: true, session: "Multiple", help: "AI", desc: "Think about the future." },
+            { id: "T13", title: "It's sow easy", total: 100, unit: "ha", stat: null, mp: true, session: "Multiple", help: "AI", desc: "Planting one bean yields green." },
+            { id: "T14", title: "Own use", total: 1, unit: "ha", stat: "hectares", mp: true, session: "Single", help: "Self", desc: "Reap what you sow. Owned field only." },
+            { id: "T15", title: "Large-scale supplier", total: 100, unit: "items", stat: "items", mp: true, session: "Multiple", help: "Both", desc: "These are the fruits of your labour." },
+            { id: "T16", title: "Field Trip", total: 150, unit: "km", stat: "distance", mp: false, session: "Multiple", help: "Self", desc: "One vehicle for all of your needs." },
+            { id: "T17", title: "Long haul", total: 10, unit: "hrs", stat: "hours", mp: false, session: "Multiple", help: "Self", desc: "In it for the long game, I see." },
+            { id: "T18", title: "van Gogh", total: 1, unit: "time", stat: null, mp: true, session: "Single", help: "Self", desc: "Look at Mr. Fancypants over there." },
+            { id: "T19", title: "It just fell off", total: 1, unit: "time", stat: null, mp: true, session: "Single", help: "Self", desc: "It was only a matter of time…" },
+            { id: "T20", title: "Fix me up", total: 25, unit: "times", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Consider a membership card." },
+            { id: "T21", title: "Fluffiness", total: 30, unit: "sheep", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Wool empire." },
+            { id: "T22", title: "Three little piggies…", total: 50, unit: "pigs", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Amazing how much food they need." },
+            { id: "T23", title: "Clucky Streak", total: 100, unit: "qty", stat: null, mp: true, session: "Single", help: "Self", desc: "Now that's a lot of Easter eggs." },
+            { id: "T24", title: "Bringing in the Honey", total: 1, unit: "pallet", stat: null, mp: true, session: "Multiple", help: "AI", desc: "One busy bee." },
+            { id: "T25", title: "Cowherd", total: 30, unit: "cows", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Didn't think it was work?" },
+            { id: "T26", title: "I like to switch it up", total: 10, unit: "veh", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Getting there." },
+            { id: "T27", title: "This is just my weekend vehicle", total: 30, unit: "veh", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Each and every one." },
+            { id: "T28", title: "Vehicle fleet", total: 60, unit: "veh", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Problem?" },
+            { id: "T29", title: "I read Shakespeare and stuff", total: 20, unit: "items", stat: null, mp: true, session: "Multiple", help: "Self", desc: "First step." },
+            { id: "T30", title: "Highly cultivated", total: 100, unit: "ha", stat: null, mp: true, session: "Multiple", help: "AI", desc: "A little proud." },
+            { id: "T31", title: "Ultimutt Pawesomeness", total: 1, unit: "pet", stat: null, mp: true, session: "Single", help: "Self", desc: "Who's a good boy?" },
+            { id: "T32", title: "That's a wrap", total: 40, unit: "bales", stat: null, mp: true, session: "Multiple", help: "Both", desc: "What's in the bale?" },
+            { id: "T33", title: "Gone but not for cotton", total: 40, unit: "bales", stat: null, mp: true, session: "Multiple", help: "Both", desc: "Where store them?" },
+            { id: "T34", title: "Raisin the stakes", total: 60000, unit: "L", stat: null, mp: true, session: "Multiple", help: "Both", desc: "Californian gold!" },
+            { id: "T35", title: "Olea europaea", total: 60000, unit: "L", stat: null, mp: true, session: "Multiple", help: "Both", desc: "It's a fruit!" },
+            { id: "T36", title: "Original grain", total: 100, unit: "ha", stat: null, mp: true, session: "Multiple", help: "AI", desc: "Horses crazy for it." },
+            { id: "T37", title: "Rock on", total: 100, unit: "stones", stat: "stones", mp: true, session: "Multiple", help: "Self", desc: "Paved with rocks." },
+            { id: "T38", title: "You wood not believe it", total: 25, unit: "trees", stat: "trees", mp: true, session: "Multiple", help: "Self", desc: "Taking a leaf." },
+            { id: "T39", title: "I'm stumped", total: 1, unit: "tree", stat: "trees", mp: true, session: "Single", help: "Self", desc: "Does one hand clap in the forest?" },
+            { id: "T40", title: "Hard work pays off", total: 10, unit: "jobs", stat: "missions", mp: true, session: "Multiple", help: "Both", desc: "Spend it, right?" },
+            { id: "T41", title: "All out of Land", total: 1, unit: "map", stat: null, mp: true, session: "Single", help: "Self", desc: "Light touches mine." },
+            { id: "T42", title: "Well-Oiled Machine", total: 10, unit: "fact", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Franchise this." },
+            { id: "T43", title: "Pretty colourful", total: 100, unit: "times", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Childhood memories." },
+            { id: "T44", title: "Game on", total: 100, unit: "hrs", stat: "hours", mp: true, session: "Multiple", help: "Self", desc: "Collector myself." },
+            { id: "T45", title: "Cheese it", total: 100, unit: "pal", stat: null, mp: true, session: "Multiple", help: "AI", desc: "Fondue?" },
+            { id: "T46", title: "It's never too late to farm", total: 45, unit: "trophies", stat: null, mp: true, session: "Multiple", help: "Self", desc: "Home sweet home." }
+        ];
+
+        // Hard-synced earned states
+        const EARNED_WW = ["T9", "T31", "T39", "T40", "T41", "T42", "T5", "T38", "T7"];
+        const EARNED_RAY = ["T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12", "T13", "T14", "T15", "T16", "T17", "T18", "T19"];
+
+        function drawSection(id, earnedList, farmId) {
+            const container = document.getElementById(id);
+            const countEl = document.getElementById(farmId === 2 ? 'ww-count' : 'ray-count');
+            
+            // Sort: High Progress > Not Started > Earned (at bottom)
+            const sorted = [...TROPHIES].sort((a, b) => {
+                const aE = earnedList.includes(a.id), bE = earnedList.includes(b.id);
+                if (aE && !bE) return 1; if (!aE && bE) return -1;
+                
+                const pA = Math.min(99, Math.floor(((LIVE_STATS[farmId]?.[a.stat] || 0) / a.total) * 100));
+                const pB = Math.min(99, Math.floor(((LIVE_STATS[farmId]?.[b.stat] || 0) / b.total) * 100));
+                return pB - pA;
+            });
+
+            countEl.innerText = `${earnedList.length} / 46`;
+
+            container.innerHTML = sorted.map(t => {
+                const isEarned = earnedList.includes(t.id);
+                const currentVal = LIVE_STATS[farmId]?.[t.stat] || 0;
+                const percent = isEarned ? 100 : Math.min(99, Math.floor((currentVal / t.total) * 100));
+                
+                let badges = `<span class="meta-pill badge-career">Career</span>`;
+                if (t.mp) badges += `<span class="meta-pill badge-multi">Multiplayer [MP]</span>`;
+                
+                badges += `<span class="meta-pill ${t.session === 'Single' ? 'badge-single' : 'badge-multiple'}">${t.session} Session</span>`;
+                badges += `<span class="meta-pill ${t.help === 'AI' ? 'badge-ai' : (t.help === 'Self' ? 'badge-self' : 'badge-ai')}">${t.help === 'Both' ? 'AI/Self OK' : t.help + ' Help'}</span>`;
+
+                return `
+                <div class="p-3 bg-white/5 border border-white/10 rounded mb-2 ${isEarned ? 'opacity-40 grayscale border-green-500/20' : ''}">
+                    <div class="flex justify-between font-black uppercase mb-1">
+                        <span>${t.title}</span>
+                        <span class="text-emerald-400 font-mono text-[10px] uppercase">
+                            ${isEarned ? 'Earned' : `${currentVal} / ${t.total} ${t.unit || ''}`}
+                        </span>
+                    </div>
+                    <div class="mb-2 flex flex-wrap gap-y-1">${badges}</div>
+                    <p class="trophy-desc">${t.desc}</p>
+                    <div class="progress-bar-sm">
+                        <div class="progress-fill ${isEarned ? 'bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.3)]' : 'bg-blue-500'}" 
+                             style="width: ${percent}%"></div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        async function fetchVault() {
+            try {
+                const res = await fetch(BRIDGE_URL + '?t=' + Date.now());
+                if (res.ok) {
+                    const xml = (new DOMParser()).parseFromString(await res.text(), "text/xml");
+                    xml.querySelectorAll('Farm').forEach(f => {
+                        const id = parseInt(f.getAttribute('id'));
+                        const stats = f.querySelector('Stats');
+                        if (stats && LIVE_STATS[id]) {
+                            LIVE_STATS[id].hectares = parseFloat(stats.getAttribute('hectaresPlowed')) || 0;
+                            LIVE_STATS[id].distance = (parseFloat(stats.getAttribute('distanceDriven')) || 0) / 1000;
+                            LIVE_STATS[id].missions = parseInt(stats.getAttribute('missionsCompleted')) || 0;
+                        }
+                    });
+                }
+            } catch (e) {}
+            drawSection('werewolf-list', EARNED_WW, 2);
+            drawSection('ray-list', EARNED_RAY, 1);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { 
+            fetchVault();
+            setInterval(fetchVault, 30000);
+        });
+    </script>
+</body>
+</html>
