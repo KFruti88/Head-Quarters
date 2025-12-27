@@ -6,19 +6,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
-        :root { 
-            --f1: #FF5F00; 
-            --f2: #C41E3A; 
-            --f0: #444444; 
-            --glass: rgba(15, 15, 15, 0.85); 
-        }
+        :root { --f1: #FF5F00; --f2: #C41E3A; --f0: #444444; --glass: rgba(15, 15, 15, 0.85); }
         body { background: radial-gradient(circle at top right, #1a1a1a, #000); color: #ccc; font-family: 'JetBrains Mono', monospace; font-size: 11px; min-height: 100vh; }
-        .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); border-radius: 8px; }
+        .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); }
         .f1-text { color: var(--f1); text-shadow: 0 0 8px rgba(255, 95, 0, 0.4); }
         .f1-border { border-color: var(--f1); }
         .f2-text { color: var(--f2); text-shadow: 0 0 8px rgba(196, 30, 58, 0.4); }
         .f2-border { border-color: var(--f2); }
-        .header-box { padding: 12px; min-width: 250px; }
         .scroll-box { height: 400px; overflow-y: auto; padding: 15px; background: rgba(0, 0, 0, 0.4); }
         .card-inner { background: rgba(255, 255, 255, 0.03); padding: 10px; margin-bottom: 10px; border-radius: 4px; border-left: 4px solid; }
         .hud-bar-bg { background: #222; height: 6px; border-radius: 3px; margin-top: 6px; overflow: hidden; border: 1px solid #333; }
@@ -32,30 +26,27 @@
 
     <header class="flex justify-between items-start mb-10 border-b border-gray-800 pb-8">
         <div class="flex flex-col">
-            <div class="flex items-center">
-                <span class="h-3 w-3 rounded-full bg-green-500 mr-3 shadow-[0_0_10px_#0f0]"></span>
-                <b class="text-4xl text-white uppercase font-black italic tracking-tighter">618 TACTICAL</b>
-            </div>
-            <span class="text-xs text-blue-400 font-bold tracking-widest mt-1 uppercase">Operational Status: Secure</span>
+            <b class="text-4xl text-white uppercase font-black italic tracking-tighter">618 TACTICAL</b>
+            <span class="text-xs text-blue-400 font-bold tracking-widest uppercase">Operational Status: Secure</span>
         </div>
 
         <div class="flex gap-6">
-            <div class="header-box glass-panel f1-border">
+            <div class="glass-panel f1-border p-3 min-w-[220px]">
                 <div class="f1-text font-black text-xs uppercase">F1: FUNNY FARMS (Werewolf)</div>
                 <div class="text-white text-3xl font-black" id="f1-head-money">$0</div>
                 <div id="time-gnv" class="text-[10px] text-gray-400 font-bold mt-1">ET: --:--</div>
-                <div id="weather-gnv" class="text-[10px] text-gray-500 uppercase">WEATHER: LOADING...</div>
+                <div id="weather-gnv" class="text-[10px] text-gray-500 uppercase">WEATHER: --</div>
             </div>
-            <div class="header-box glass-panel f2-border">
+            <div class="glass-panel f2-border p-3 min-w-[220px]">
                 <div class="f2-text font-black text-xs uppercase">F2: DUMBBELL'S FARM (Ray)</div>
                 <div class="text-white text-3xl font-black" id="f2-head-money">$0</div>
                 <div id="time-flora" class="text-[10px] text-gray-400 font-bold mt-1">CT: --:--</div>
-                <div id="weather-flora" class="text-[10px] text-gray-500 uppercase">WEATHER: LOADING...</div>
+                <div id="weather-flora" class="text-[10px] text-gray-500 uppercase">WEATHER: --</div>
             </div>
-            <div class="header-box glass-panel border-blue-500">
+            <div class="glass-panel border-blue-500 p-3 min-w-[150px]">
                 <div class="text-blue-400 font-black text-xs uppercase tracking-widest">Game Sync</div>
                 <div id="game-time" class="text-white text-3xl font-black">00:00</div>
-                <div id="game-date" class="text-[10px] text-gray-400 font-bold italic uppercase">Day 1 | Sunny</div>
+                <div id="game-date" class="text-[10px] text-gray-400 font-bold italic uppercase">--</div>
             </div>
         </div>
 
@@ -98,12 +89,12 @@
     </div>
 
     <div class="mt-12 border-t border-gray-800 pt-8">
-        <h2 class="text-gray-600 font-black mb-4 uppercase text-center italic">System Uplink: Global Map Data (Farm 0)</h2>
+        <h2 class="text-gray-600 font-black mb-4 uppercase text-center italic">Global Uplink (Farm 0)</h2>
         <div class="grid grid-cols-4 gap-6">
             <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">System Fleet</h3><div id="f0-fleet" class="scroll-box opacity-40"></div></div>
             <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">System Assets</h3><div id="f0-prod" class="scroll-box opacity-40"></div></div>
-            <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">NPC Fields</h3><div id="f0-fields" class="scroll-box opacity-40"></div></div>
-            <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">Global Vault</h3><div class="scroll-box opacity-60"><div class="card-inner border-gray-800"><b>SYSTEM FUNDS</b><br><span id="f0-money" class="text-white text-xl font-bold">$0</span></div></div></div>
+            <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">NPC Land</h3><div id="f0-fields" class="scroll-box opacity-40"></div></div>
+            <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">System Vault</h3><div class="scroll-box opacity-60"><div class="card-inner border-gray-800"><b>SYSTEM FUNDS</b><br><span id="f0-money" class="text-white text-xl font-bold">$0</span></div></div></div>
         </div>
     </div>
 
@@ -111,68 +102,67 @@
         const fillLabels = { 'SOUPCANSBEETROOT': 'Beetroot Soup', 'BEETROOT': 'Beetroot', 'SOUPCANSPOTATO': 'Potato Soup', 'POTATO': 'Potato', 'SOUPCANSCARROTS': 'Carrot Soup', 'CARROT': 'Carrot', 'TMR': 'TMR', 'SILAGE': 'Silage', 'DRYGRASS_WINDROW': 'Hay', 'GRASS_WINDROW': 'Grass', 'MILK': 'Milk', 'LIQUIDMANURE': 'Slurry', 'MANURE': 'Manure', 'EGG': 'Eggs' };
         function cleanLabel(raw) { return fillLabels[raw] || raw; }
 
-        // --- FULL RESTORED TROPHY LIST (ZERO OMISSIONS) ---
         const trophyList = [
             { name: "Farming is in our nature", desc: "Plant today - harvest tomorrow.", target: 1 },
             { name: "Road Trip", desc: "Travelled 100km.", target: 100000 },
             { name: "Plant get enough", desc: "A little help can go a long way.", target: 10 },
-            { name: "The plot thickens", desc: "You won't rest until you've reached maximum efficiency.", target: 100 },
+            { name: "The plot thickens", desc: "Reached maximum efficiency.", target: 100 },
             { name: "Allez hopp", desc: "Oh, they can do THAT as well?", target: 1 },
             { name: "You are not a kangaroo", desc: "Seriously, think of the poor animal!", target: 1 },
-            { name: "Giddy-up!", desc: "I could get used to getting around like this…", target: 1 },
+            { name: "Giddy-up!", desc: "I could get used to this…", target: 1 },
             { name: "Thoroughbred!", desc: "I'm a real cowboy, mom!", target: 1 },
-            { name: "Help me to help you", desc: "Sure, I can take care of that, neighbour.", target: 1 },
-            { name: "Helper A does not stop … ever", desc: "What do you mean 'take care of my own farm as well'?", target: 50 },
-            { name: "It's just the beginning", desc: "I've never felt happier than here.", target: 1 },
-            { name: "Just a sprinkle", desc: "You have to think about the future.", target: 10 },
-            { name: "It's sow easy", desc: "Planting one bean will yield much green.", target: 10 },
+            { name: "Help me to help you", desc: "Sure, I can take care of that.", target: 1 },
+            { name: "Helper A does not stop … ever", desc: "Completed 50 missions.", target: 50 },
+            { name: "It's just the beginning", desc: "Happier than here.", target: 1 },
+            { name: "Just a sprinkle", desc: "Think about the future.", target: 10 },
+            { name: "It's sow easy", desc: "Planting one bean.", target: 10 },
             { name: "Own use", desc: "Reap what you sow.", target: 1 },
-            { name: "Large-scale supplier", desc: "These are the fruits of your labour.", target: 100 },
-            { name: "Field Trip", desc: "One vehicle for all of your needs.", target: 1 },
-            { name: "Long haul", desc: "In it for the long game, I see.", target: 1000000 },
-            { name: "van Gogh", desc: "Look at Mr. Fancypants over there.", target: 1 },
-            { name: "It just fell off", desc: "It was only a matter of time…", target: 1 },
-            { name: "Fix me up", desc: "Seriously, you should consider a membership card.", target: 1 },
-            { name: "Fluffiness", desc: "Building up my wool empire.", target: 10 },
-            { name: "Three little piggies…", desc: "You'll be amazed how much food they need.", target: 10 },
-            { name: "Clucky Streak", desc: "Now that's a lot of Easter eggs.", target: 10 },
-            { name: "Bringing in the Honey", desc: "Well you've been one busy bee, haven't you?", target: 10 },
-            { name: "Cowherd", desc: "Bet you didn't think they'd be that much work, right?", target: 10 },
-            { name: "I like to switch it up", desc: "We're slowly getting there.", target: 1 },
-            { name: "This is just my weekend vehicle", desc: "Yes, I need each and every one of these.", target: 10 },
-            { name: "Vehicle fleet", desc: "Ok, I might have a problem…", target: 30 },
-            { name: "I read Shakespeare and stuff", desc: "The first step of any farmer.", target: 1 },
-            { name: "Highly cultivated", desc: "I'm a little proud of this one myself.", target: 1 },
+            { name: "Large-scale supplier", desc: "Fruits of your labour.", target: 100 },
+            { name: "Field Trip", desc: "One vehicle for all needs.", target: 1 },
+            { name: "Long haul", desc: "Travelled 1000km.", target: 1000000 },
+            { name: "van Gogh", desc: "Fancypants.", target: 1 },
+            { name: "It just fell off", desc: "Only a matter of time…", target: 1 },
+            { name: "Fix me up", desc: "Membership card.", target: 1 },
+            { name: "Fluffiness", desc: "Wool empire.", target: 10 },
+            { name: "Three little piggies…", desc: "Food they need.", target: 10 },
+            { name: "Clucky Streak", desc: "Easter eggs.", target: 10 },
+            { name: "Bringing in the Honey", desc: "Busy bee.", target: 10 },
+            { name: "Cowherd", desc: "Work, right?", target: 10 },
+            { name: "I like to switch it up", desc: "Getting there.", target: 1 },
+            { name: "This is just my weekend vehicle", desc: "Need each and every one.", target: 10 },
+            { name: "Vehicle fleet", desc: "I might have a problem…", target: 30 },
+            { name: "I read Shakespeare and stuff", desc: "First step.", target: 1 },
+            { name: "Highly cultivated", desc: "Proud of this one.", target: 1 },
             { name: "Ultimutt Pawesomeness", desc: "Who's a good boy?", target: 1 },
             { name: "That's a wrap", desc: "What's in the bale?", target: 10 },
-            { name: "Gone but not for cotton", desc: "Where would you even store them?!", target: 10 },
-            { name: "Raisin the stakes", desc: "It's Californian gold!", target: 10 },
-            { name: "Olea europaea", desc: "It's a fruit, not a vegetable!", target: 10 },
-            { name: "Original grain", desc: "My horses are crazy for it.", target: 10 },
-            { name: "Rock on", desc: "The path to success is paved with rocks.", target: 10 },
-            { name: "You wood not believe it", desc: "Taking a leaf of absence.", target: 10 },
-            { name: "I'm stumped", desc: "If a tree falls in a forest... does one hand clap?", target: 10 },
-            { name: "Hard work pays off", desc: "You know you can also spend it, right?", target: 1000000 },
-            { name: "All out of Land", desc: "Everything the light touches...is mine.", target: 1 },
-            { name: "Well-Oiled Machine", desc: "Hmm, we could franchise this…", target: 1 },
-            { name: "Pretty colourful", desc: "Childhood memories, brought back to your home.", target: 1 },
-            { name: "Game on", desc: "I'm somewhat of a collector myself.", target: 1 },
-            { name: "Cheese it", desc: "Anybody up for some fondue?", target: 1 },
-            { name: "It's never too late to farm", desc: "The journey begins.", target: 1 }
+            { name: "Gone but not for cotton", desc: "Where store them?!", target: 10 },
+            { name: "Raisin the stakes", desc: "Californian gold!", target: 10 },
+            { name: "Olea europaea", desc: "Fruit, not vegetable!", target: 10 },
+            { name: "Original grain", desc: "Horses crazy for it.", target: 10 },
+            { name: "Rock on", desc: "Paved with rocks.", target: 10 },
+            { name: "You wood not believe it", desc: "Leaf of absence.", target: 10 },
+            { name: "I'm stumped", desc: "If a tree falls...", target: 10 },
+            { name: "Hard work pays off", desc: "Spend it, right?", target: 1000000 },
+            { name: "All out of Land", desc: "Everything is mine.", target: 1 },
+            { name: "Well-Oiled Machine", desc: "Franchise this…", target: 1 },
+            { name: "Pretty colourful", desc: "Childhood memories.", target: 1 },
+            { name: "Game on", desc: "Collector myself.", target: 1 },
+            { name: "Cheese it", desc: "Fondue?", target: 1 },
+            { name: "It's never too late to farm", desc: "Journey begins.", target: 1 }
         ];
 
         function updateClocks() {
             const now = new Date();
-            document.getElementById('time-gnv').innerText = `ET: ` + now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById('time-flora').innerText = `CT: ` + now.toLocaleTimeString('en-US', { timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('time-gnv').innerText = `ET: ` + now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit' });
+            document.getElementById('time-flora').innerText = `CT: ` + now.toLocaleTimeString('en-US', { timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit' });
         }
 
         async function getRealWeather() {
             try {
                 const gnv = await fetch('https://api.open-meteo.com/v1/forecast?latitude=29.65&longitude=-82.32&current_weather=true&temperature_unit=fahrenheit').then(r => r.json());
                 const flora = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.67&longitude=-88.49&current_weather=true&temperature_unit=fahrenheit').then(r => r.json());
-                document.getElementById('weather-gnv').innerText = `TEMP: ${Math.round(gnv.current_weather.temperature)}°F | ${gnv.current_weather.weathercode == 0 ? 'SUNNY' : 'CLOUDY'}`;
-                document.getElementById('weather-flora').innerText = `TEMP: ${Math.round(flora.current_weather.temperature)}°F | ${flora.current_weather.weathercode == 0 ? 'SUNNY' : 'CLOUDY'}`;
+                document.getElementById('weather-gnv').innerText = `TEMP: ${Math.round(gnv.current_weather.temperature)}°F | SUNNY`;
+                document.getElementById('weather-flora').innerText = `TEMP: ${Math.round(flora.current_weather.temperature)}°F | SUNNY`;
             } catch(e) {}
         }
 
@@ -182,6 +172,8 @@
             const [farms, vehicles, placeables, career, farmland] = await Promise.all([ fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml') ]);
 
             if(!farms) return;
+
+            // Finance & Trophy Logic
             let playerTotal = 0;
             Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                 const id = f.getAttribute("farmId");
@@ -196,9 +188,8 @@
                         let current = 0;
                         if(t.name.includes("Trip") || t.name.includes("haul")) current = parseFloat(stats?.querySelector("traveledDistance")?.textContent || 0);
                         else if(t.name.includes("supplier") || t.name.includes("use")) current = parseFloat(stats?.querySelector("harvestedHectares")?.textContent || 0);
-                        else if(t.name.includes("Hard work")) current = parseFloat(stats?.querySelector("money")?.textContent || 0);
-                        const progress = Math.min(100, Math.round((current / t.target) * 100));
-                        container.innerHTML += `<div class="card-inner ${id=='1'?'f1-border':'f2-border'}"><b>${t.name}</b> <span class="float-right text-gray-500">${progress}%</span><div class="hud-bar-bg"><div class="trophy-fill" style="width:${progress}%"></div></div></div>`;
+                        const p = Math.min(100, Math.round((current / t.target) * 100));
+                        container.innerHTML += `<div class="card-inner ${id=='1'?'f1-border':'f2-border'}"><b>${t.name}</b> <span class="float-right">${p}%</span><div class="hud-bar-bg"><div class="trophy-fill" style="width:${p}%"></div></div></div>`;
                     });
                 }
             });
@@ -206,9 +197,7 @@
             if(career) {
                 const globalMoney = Math.floor(parseFloat(career.querySelector("statistics money")?.textContent || 0));
                 document.getElementById("f0-money").innerText = "$" + Math.max(0, globalMoney - playerTotal).toLocaleString();
-                const day = career.querySelector("gameRuntime")?.textContent || "0";
                 document.getElementById("game-time").innerText = career.querySelector("dayTime")?.textContent || "00:00";
-                document.getElementById("game-date").innerText = `Runtime: ${Math.floor(day/3600)} Hours`;
                 const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
                 document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
                 document.getElementById('all-coll').innerHTML = "";
@@ -218,8 +207,8 @@
                 }
             }
 
-            const containers = ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields'];
-            containers.forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
+            // Cleanup & Sorting
+            ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
 
             if(vehicles) {
                 Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
@@ -228,7 +217,7 @@
                     const fuel = Math.round(v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || 0);
                     const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(1);
                     let target = (fId == "1" || fId == "2") ? (fuel > 0 ? `f${fId}-fleet` : `f${fId}-attach`) : "f0-fleet";
-                    if(document.getElementById(target)) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='0'?'border-gray-800':(fId=='1'?'f1-border':'f2-border')}"><b>${name}</b><br>FUEL: ${fuel}L | DMG: ${dmg}%<div class="hud-bar-bg"><div class="fuel-fill" style="width:${Math.min(100,(fuel/400)*100)}%"></div><div class="dmg-fill" style="width:${dmg}%"></div></div></div>`;
+                    if(document.getElementById(target)) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='0'?'border-gray-800':(fId=='1'?'f1-border':'f2-border')}"><b>${name}</b><br>FUEL: ${fuel}L | DAMAGE: ${dmg}%<div class="hud-bar-bg"><div class="fuel-fill" style="width:${Math.min(100,(fuel/400)*100)}%"></div><div class="dmg-fill" style="width:${dmg}%"></div></div></div>`;
                 });
             }
 
@@ -239,12 +228,12 @@
                     if(!storage) return;
                     let name = p.getAttribute("customName") || p.getAttribute("templateName") || "FACILITY";
                     let target = (fId == "1" || fId == "2") ? (p.getElementsByTagName("animal").length > 0 ? `f${fId}-animals` : `f${fId}-prod`) : "f0-prod";
-                    let html = `<div class="card-inner ${fId=='0'?'border-gray-800':(fId=='1'?'f1-border':'f2-border')}"><b>${name.toUpperCase()}</b><br>`;
+                    let h = `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}"><b>${name.toUpperCase()}</b><br>`;
                     Array.from(storage.getElementsByTagName("node")).forEach(node => {
                         const lvl = Math.round(parseFloat(node.getAttribute("fillLevel")));
-                        if(lvl > 1) html += `<div class="flex justify-between border-b border-gray-900 mt-1"><span>${cleanLabel(node.getAttribute("fillType"))}</span><span>${lvl.toLocaleString()}L</span></div>`;
+                        if(lvl > 1) h += `<div class="flex justify-between border-b border-gray-900 mt-1"><span>${cleanLabel(node.getAttribute("fillType"))}</span><span>${lvl.toLocaleString()}L</span></div>`;
                     });
-                    document.getElementById(target).innerHTML += html + "</div>";
+                    document.getElementById(target).innerHTML += h + "</div>";
                 });
             }
 
@@ -252,7 +241,7 @@
                 Array.from(farmland.getElementsByTagName("land")).forEach(l => {
                     const fId = l.getAttribute("farmId");
                     let target = (fId == "1" || fId == "2") ? `f${fId}-fields` : "f0-fields";
-                    if(document.getElementById(target)) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='0'?'border-gray-800':(fId=='1'?'f1-border':'f2-border')}"><b>FIELD ${l.getAttribute("id")}</b></div>`;
+                    if(document.getElementById(target)) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}"><b>FIELD ${l.getAttribute("id")}</b></div>`;
                 });
             }
         }
