@@ -177,7 +177,10 @@
         async function updateDashboard() {
             const ts = new Date().getTime();
             const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
-            const [farms, vehicles, placeables, career, farmland] = await Promise.all([ fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml') ]);
+            const [farms, vehicles, placeables, career, farmland, missions] = await Promise.all([ 
+                fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), 
+                fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml') 
+            ]);
 
             if(farms && career) {
                 const globalMoney = Math.floor(parseFloat(career.querySelector("statistics money")?.textContent || 0));
@@ -193,13 +196,23 @@
                 const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
                 document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
 
-                // MODS LIST LOGIC
+                // MODS
                 const modsBox = document.getElementById('active-mods');
                 modsBox.innerHTML = "";
                 Array.from(career.getElementsByTagName("mod")).forEach(m => {
                     const title = m.getAttribute("title") || m.getAttribute("modName");
-                    const version = m.getAttribute("version") || "v1.0";
-                    modsBox.innerHTML += `<div class="card-inner border-blue-900"><b>${title.toUpperCase()}</b><br><span class="text-gray-500 text-[9px]">${version}</span></div>`;
+                    modsBox.innerHTML += `<div class="card-inner border-blue-900"><b>${title.toUpperCase()}</b></div>`;
+                });
+            }
+
+            // MISSIONS
+            const missionBox = document.getElementById('missions');
+            missionBox.innerHTML = "";
+            if(missions) {
+                Array.from(missions.getElementsByTagName("mission")).forEach(m => {
+                    if(m.getAttribute("status") == "2") {
+                        missionBox.innerHTML += `<div class="card-inner border-blue-500"><b>FIELD ${m.getAttribute("fieldId")}: ${m.getAttribute("type").toUpperCase()}</b><br>$${parseInt(m.getAttribute("reward")).toLocaleString()}</div>`;
+                    }
                 });
             }
 
