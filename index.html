@@ -27,7 +27,6 @@
             <b class="text-4xl text-white uppercase font-black italic tracking-tighter">618 TACTICAL</b>
             <span class="text-[9px] text-blue-500 font-bold tracking-widest uppercase">Operational Status: Secure | Savegame 3 Uplink</span>
         </div>
-
         <div class="flex gap-4">
             <div class="glass-panel f1-border p-3 min-w-[220px]">
                 <div class="f1-text font-black text-[9px] uppercase tracking-widest">F1: FUNNY FARMS (Werewolf)</div>
@@ -51,10 +50,10 @@
     </header>
 
     <div class="grid grid-cols-4 gap-4 mb-6">
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase">F1 Trophies</h3><div id="f1-trophies" class="scroll-box"></div></div>
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase">F1 Production</h3><div id="f1-prod" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase">F2 Trophies</h3><div id="f2-trophies" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase">F2 Production</h3><div id="f2-prod" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase text-center">F1 Trophies</h3><div id="f1-trophies" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase text-center">F1 Production</h3><div id="f1-prod" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase text-center">F2 Trophies</h3><div id="f2-trophies" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase text-center">F2 Production</h3><div id="f2-prod" class="scroll-box"></div></div>
     </div>
 
     <div class="grid grid-cols-4 gap-4 mb-6">
@@ -83,72 +82,70 @@
     </div>
 
     <div class="border-t border-gray-800 pt-8">
-        <h2 class="text-gray-600 font-black mb-4 uppercase text-center italic">Global Uplink (Farm 0)</h2>
+        <h2 class="text-gray-600 font-black mb-4 uppercase text-center italic tracking-widest">Global Uplink (Farm 0)</h2>
         <div class="grid grid-cols-4 gap-4">
-            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-900 uppercase">System Fleet</h3><div id="f0-fleet" class="scroll-box"></div></div>
-            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-900 uppercase">System Assets</h3><div id="f0-prod" class="scroll-box"></div></div>
-            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-900 uppercase">NPC Land</h3><div id="f0-fields" class="scroll-box"></div></div>
+            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-800 uppercase">System Fleet</h3><div id="f0-fleet" class="scroll-box"></div></div>
+            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-800 uppercase">System Assets</h3><div id="f0-prod" class="scroll-box"></div></div>
+            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-800 uppercase">NPC Land</h3><div id="f0-fields" class="scroll-box"></div></div>
             <div class="glass-panel border-blue-900"><h3 class="text-blue-500 font-bold p-2 border-b border-gray-800 uppercase">Active Mods</h3><div id="active-mods" class="scroll-box"></div></div>
         </div>
     </div>
 
     <script>
-        // INTELLIGENCE PARAMETERS
-        const trophyTargets = [ 
-            {id:"help", name:"Contracts Completed", target: 50, tag: "missionsFinished"},
-            {id:"nature", name:"Hectares Thrashed", target: 100, tag: "thrashedArea"},
-            {id:"wood", name:"Trees Cut", target: 25, tag: "treeCapsCut"},
-            {id:"hard", name:"Millionaire Race", target: 1000000, tag: "money"}
-        ];
+        const trophyNames = {
+            "nature": "Farming is in our nature", "road": "Road Trip", "plant": "Plant get enough", "hopp": "Allez hopp", 
+            "kangaroo": "Not a kangaroo", "giddy": "Giddy-up!", "thorough": "Thoroughbred!", "help": "Help me to help you", 
+            "helper": "Helper A no stop", "beginning": "Just beginning", "own": "Own use", "field": "Field Trip", 
+            "paw": "Ultimutt Paw", "wrap": "That's a wrap", "clucky": "Clucky Streak", "cowherd": "Cowherd", 
+            "switch": "Switch it up", "weekend": "Weekend vehicle", "fleet": "Vehicle fleet", "shakespeare": "Shakespeare", 
+            "stumped": "I'm stumped", "hard": "Hard work pays", "land": "All out of Land", "machine": "Oiled Machine", 
+            "colourful": "Pretty colourful", "wood": "Wood believe it"
+        };
 
         async function updateDashboard() {
             const ts = new Date().getTime();
             const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
-            
-            const [farms, vehicles, career, env, placeables, items, land, missions] = await Promise.all([ 
-                fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('careerSavegame.xml'), 
-                fetchXml('environment.xml'), fetchXml('placeables.xml'), fetchXml('items.xml'),
-                fetchXml('farmland.xml'), fetchXml('missions.xml')
+            const fetchJson = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? await r.json() : null; } catch(e) { return null; } };
+
+            const [career, trophyMaster, vehicles, farms, env, placeables, items, land, missions] = await Promise.all([
+                fetchXml('careerSavegame.xml'), fetchJson('trophies_master.json'), fetchXml('vehicles.xml'), fetchXml('farms.xml'),
+                fetchXml('environment.xml'), fetchXml('placeables.xml'), fetchXml('items.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml')
             ]);
 
-            if(career) {
-                const stats = career.querySelector("statistics");
-                const getVal = (tag) => parseFloat(stats?.querySelector(tag)?.textContent || 0);
+            // 1. TROPHIES (FROM JSON)
+            if (trophyMaster) {
+                renderTrophies('f1-trophies', trophyMaster.werewolf, 'f1-border');
+                renderTrophies('f2-trophies', trophyMaster.ray, 'f2-border');
+            }
 
-                // CLOCK & DATE LOGIC
+            // 2. HEADER STATS
+            if (career) {
+                const stats = career.querySelector("statistics");
                 const rawTime = parseFloat(career.querySelector("dayTime")?.textContent || 0);
                 const h = Math.floor(rawTime / 3600000); const m = Math.floor((rawTime % 3600000) / 60000);
                 document.getElementById("game-time").innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
                 
-                const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
                 const dayP = parseInt(career.querySelector("dayOfPeriod")?.textContent || 1);
+                const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
                 document.getElementById("game-date").innerText = `DATE: ${months[Math.floor((dayP - 1) / 3) % 12]} DAY ${((dayP - 1) % 3) + 1}`;
 
-                // FINANCIAL LOGIC
-                const globalMoney = getVal("money");
+                const globalMoney = parseFloat(stats?.querySelector("money")?.textContent || 0);
                 let f2Money = 0;
                 if(farms) Array.from(farms.getElementsByTagName("farm")).forEach(f => { if(f.getAttribute("farmId")=="2") f2Money = Math.floor(parseFloat(f.getAttribute("money")||0)); });
                 document.getElementById('f2-head-money').innerText = "$" + f2Money.toLocaleString();
                 document.getElementById('f1-head-money').innerText = "$" + (globalMoney - f2Money).toLocaleString();
 
-                // DYNAMIC TROPHIES
-                const liveTrophies = {};
-                trophyTargets.forEach(t => { liveTrophies[t.id] = Math.min(100, Math.floor((getVal(t.tag) / t.target) * 100)); });
-                renderTrophies('f1-trophies', liveTrophies, 'f1-border');
-                renderTrophies('f2-trophies', liveTrophies, 'f2-border');
-
-                // MOD INTELLIGENCE
                 const modsBox = document.getElementById('active-mods'); modsBox.innerHTML = "";
                 Array.from(career.getElementsByTagName("mod")).forEach(m => { modsBox.innerHTML += `<div class="card-inner border-blue-900">${m.getAttribute("title")||m.getAttribute("modName")}</div>`; });
             }
 
-            if(env) {
+            if (env) {
                 const weather = env.querySelector("weather currentTypeName")?.textContent || "SUNNY";
                 document.getElementById('weather-display').innerText = `WEATHER: ${weather.toUpperCase()}`;
             }
 
-            // FLEET TELEMETRY (Motorized vs Attachments)
-            if(vehicles) {
+            // 3. FLEET & ATTACH
+            if (vehicles) {
                 ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach'].forEach(id => document.getElementById(id).innerHTML = "");
                 Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
                     const fId = v.getAttribute("farmId");
@@ -157,78 +154,58 @@
                     const isMotorized = v.querySelector("consumer") !== null;
                     let target = `f${fId}-fleet`;
                     if (fId !== "0" && !isMotorized) target = `f${fId}-attach`;
-                    
                     if(document.getElementById(target)) {
-                        document.getElementById(target).innerHTML += `
-                        <div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">
-                            <img src="${name.toLowerCase()}.png" class="png-bg" onerror="this.style.display='none'">
-                            <b>${name}</b>
-                            ${isMotorized ? `<div class="stat-line"><span>FUEL</span><span>${fuel}L</span></div><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:${Math.min(100, fuel/5)}%"></div></div>` : ''}
-                        </div>`;
+                        document.getElementById(target).innerHTML += `<div class="card-inner"><b>${name}</b>${isMotorized ? `<br>FUEL: ${fuel}L` : ''}</div>`;
                     }
                 });
             }
 
-            // ASSET & LIVESTOCK TELEMETRY
-            if(placeables) {
+            // 4. PRODUCTION & LIVESTOCK
+            if (placeables) {
                 ['f1-prod','f2-prod','f0-prod','f1-animals','f2-animals'].forEach(id => document.getElementById(id).innerHTML = "");
                 Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
                     const fId = p.getAttribute("farmId");
                     const name = (p.getAttribute("customName") || p.getAttribute("templateName") || "STATION").toUpperCase();
-                    const animalNodes = p.getElementsByTagName("animal");
-                    const target = animalNodes.length > 0 ? `f${fId}-animals` : `f${fId}-prod`;
-                    
+                    const animals = p.getElementsByTagName("animal").length;
+                    const target = animals > 0 ? `f${fId}-animals` : `f${fId}-prod`;
                     if(document.getElementById(target)) {
-                        document.getElementById(target).innerHTML += `
-                        <div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">
-                            <b>${name}</b>
-                            ${animalNodes.length > 0 ? `<div class="stat-line"><span>COUNT</span><span>${animalNodes.length} UNITS</span></div>` : ''}
-                        </div>`;
+                        document.getElementById(target).innerHTML += `<div class="card-inner"><b>${name}</b>${animals > 0 ? `<br>UNITS: ${animals}` : ''}</div>`;
                     }
                 });
             }
 
-            // CARGO & PALLET LOGISTICS
-            if(items) {
+            // 5. PALLETS, FIELDS, MISSIONS
+            if (items) {
                 ['f1-pallets','f2-pallets'].forEach(id => document.getElementById(id).innerHTML = "");
                 Array.from(items.getElementsByTagName("item")).forEach(it => {
                     const fId = it.getAttribute("farmId");
                     const type = it.getAttribute("filename").split('/').pop().replace('.xml','').toUpperCase();
-                    if(document.getElementById(`f${fId}-pallets`)) {
-                        document.getElementById(`f${fId}-pallets`).innerHTML += `<div class="card-inner border-yellow-700">${type}</div>`;
-                    }
+                    if(document.getElementById(`f${fId}-pallets`)) document.getElementById(`f${fId}-pallets`).innerHTML += `<div class="card-inner">${type}</div>`;
                 });
             }
 
-            // PROPERTY DEEDS
-            if(land) {
+            if (land) {
                 ['f1-fields','f2-fields','f0-fields'].forEach(id => document.getElementById(id).innerHTML = "");
                 Array.from(land.getElementsByTagName("land")).forEach(l => {
                     const fId = l.getAttribute("farmId");
-                    const target = `f${fId}-fields`;
-                    if(document.getElementById(target)) {
-                        document.getElementById(target).innerHTML += `<div class="card-inner border-gray-700">FIELD ${l.getAttribute("id")}</div>`;
-                    }
+                    if(document.getElementById(`f${fId}-fields`)) document.getElementById(`f${fId}-fields`).innerHTML += `<div class="card-inner">FIELD ${l.getAttribute("id")}</div>`;
                 });
             }
 
-            // MISSION LOGISTICS
-            if(missions) {
+            if (missions) {
                 const mBox = document.getElementById('missions'); mBox.innerHTML = "";
-                Array.from(missions.getElementsByTagName("mission")).forEach(m => {
-                    if(m.getAttribute("status")=="2") mBox.innerHTML += `<div class="card-inner border-gray-600"><b>FLD ${m.getAttribute("fieldId")}</b>: ${m.getAttribute("type")}</div>`;
-                });
-            }
-
-            if(collectibles) {
-                const colls = Array.from(collectibles.getElementsByTagName("collectible"));
-                document.getElementById('coll-found').innerText = colls.filter(c => c.getAttribute("found")=="true").length;
+                Array.from(missions.getElementsByTagName("mission")).forEach(m => { if(m.getAttribute("status")=="2") mBox.innerHTML += `<div class="card-inner border-gray-600"><b>FLD ${m.getAttribute("fieldId")}</b>: ${m.getAttribute("type")}</div>`; });
             }
         }
 
-        function renderTrophies(containerId, stats, color) {
-            const container = document.getElementById(containerId); container.innerHTML = "";
-            trophyTargets.forEach(t => {
-                const p = stats[t.id] || 0;
-                container.innerHTML += `<div class="card-inner ${color} ${p==100?'opacity-50':''}">
-                    <div class="flex justify-between
+        function renderTrophies(containerId, stats, borderClass) {
+            const box = document.getElementById(containerId); box.innerHTML = "";
+            Object.keys(stats).forEach(id => {
+                const p = stats[id]; const name = trophyNames[id] || id;
+                box.innerHTML += `<div class="card-inner ${borderClass} ${p==100?'trophy-earned':''}"><div class="flex justify-between"><b>${name}</b><span>${p}%</span></div><div class="hud-bar-bg"><div class="trophy-fill" style="width:${p}%"></div></div></div>`;
+            });
+        }
+        updateDashboard(); setInterval(updateDashboard, 60000);
+    </script>
+</body>
+</html>
