@@ -7,16 +7,15 @@ user = os.getenv('GPORTAL_USER')
 password = os.getenv('GPORTAL_PASS')
 port = 50021
 
+# The path we confirmed from your screenshot
 remote_folder = "profile/savegame3"
 
-# All files required for the full tactical dashboard
-files_to_sync = {
-    "farms.xml": "farms.xml",           # Balances & Farm IDs
-    "vehicles.xml": "vehicles.xml",     # Damage, Fuel, Attachments
-    "placeables.xml": "placeables.xml", # Animals, Factories, Production
-    "farmland.xml": "farmland.xml",     # Crop growth & Fertilizer levels
-    "careerSavegame.xml": "live_vault.xml" # Global stats & Trophies
-}
+# Every file needed for your detailed report
+files_to_sync = [
+    "careerSavegame.xml", "farms.xml", "vehicles.xml", 
+    "placeables.xml", "farmland.xml", "players.xml",
+    "economy.xml", "environment.xml"
+]
 
 try:
     print(f"Connecting to {host}...")
@@ -24,18 +23,16 @@ try:
     ftp.connect(host, port, timeout=30)
     ftp.login(user=user, passwd=password)
     ftp.set_pasv(True)
-    
-    print(f"Entering {remote_folder}...")
     ftp.cwd(remote_folder)
     
-    for remote, local in files_to_sync.items():
-        print(f"Downloading {remote}...")
-        with open(local, 'wb') as fp:
-            ftp.retrbinary(f'RETR {remote}', fp.write)
+    for filename in files_to_sync:
+        print(f"Syncing {filename}...")
+        with open(filename, 'wb') as fp:
+            ftp.retrbinary(f'RETR {filename}', fp.write)
     
     ftp.quit()
-    print("Full Tactical Sync Complete!")
+    print("ALL TACTICAL DATA SYNCED.")
 
 except Exception as e:
-    print(f"CRITICAL ERROR: {e}")
+    print(f"SYNC FAILED: {e}")
     sys.exit(1)
