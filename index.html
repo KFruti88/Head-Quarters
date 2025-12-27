@@ -177,9 +177,10 @@
         async function updateDashboard() {
             const ts = new Date().getTime();
             const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
-            const [farms, vehicles, placeables, career, farmland, missions] = await Promise.all([ 
+            const [farms, vehicles, placeables, career, farmland, missions, collectibles] = await Promise.all([ 
                 fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), 
-                fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml') 
+                fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml'),
+                fetchXml('collectibles.xml')
             ]);
 
             if(farms && career) {
@@ -193,8 +194,6 @@
                 document.getElementById("game-time").innerText = career.querySelector("dayTime")?.textContent || "00:00";
                 const day = career.querySelector("gameRuntime")?.textContent || "0";
                 document.getElementById("game-date").innerText = `Runtime: ${Math.floor(day/3600)} Hours`;
-                const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
-                document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
 
                 // MODS
                 const modsBox = document.getElementById('active-mods');
@@ -216,10 +215,23 @@
                 });
             }
 
+            // COLLECTIBLES
+            if(collectibles) {
+                const colls = Array.from(collectibles.getElementsByTagName("collectible"));
+                const found = colls.filter(c => c.getAttribute("found") === "true").length;
+                document.getElementById('coll-found').innerText = found;
+                const collBox = document.getElementById('all-coll');
+                collBox.innerHTML = "";
+                colls.forEach((c, i) => {
+                    const isFound = c.getAttribute("found") === "true";
+                    collBox.innerHTML += `<div class="card-inner border-purple-900 ${isFound ? 'opacity-100' : 'opacity-40'}">#${i+1}: ${isFound ? 'FOUND' : 'MISSING'}</div>`;
+                });
+            }
+
             renderSortedTrophies('f1-trophies', werewolfStats, null, 'f1-border');
             renderSortedTrophies('f2-trophies', null, rayEarned, 'f2-border');
 
-            ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields','all-coll'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
+            ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
             
             if(vehicles) {
                 Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
