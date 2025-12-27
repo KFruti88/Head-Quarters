@@ -1,0 +1,12 @@
+{
+  "werewolf": {
+    "help": 100, "paw": 100, "giddy": 100, "hopp": 100, "machine": 100, "land": 100, "wood": 100, "stumped": 100, 
+    "weekend": 90, "switch": 60, "cowherd": 45, "fleet": 45, "kangaroo": 36, "clucky": 31, "beginning": 10, 
+    "helper": 8, "field": 7, "thorough": 4, "shakespeare": 4, "road": 2
+  },
+  "ray": {
+    "help": 24, "road": 100, "plant": 100, "hopp": 100, "kangaroo": 100, "giddy": 100, "thorough": 100, 
+    "beginning": 100, "own": 100, "switch": 100, "weekend": 100, "fleet": 100, "shakespeare": 100, 
+    "paw": 100, "wrap": 100, "hard": 100, "land": 100, "machine": 100, "colourful": 100
+  }
+}
