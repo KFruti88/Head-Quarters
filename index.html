@@ -215,7 +215,7 @@
             let eHtml = ""; let uHtml = "";
             trophyList.forEach(t => {
                 const isE = earnedList.includes(t.name);
-                const block = `<div class="card-inner ${borderClass} ${isE ? 'trophy-earned' : ''}"><b>${t.name}</b><br><span class="italic text-[9px] text-gray-400">${t.desc}</span><br>${isE ? '<span class="text-green-500 font-bold">[EARNED]</span>' : 'Progress: 0%'}</div>`;
+                const block = `<div class="card-inner ${borderClass} ${isE ? 'trophy-earned' : ''}"><b>${t.name}</b><br><span class="italic text-[9px] text-gray-400">${t.desc}</span><br>${isE ? '<span class="text-green-500">[EARNED]</span>' : 'Progress: 0%'}</div>`;
                 if (isE) eHtml += block; else uHtml += block;
             });
             container.innerHTML = html + uHtml + eHtml;
@@ -226,24 +226,22 @@
             const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
 
             try {
-                const [farms, vehicles, placeables, career, farmland, missions] = await Promise.all([
+                const [farms, vehicles, placeables, career, farmland] = await Promise.all([
                     fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), 
-                    fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml')
+                    fetchXml('careerSavegame.xml'), fetchXml('farmland.xml')
                 ]);
 
                 if (!farms || !career) return;
 
-                // 1. FINANCIAL LOGIC (ISOLATING F1, F2, and F0)
+                // 1. FINANCIAL LOGIC
                 const totalMoney = parseInt(career.querySelector("statistics money")?.textContent || 0);
                 let f1Money = 0; let f2Money = 0;
-
                 Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                     const id = f.getAttribute("farmId");
                     const m = parseInt(f.getAttribute("money") || 0);
                     if (id === "1") f1Money = m;
                     if (id === "2") f2Money = m;
                 });
-
                 document.getElementById("f1-head-money").innerText = "$" + f1Money.toLocaleString();
                 document.getElementById("f2-head-money").innerText = "$" + f2Money.toLocaleString();
                 const systemBalance = totalMoney - (f1Money + f2Money);
@@ -254,7 +252,7 @@
                     if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
                 });
 
-                // 2. FLEET SORTING (F1, F2, and F0)
+                // 2. FLEET / VEHICLES
                 if (vehicles) {
                     let vCounts = {1:0, 2:0};
                     Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
@@ -264,16 +262,39 @@
                         if (fId === "1" || fId === "2") {
                             target = v.querySelector("consumer[type='fuel']") ? `f${fId}-fleet` : `f${fId}-attach`;
                             if(v.querySelector("consumer[type='fuel']")) vCounts[fId]++;
-                        } else if (fId === "0") {
-                            target = "f0-fleet";
-                        }
+                        } else { target = "f0-fleet"; }
                         if (target) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${name}</b></div>`;
                     });
                     document.getElementById('f1-v-count').innerText = vCounts[1];
                     document.getElementById('f2-v-count').innerText = vCounts[2];
                 }
 
-                // 3. FIELD SORTING (F1, F2, and F0/NPC)
+                // 3. FACILITIES (LIVESTOCK & PRODUCTION)
+                if (placeables) {
+                    Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
+                        const fId = p.getAttribute("farmId");
+                        const storage = p.querySelector("storage");
+                        if (!storage) return;
+
+                        // Detailed Naming Logic
+                        let facilityName = p.getAttribute("customName") || p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop().replace('.xml','');
+                        
+                        let target = "";
+                        if (fId === "1" || fId === "2") {
+                            // If it contains animals, it's livestock; otherwise, it's production
+                            target = p.getElementsByTagName("animal").length > 0 ? `f${fId}-animals` : `f${fId}-prod`;
+                        } else { target = "f0-prod"; }
+
+                        let html = `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${facilityName.toUpperCase()}</b>`;
+                        Array.from(storage.getElementsByTagName("node")).forEach(node => {
+                            const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
+                            if(level > 1) html += `<div class="mt-1 text-[10px]">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
+                        });
+                        document.getElementById(target).innerHTML += html + "</div>";
+                    });
+                }
+
+                // 4. FIELDS
                 if (farmland) {
                     Array.from(farmland.getElementsByTagName("land")).forEach(l => {
                         const fId = l.getAttribute("farmId");
@@ -282,29 +303,9 @@
                     });
                 }
 
-                // 4. PRODUCTION / ASSETS (F1, F2, and F0)
-                if (placeables) {
-                    Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
-                        const fId = p.getAttribute("farmId");
-                        const storage = p.querySelector("storage");
-                        if (!storage) return;
-                        let target = (fId === "1" || fId === "2") ? `f${fId}-animals` : "f0-prod";
-                        let html = `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${p.getAttribute("templateName") || "Facility"}</b>`;
-                        Array.from(storage.getElementsByTagName("node")).forEach(node => {
-                            const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
-                            if(level > 1) html += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
-                        });
-                        document.getElementById(target).innerHTML += html + "</div>";
-                    });
-                }
-
                 // 5. COLLECTIBLES
                 const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
                 document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
-                for(let i=0; i<50; i++) {
-                    const found = fStr[i] === '1';
-                    document.getElementById('all-coll').innerHTML += `<div class="py-1 ${found?'text-green-500':'text-red-400'}">#${i+1}: ${found?'FOUND':'MISSING'}</div>`;
-                }
 
             } catch (e) { console.error("Sync Error", e); }
         }
