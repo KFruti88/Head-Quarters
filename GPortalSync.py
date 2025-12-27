@@ -7,73 +7,58 @@ from github import Github
 FTP_HOST = "your_gportal_ip"
 FTP_USER = "your_username"
 FTP_PASS = "your_password"
-SAVE_PATH = "/savegame1" # Path on GPortal
+SAVE_PATH = "/savegame1" 
 
 GH_TOKEN = "your_github_token"
 GH_REPO  = "KFruti88/your_repo_name"
 
-# Timing as we discussed
+# Timing Tracks
 SMALL_INTERVAL = 7 * 60  
 LARGE_INTERVAL = 30 * 60 
 
-# Connect to GitHub
+# File Groups
+SMALL_FILES = ['farms.xml', 'vehicles.xml', 'missions.xml', 'careerSavegame.xml', 'collectibles.xml', 'placeables.xml', 'environment.xml', 'farmland.xml']
+# This grabs EVERYTHING else (Density maps, items, etc.)
+HEAVY_EXTENSIONS = ['.xml', '.grle', '.png'] 
+
 gh = Github(GH_TOKEN)
 repo = gh.get_repo(GH_REPO)
 
-def universal_sync(message):
+def sync_engine(file_list, message):
     try:
-        # 1. Connect to GPortal
         ftp = ftplib.FTP(FTP_HOST)
         ftp.login(FTP_USER, FTP_PASS)
         ftp.cwd(SAVE_PATH)
-
-        # 2. List ALL files in the directory
-        all_files = ftp.nlst()
-        
-        # 3. Filter for only .xml files
-        xml_files = [f for f in all_files if f.endswith('.xml')]
-
-        for filename in xml_files:
-            # Download
-            with open(filename, 'wb') as f:
+        for filename in file_list:
+            local_file = filename
+            with open(local_file, 'wb') as f:
                 ftp.retrbinary(f"RETR {filename}", f.write)
-
-            # Read content
-            with open(filename, 'rb') as f:
+            with open(local_file, 'rb') as f:
                 content = f.read()
-
-            # Upload to GitHub
             try:
                 contents = repo.get_contents(filename)
                 repo.update_file(contents.path, message, content, contents.sha)
                 print(f"Synced: {filename}")
             except:
                 repo.create_file(filename, message, content)
-                print(f"Created: {filename}")
-        
         ftp.quit()
     except Exception as e:
         print(f"Sync Error: {e}")
 
-# === MAIN LOOP ===
 last_small = 0
 last_large = 0
 
 while True:
     now = time.time()
-
-    # Small Sync (Tactical) every 7 mins
     if now - last_small >= SMALL_INTERVAL:
-        print("Running Tactical Sync...")
-        # For the fast sync, we still use a specific list to save time
-        FAST_LIST = ['farms.xml', 'vehicles.xml', 'careerSavegame.xml', 'missions.xml']
-        # (Internal logic for fast list)
+        sync_engine(SMALL_FILES, "Tactical Update [7M Track]")
         last_small = now
-
-    # Large Sync (The "Missing" Files) every 30 mins
     if now - last_large >= LARGE_INTERVAL:
-        print("Running Full Environmental Sync (grabbing all XMLs)...")
-        universal_sync("Full Tactical Intelligence Update [All XMLs]")
+        # Full scan for missing files
+        ftp = ftplib.FTP(FTP_HOST)
+        ftp.login(FTP_USER, FTP_PASS)
+        ftp.cwd(SAVE_PATH)
+        all_xmls = [f for f in ftp.nlst() if f.endswith('.xml')]
+        sync_engine(all_xmls, "Environmental Sync [30M Track]")
         last_large = now
-
     time.sleep(30)
