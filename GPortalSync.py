@@ -7,30 +7,31 @@ user = os.getenv('GPORTAL_USER')
 password = os.getenv('GPORTAL_PASS')
 port = 50021
 
-# CONFIGURATION - Updated to savegame3 based on your input
-remote_folder = "profile/savegame3" 
-remote_filename = "careerSavegame.xml" 
-local_filename = "live_vault.xml"
+remote_folder = "profile/savegame3"
+
+# List of all files needed for your detailed dashboard
+files_to_sync = {
+    "farms.xml": "farms.xml",           # Balances and Farm IDs
+    "vehicles.xml": "vehicles.xml",     # Fleet damage, fuel, attachments
+    "placeables.xml": "placeables.xml", # Factories, production, storage
+    "farmland.xml": "farmland.xml",     # Field ownership
+    "players.xml": "players.xml"        # Individual player stats
+}
 
 try:
-    print(f"Connecting to {host} on port {port}...")
     ftp = FTP()
     ftp.connect(host, port, timeout=30)
-    
-    print(f"Logging in as {user}...")
     ftp.login(user=user, passwd=password)
     ftp.set_pasv(True)
-    
-    # Moving into the specific path: profile -> savegame3
-    print(f"Moving to {remote_folder}...")
     ftp.cwd(remote_folder)
     
-    print(f"Downloading {remote_filename}...")
-    with open(local_filename, 'wb') as fp:
-        ftp.retrbinary(f'RETR {remote_filename}', fp.write)
+    for remote, local in files_to_sync.items():
+        print(f"Syncing {remote}...")
+        with open(local, 'wb') as fp:
+            ftp.retrbinary(f'RETR {remote}', fp.write)
     
     ftp.quit()
-    print("Sync Successful! live_vault.xml is updated.")
+    print("Full Sync Successful!")
 
 except Exception as e:
     print(f"SYNC FAILED: {e}")
