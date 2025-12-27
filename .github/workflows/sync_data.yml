@@ -1,4 +1,5 @@
 name: 618 Tactical Cloud Sync
+
 on:
   schedule:
     - cron: '*/10 * * * *'
@@ -11,20 +12,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-      - name: Run Sync
+
+      - name: Run Sync Script
         env:
           GPORTAL_IP: ${{ secrets.GPORTAL_IP }}
           GPORTAL_USER: ${{ secrets.GPORTAL_USER }}
           GPORTAL_PASS: ${{ secrets.GPORTAL_PASS }}
         run: python GPortalSync.py
-      - name: Commit Changes
+
+      - name: Commit and Push Data
         run: |
           git config --global user.name "618-Bot"
           git config --global user.email "bot@618crew.com"
-          git add live_vault.xml
-          git commit -m "Update Vault" || exit 0
-          git push
+          if [ -f "live_vault.xml" ]; then
+            git add live_vault.xml
+            git commit -m "Update Vault Data" || exit 0
+            git push
+          else
+            echo "File live_vault.xml not found, skipping push."
+            exit 1
+          fi
