@@ -215,7 +215,7 @@
             let eHtml = ""; let uHtml = "";
             trophyList.forEach(t => {
                 const isE = earnedList.includes(t.name);
-                const block = `<div class="card-inner ${borderClass} ${isE ? 'trophy-earned' : ''}"><b>${t.name}</b><br><span class="italic text-[9px] text-gray-400">${t.desc}</span><br>${isE ? '<span class="text-green-500">[EARNED]</span>' : 'Progress: 0%'}</div>`;
+                const block = `<div class="card-inner ${borderClass} ${isE ? 'trophy-earned' : ''}"><b>${t.name}</b><br><span class="italic text-[9px] text-gray-400">${t.desc}</span><br>${isE ? '<span class="text-green-500 font-bold">[EARNED]</span>' : 'Progress: 0%'}</div>`;
                 if (isE) eHtml += block; else uHtml += block;
             });
             container.innerHTML = html + uHtml + eHtml;
@@ -223,7 +223,13 @@
 
         async function updateDashboard() {
             const ts = new Date().getTime();
-            const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
+            const fetchXml = async (fileName) => {
+                try {
+                    const r = await fetch(`${fileName}?v=${ts}`);
+                    if (!r.ok) { console.error(`🔴 TACTICAL ERROR: ${fileName} NOT FOUND`); return null; }
+                    return new DOMParser().parseFromString(await r.text(), "text/xml");
+                } catch (e) { return null; }
+            };
 
             try {
                 const [farms, vehicles, placeables, career, farmland] = await Promise.all([
@@ -231,23 +237,33 @@
                     fetchXml('careerSavegame.xml'), fetchXml('farmland.xml')
                 ]);
 
-                if (!farms || !career) return;
+                if (!farms) return;
 
-                // 1. FINANCIAL LOGIC
-                const totalMoney = parseInt(career.querySelector("statistics money")?.textContent || 0);
+                // 1. FINANCIAL LOGIC (Fixing $0 Balance)
+                let totalPlayerWealth = 0;
                 let f1Money = 0; let f2Money = 0;
+
                 Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                     const id = f.getAttribute("farmId");
-                    const m = parseInt(f.getAttribute("money") || 0);
-                    if (id === "1") f1Money = m;
-                    if (id === "2") f2Money = m;
+                    const moneyValue = Math.floor(parseFloat(f.getAttribute("money") || 0));
+                    
+                    if (id === "1") {
+                        f1Money = moneyValue;
+                        document.getElementById("f1-head-money").innerText = "$" + f1Money.toLocaleString();
+                    } else if (id === "2") {
+                        f2Money = moneyValue;
+                        document.getElementById("f2-head-money").innerText = "$" + f2Money.toLocaleString();
+                    }
+                    if (id !== "0") totalPlayerWealth += moneyValue;
                 });
-                document.getElementById("f1-head-money").innerText = "$" + f1Money.toLocaleString();
-                document.getElementById("f2-head-money").innerText = "$" + f2Money.toLocaleString();
-                const systemBalance = totalMoney - (f1Money + f2Money);
-                document.getElementById("f0-money").innerText = "$" + (systemBalance > 0 ? systemBalance.toLocaleString() : "0");
 
-                // Clear dynamic containers
+                if (career) {
+                    const globalStatsMoney = Math.floor(parseFloat(career.querySelector("statistics money")?.textContent || 0));
+                    const systemBalance = globalStatsMoney - totalPlayerWealth;
+                    document.getElementById("f0-money").innerText = "$" + (systemBalance > 0 ? systemBalance.toLocaleString() : "0");
+                }
+
+                // Reset dynamic containers
                 ['f1-fleet','f2-fleet','f0-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields','f1-attach','f2-attach','f1-pallets','f2-pallets'].forEach(id => {
                     if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
                 });
@@ -269,26 +285,20 @@
                     document.getElementById('f2-v-count').innerText = vCounts[2];
                 }
 
-                // 3. FACILITIES (LIVESTOCK & PRODUCTION)
+                // 3. FACILITIES (Detail Logic Included)
                 if (placeables) {
                     Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
                         const fId = p.getAttribute("farmId");
                         const storage = p.querySelector("storage");
                         if (!storage) return;
 
-                        // Detailed Naming Logic
                         let facilityName = p.getAttribute("customName") || p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop().replace('.xml','');
-                        
-                        let target = "";
-                        if (fId === "1" || fId === "2") {
-                            // If it contains animals, it's livestock; otherwise, it's production
-                            target = p.getElementsByTagName("animal").length > 0 ? `f${fId}-animals` : `f${fId}-prod`;
-                        } else { target = "f0-prod"; }
+                        let target = (fId === "1" || fId === "2") ? (p.getElementsByTagName("animal").length > 0 ? `f${fId}-animals` : `f${fId}-prod`) : "f0-prod";
 
                         let html = `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${facilityName.toUpperCase()}</b>`;
                         Array.from(storage.getElementsByTagName("node")).forEach(node => {
                             const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
-                            if(level > 1) html += `<div class="mt-1 text-[10px]">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
+                            if(level > 1) html += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
                         });
                         document.getElementById(target).innerHTML += html + "</div>";
                     });
@@ -304,8 +314,10 @@
                 }
 
                 // 5. COLLECTIBLES
-                const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
-                document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
+                if (career) {
+                    const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
+                    document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
+                }
 
             } catch (e) { console.error("Sync Error", e); }
         }
