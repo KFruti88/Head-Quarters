@@ -20,6 +20,7 @@
         .fuel-fill { background: #3b82f6; height: 100%; }
         .dmg-fill { background: #ef4444; height: 100%; }
         .trophy-fill { background: #22c55e; height: 100%; }
+        .trophy-earned { border-left-color: #22c55e !important; background: rgba(34, 197, 94, 0.05); opacity: 0.5; }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
     </style>
 </head>
@@ -103,54 +104,61 @@
         const fillLabels = { 'SOUPCANSBEETROOT': 'Beetroot Soup', 'BEETROOT': 'Beetroot', 'SOUPCANSPOTATO': 'Potato Soup', 'POTATO': 'Potato', 'SOUPCANSCARROTS': 'Carrot Soup', 'CARROT': 'Carrot', 'TMR': 'TMR', 'SILAGE': 'Silage', 'DRYGRASS_WINDROW': 'Hay', 'GRASS_WINDROW': 'Grass', 'MILK': 'Milk', 'LIQUIDMANURE': 'Slurry', 'MANURE': 'Manure', 'EGG': 'Eggs' };
         function cleanLabel(raw) { return fillLabels[raw] || raw; }
 
-        const trophyList = [
-            { name: "Farming is in our nature", desc: "Plant today - harvest tomorrow.", target: 1 },
-            { name: "Road Trip", desc: "Travelled 100km.", target: 100000 },
-            { name: "Plant get enough", desc: "A little help can go a long way.", target: 10 },
-            { name: "The plot thickens", desc: "Reached maximum efficiency.", target: 100 },
-            { name: "Allez hopp", desc: "Oh, they can do THAT as well?", target: 1 },
-            { name: "You are not a kangaroo", desc: "Seriously, think of the poor animal!", target: 1 },
-            { name: "Giddy-up!", desc: "I could get used to this…", target: 1 },
-            { name: "Thoroughbred!", desc: "I'm a real cowboy, mom!", target: 1 },
-            { name: "Help me to help you", desc: "Sure, I can take care of that.", target: 1 },
-            { name: "Helper A does not stop … ever", desc: "Completed 50 missions.", target: 50 },
-            { name: "It's just the beginning", desc: "Happier than here.", target: 1 },
-            { name: "Just a sprinkle", desc: "Think about the future.", target: 10 },
-            { name: "It's sow easy", desc: "Planting one bean.", target: 10 },
-            { name: "Own use", desc: "Reap what you sow.", target: 1 },
-            { name: "Large-scale supplier", desc: "Fruits of your labour.", target: 100 },
-            { name: "Field Trip", desc: "One vehicle for all needs.", target: 1 },
-            { name: "Long haul", desc: "Travelled 1000km.", target: 1000000 },
-            { name: "van Gogh", desc: "Fancypants.", target: 1 },
-            { name: "It just fell off", desc: "Only a matter of time…", target: 1 },
-            { name: "Fix me up", desc: "Membership card.", target: 1 },
-            { name: "Fluffiness", desc: "Wool empire.", target: 10 },
-            { name: "Three little piggies…", desc: "Food they need.", target: 10 },
-            { name: "Clucky Streak", desc: "Now that's a lot of Easter eggs.", target: 10 },
-            { name: "Bringing in the Honey", desc: "Busy bee.", target: 10 },
-            { name: "Cowherd", desc: "Work, right?", target: 10 },
-            { name: "I like to switch it up", desc: "Getting there.", target: 1 },
-            { name: "This is just my weekend vehicle", desc: "Need each and every one.", target: 10 },
-            { name: "Vehicle fleet", desc: "I might have a problem…", target: 30 },
-            { name: "I read Shakespeare and stuff", desc: "First step.", target: 1 },
-            { name: "Highly cultivated", desc: "Proud of this one.", target: 1 },
-            { name: "Ultimutt Pawesomeness", desc: "Who's a good boy?", target: 1 },
-            { name: "That's a wrap", desc: "What's in the bale?", target: 10 },
-            { name: "Gone but not for cotton", desc: "Where store them?!", target: 10 },
-            { name: "Raisin the stakes", desc: "Californian gold!", target: 10 },
-            { name: "Olea europaea", desc: "Fruit, not vegetable!", target: 10 },
-            { name: "Original grain", desc: "Horses crazy for it.", target: 10 },
-            { name: "Rock on", desc: "Paved with rocks.", target: 10 },
-            { name: "You wood not believe it", desc: "Leaf of absence.", target: 10 },
-            { name: "I'm stumped", desc: "If a tree falls...", target: 10 },
-            { name: "Hard work pays off", desc: "Spend it, right?", target: 1000000 },
-            { name: "All out of Land", desc: "Everything is mine.", target: 1 },
-            { name: "Well-Oiled Machine", desc: "Franchise this…", target: 1 },
-            { name: "Pretty colourful", desc: "Childhood memories.", target: 1 },
-            { name: "Game on", desc: "Collector myself.", target: 1 },
-            { name: "Cheese it", desc: "Fondue?", target: 1 },
-            { name: "It's never too late to farm", desc: "Journey begins.", target: 1 }
+        const masterTrophyList = [
+            { id: "nature", name: "Farming is in our nature", desc: "Plant today - harvest tomorrow." },
+            { id: "road", name: "Road Trip", desc: "That thing wouldn't have fit onto the street anyway." },
+            { id: "plant", name: "Plant get enough", desc: "A little help can go a long way." },
+            { id: "thickens", name: "The plot thickens", desc: "Reached maximum efficiency." },
+            { id: "hopp", name: "Allez hopp", desc: "Oh, they can do THAT as well?" },
+            { id: "kangaroo", name: "You are not a kangaroo", desc: "Seriously, think of the poor animal!" },
+            { id: "giddy", name: "Giddy-up!", desc: "I could get used to getting around like this…" },
+            { id: "thorough", name: "Thoroughbred!", desc: "I'm a real cowboy, mom!" },
+            { id: "help", name: "Help me to help you", desc: "Sure, I can take care of that, neighbour." },
+            { id: "helper", name: "Helper A does not stop", desc: "What do you mean 'take care of my own farm'?" },
+            { id: "beginning", name: "It's just the beginning", desc: "I've never felt happier than here." },
+            { id: "sprinkle", name: "Just a sprinkle", desc: "You have to think about the future." },
+            { id: "sow", name: "It's sow easy", desc: "Planting one bean will yield much green." },
+            { id: "own", name: "Own use", desc: "Reap what you sow." },
+            { id: "supplier", name: "Large-scale supplier", desc: "Fruits of your labour." },
+            { id: "field", name: "Field Trip", desc: "One vehicle for all of your needs." },
+            { id: "haul", name: "Long haul", desc: "In it for the long game, I see." },
+            { id: "gogh", name: "van Gogh", desc: "Look at Mr. Fancypants over there." },
+            { id: "fell", name: "It just fell off", desc: "Only a matter of time…" },
+            { id: "fix", name: "Fix me up", desc: "Consider a membership card." },
+            { id: "fluff", name: "Fluffiness", desc: "Building up my wool empire." },
+            { id: "piggies", name: "Three little piggies…", desc: "Food they need." },
+            { id: "clucky", name: "Clucky Streak", desc: "Now that's a lot of Easter eggs." },
+            { id: "honey", name: "Bringing in the Honey", desc: "Busy bee." },
+            { id: "cowherd", name: "Cowherd", desc: "Bet you didn't think they'd be that much work." },
+            { id: "switch", name: "I like to switch it up", desc: "We're slowly getting there." },
+            { id: "weekend", name: "Weekend vehicle", desc: "I need each and every one." },
+            { id: "fleet", name: "Vehicle fleet", desc: "I might have a problem…" },
+            { id: "shakespeare", name: "Shakespeare and stuff", desc: "First step." },
+            { id: "cultivated", name: "Highly cultivated", desc: "Proud of this one." },
+            { id: "paw", name: "Ultimutt Pawesomeness", desc: "Who's a good boy?" },
+            { id: "wrap", name: "That's a wrap", desc: "What's in the bale?" },
+            { id: "cotton", name: "Gone but not for cotton", desc: "Where would you even store them?!" },
+            { id: "raisin", name: "Raisin the stakes", desc: "Californian gold!" },
+            { id: "olea", name: "Olea europaea", desc: "Fruit, not vegetable!" },
+            { id: "grain", name: "Original grain", desc: "Horses crazy for it." },
+            { id: "rock", name: "Rock on", desc: "Paved with rocks." },
+            { id: "wood", name: "You wood not believe it", desc: "Leaf of absence." },
+            { id: "stumped", name: "I'm stumped", desc: "Does one hand clap?" },
+            { id: "hard", name: "Hard work pays off", desc: "Spend it, right?" },
+            { id: "land", name: "All out of Land", desc: "Everything is mine." },
+            { id: "machine", name: "Well-Oiled Machine", desc: "Franchise this…" },
+            { id: "colourful", name: "Pretty colourful", desc: "Childhood memories." },
+            { id: "gameon", name: "Game on", desc: "Collector myself." },
+            { id: "cheese", name: "Cheese it", desc: "Fondue?" },
+            { id: "late", name: "Never too late", desc: "It feels good to be home." }
         ];
+
+        const werewolfStats = {
+            help: 100, paw: 100, giddy: 100, hopp: 100, machine: 100, land: 100, wood: 100, stumped: 100,
+            weekend: 90, switch: 60, cowherd: 45, fleet: 45, kangaroo: 36, clucky: 31, beginning: 10, helper: 8, field: 7, thorough: 4, shakespeare: 4, road: 2
+        };
+
+        const rayEarned = ["road", "plant", "hopp", "kangaroo", "giddy", "thorough", "help", "beginning", "own", "switch", "weekend", "fleet", "shakespeare", "paw", "wrap", "hard", "land", "machine", "colourful"];
 
         function updateClocks() {
             const now = new Date();
@@ -172,45 +180,32 @@
             const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
             const [farms, vehicles, placeables, career, farmland] = await Promise.all([ fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml') ]);
 
-            if(!farms || !career) return;
-            
-            const globalMoney = Math.floor(parseFloat(career.querySelector("statistics money")?.textContent || 0));
-            let farm2Money = 0;
-            
-            Array.from(farms.getElementsByTagName("farm")).forEach(f => {
-                const id = f.getAttribute("farmId");
-                const m = Math.floor(parseFloat(f.getAttribute("money") || 0));
-                if(id == "2") {
-                    farm2Money = m;
-                    document.getElementById(`f2-head-money`).innerText = "$" + farm2Money.toLocaleString();
-                    renderTrophyProgress(2, f.querySelector("statistics"));
-                }
-            });
-
-            const farm1Money = globalMoney - farm2Money;
-            document.getElementById(`f1-head-money`).innerText = "$" + (farm1Money > 0 ? farm1Money.toLocaleString() : "0");
-            
-            const f1Data = Array.from(farms.getElementsByTagName("farm")).find(f => f.getAttribute("farmId") == "1");
-            if(f1Data) renderTrophyProgress(1, f1Data.querySelector("statistics"));
-
-            document.getElementById("game-time").innerText = career.querySelector("dayTime")?.textContent || "00:00";
-            const day = career.querySelector("gameRuntime")?.textContent || "0";
-            document.getElementById("game-date").innerText = `Runtime: ${Math.floor(day/3600)} Hours`;
-            const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
-            document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
-            
-            ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields','all-coll'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
-
-            for(let i=0; i<50; i++) {
-                const found = fStr[i] === '1';
-                document.getElementById('all-coll').innerHTML += `<div class="card-inner border-purple-900 ${found?'opacity-100':'opacity-40'}">#${i+1}: ${found ? 'FOUND' : 'MISSING'}</div>`;
+            if(farms && career) {
+                const globalMoney = Math.floor(parseFloat(career.querySelector("statistics money")?.textContent || 0));
+                let farm2Money = 0;
+                Array.from(farms.getElementsByTagName("farm")).forEach(f => {
+                    if(f.getAttribute("farmId") == "2") farm2Money = Math.floor(parseFloat(f.getAttribute("money") || 0));
+                });
+                document.getElementById(`f2-head-money`).innerText = "$" + farm2Money.toLocaleString();
+                document.getElementById(`f1-head-money`).innerText = "$" + (globalMoney - farm2Money).toLocaleString();
+                document.getElementById("game-time").innerText = career.querySelector("dayTime")?.textContent || "00:00";
+                const day = career.querySelector("gameRuntime")?.textContent || "0";
+                document.getElementById("game-date").innerText = `Runtime: ${Math.floor(day/3600)} Hours`;
+                const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
+                document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
             }
 
+            // TROPHY RENDERING WITH SORTING
+            renderSortedTrophies('f1-trophies', werewolfStats, null, 'f1-border');
+            renderSortedTrophies('f2-trophies', null, rayEarned, 'f2-border');
+
+            // REST OF DASHBOARD SECTIONS
+            ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields','all-coll'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
+            
             if(vehicles) {
                 Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
                     const fId = v.getAttribute("farmId");
                     const path = v.getAttribute("filename");
-                    // Better Vehicle Naming
                     const name = path.split('/').pop().replace('.xml','').replace(/_/g, ' ').toUpperCase();
                     const fuel = Math.round(v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || 0);
                     const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(1);
@@ -224,22 +219,14 @@
                     const fId = p.getAttribute("farmId");
                     const storage = p.querySelector("storage");
                     if(!storage) return;
-                    
-                    // AGGRESSIVE NAMING LOGIC
-                    const customName = p.getAttribute("customName");
-                    const templateName = p.getAttribute("templateName");
-                    const fileName = p.getAttribute("filename").split('/').pop().replace('.xml','').replace(/_/g, ' ');
-                    
-                    let displayName = (customName && customName !== "") ? customName : 
-                                      (templateName && templateName !== "") ? templateName : fileName;
-                    
+                    const displayName = p.getAttribute("customName") || p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop().replace('.xml','').replace(/_/g, ' ');
                     let target = (fId == "1" || fId == "2") ? (p.getElementsByTagName("animal").length > 0 ? `f${fId}-animals` : `f${fId}-prod`) : "f0-prod";
                     let h = `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}"><b>${displayName.toUpperCase()}</b><br>`;
                     Array.from(storage.getElementsByTagName("node")).forEach(node => {
                         const lvl = Math.round(parseFloat(node.getAttribute("fillLevel")));
                         if(lvl > 1) h += `<div class="flex justify-between border-b border-gray-900 mt-1"><span>${cleanLabel(node.getAttribute("fillType"))}</span><span>${lvl.toLocaleString()}L</span></div>`;
                     });
-                    document.getElementById(target).innerHTML += h + "</div>";
+                    if(document.getElementById(target)) document.getElementById(target).innerHTML += h + "</div>";
                 });
             }
 
@@ -252,16 +239,30 @@
             }
         }
 
-        function renderTrophyProgress(fId, stats) {
-            const container = document.getElementById(`f${fId}-trophies`);
+        function renderSortedTrophies(containerId, stats, earnedList, farmColorClass) {
+            const container = document.getElementById(containerId);
             container.innerHTML = "";
-            trophyList.forEach(t => {
-                let current = 0;
-                if(t.name.includes("Trip") || t.name.includes("haul")) current = parseFloat(stats?.querySelector("traveledDistance")?.textContent || 0);
-                else if(t.name.includes("supplier") || t.name.includes("use")) current = parseFloat(stats?.querySelector("harvestedHectares")?.textContent || 0);
-                else if(t.name.includes("Hard work")) current = parseFloat(stats?.querySelector("money")?.textContent || 0);
-                const progress = Math.min(100, Math.round((current / t.target) * 100));
-                container.innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>${t.name}</b> <span class="float-right text-gray-500">${progress}%</span><div class="hud-bar-bg"><div class="trophy-fill" style="width:${progress}%"></div></div></div>`;
+
+            const list = masterTrophyList.map(t => {
+                let prog = earnedList ? (earnedList.includes(t.id) ? 100 : 0) : (stats[t.id] || 0);
+                return { ...t, prog };
+            });
+
+            // Sort: Incomplete (descending %) first, 100% last
+            list.sort((a, b) => {
+                if (a.prog === 100 && b.prog < 100) return 1;
+                if (a.prog < 100 && b.prog === 100) return -1;
+                return b.prog - a.prog;
+            });
+
+            list.forEach(t => {
+                const isDone = t.prog === 100;
+                container.innerHTML += `
+                    <div class="card-inner ${farmColorClass} ${isDone ? 'trophy-earned' : ''}">
+                        <div class="flex justify-between"><b>${t.name}</b> <span class="font-bold">${t.prog}%</span></div>
+                        <div class="text-[9px] text-gray-500 italic">${t.desc}</div>
+                        <div class="hud-bar-bg"><div class="trophy-fill" style="width:${t.prog}%"></div></div>
+                    </div>`;
             });
         }
 
