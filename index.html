@@ -1,45 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>618 Tactical Command</title>
+    <meta charset="UTF-8">
+    <title>618 Tactical Command: Full Intelligence Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background: #000; color: #ccc; font-family: sans-serif; }
-        .farm1-text { color: #FF5F00; } /* Jet-Orange */
-        .farm2-text { color: #C41E3A; } /* Cardinal Red */
-        .card { background: #111; border: 1px solid #333; padding: 15px; margin-bottom: 20px; }
-        .section-title { border-bottom: 2px solid #444; margin-bottom: 10px; font-weight: bold; text-transform: uppercase; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        body { background: #000; color: #aaa; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+        .f1 { color: #FF5F00; border-color: #FF5F00; }
+        .f2 { color: #C41E3A; border-color: #C41E3A; }
+        .header-large { font-size: 5rem; font-weight: 900; line-height: 1; margin-bottom: 2rem; }
+        .data-block { border-left: 2px solid; padding-left: 15px; margin-bottom: 30px; }
+        .detail-row { display: flex; justify-content: space-between; border-bottom: 1px solid #1a1a1a; padding: 4px 0; }
+        .label { text-transform: uppercase; opacity: 0.6; }
     </style>
 </head>
-<body class="p-4">
-    <h1 class="text-4xl font-black text-center mb-8 italic">TACTICAL INTELLIGENCE CENTER</h1>
+<body class="p-10">
 
-    <div class="grid grid-cols-2 gap-8">
-        <div id="farm1-container">
-            <h2 class="text-5xl font-black farm1-text mb-4 uppercase">FARM 01</h2>
-            <div id="f1-content">
-                <div class="card"><div class="section-title farm1-text">Balance</div><div id="f1-money" class="text-4xl">$0</div></div>
-                <div class="card"><div class="section-title farm1-text">Fleet & Damage</div><div id="f1-fleet" class="space-y-2"></div></div>
-                <div class="card"><div class="section-title farm1-text">Livestock & Feed</div><div id="f1-animals" class="space-y-2"></div></div>
-                <div class="card"><div class="section-title farm1-text">Factories & Production</div><div id="f1-factories" class="space-y-2"></div></div>
-                <div class="card"><div class="section-title farm1-text">Trophies</div><div id="f1-trophies" class="space-y-2"></div></div>
-            </div>
+    <div class="grid grid-cols-2 gap-20">
+        <div id="farm1-zone">
+            <h1 class="header-large f1 italic">FARM 01</h1>
+            
+            <section class="data-block f1">
+                <h2 class="text-2xl font-bold mb-4 underline">FINANCIAL INTELLIGENCE</h2>
+                <div id="f1-money" class="text-5xl font-black mb-2">$0</div>
+                <div id="f1-loan" class="text-xl opacity-70 italic">Loan: $0</div>
+            </section>
+
+            <section class="data-block f1">
+                <h2 class="text-2xl font-bold mb-4 underline">FLEET INVENTORY (NON-COMPACT)</h2>
+                <div id="f1-fleet-list" class="space-y-4"></div>
+            </section>
+
+            <section class="data-block f1">
+                <h2 class="text-2xl font-bold mb-4 underline">LIVESTOCK & BIOMETRICS</h2>
+                <div id="f1-animal-list" class="space-y-4"></div>
+            </section>
+
+            <section class="data-block f1">
+                <h2 class="text-2xl font-bold mb-4 underline">PRODUCTION & LOGISTICS</h2>
+                <div id="f1-production-list" class="space-y-4"></div>
+            </section>
         </div>
 
-        <div id="farm2-container">
-            <h2 class="text-5xl font-black farm2-text mb-4 uppercase">FARM 02</h2>
-            <div id="f2-content">
-                <div class="card"><div class="section-title farm2-text">Balance</div><div id="f2-money" class="text-4xl">$0</div></div>
-                <div class="card"><div class="section-title farm2-text">Fleet & Damage</div><div id="f2-fleet" class="space-y-2"></div></div>
-                <div class="card"><div class="section-title farm2-text">Livestock & Feed</div><div id="f2-animals" class="space-y-2"></div></div>
-                <div class="card"><div class="section-title farm2-text">Factories & Production</div><div id="f2-factories" class="space-y-2"></div></div>
-                <div class="card"><div class="section-title farm2-text">Trophies</div><div id="f2-trophies" class="space-y-2"></div></div>
-            </div>
+        <div id="farm2-zone">
+            <h1 class="header-large f2 italic">FARM 02</h1>
+            
+            <section class="data-block f2">
+                <h2 class="text-2xl font-bold mb-4 underline">FINANCIAL INTELLIGENCE</h2>
+                <div id="f2-money" class="text-5xl font-black mb-2">$0</div>
+                <div id="f2-loan" class="text-xl opacity-70 italic">Loan: $0</div>
+            </section>
+
+            <section class="data-block f2">
+                <h2 class="text-2xl font-bold mb-4 underline">FLEET INVENTORY (NON-COMPACT)</h2>
+                <div id="f2-fleet-list" class="space-y-4"></div>
+            </section>
+
+            <section class="data-block f2">
+                <h2 class="text-2xl font-bold mb-4 underline">LIVESTOCK & BIOMETRICS</h2>
+                <div id="f2-animal-list" class="space-y-4"></div>
+            </section>
+
+            <section class="data-block f2">
+                <h2 class="text-2xl font-bold mb-4 underline">PRODUCTION & LOGISTICS</h2>
+                <div id="f2-production-list" class="space-y-4"></div>
+            </section>
         </div>
     </div>
 
     <script>
-        async function runTacticalReport() {
+        async function buildMegaDashboard() {
             const ts = new Date().getTime();
             const getXml = async (f) => {
                 const r = await fetch(`${f}?v=${ts}`);
@@ -48,42 +79,61 @@
             };
 
             try {
-                const [farms, vehicles, placeables, career] = await Promise.all([
-                    getXml('farms.xml'), getXml('vehicles.xml'), getXml('placeables.xml'), getXml('careerSavegame.xml')
+                const [farms, vehicles, placeables, career, players] = await Promise.all([
+                    getXml('farms.xml'), getXml('vehicles.xml'), getXml('placeables.xml'), getXml('live_vault.xml'), getXml('players.xml')
                 ]);
 
-                // 1. BALANCES (from farms.xml)
+                // --- 1. DETAILED FINANCES ---
                 Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                     const id = f.getAttribute("farmId");
                     const money = parseInt(f.getAttribute("money")).toLocaleString();
+                    const loan = parseInt(f.getAttribute("loan")).toLocaleString();
                     if(document.getElementById(`f${id}-money`)) document.getElementById(`f${id}-money`).innerText = `$${money}`;
+                    if(document.getElementById(`f${id}-loan`)) document.getElementById(`f${id}-loan`).innerText = `LOAN BALANCE: $${loan}`;
                 });
 
-                // 2. FLEET (from vehicles.xml) - Damage & Fuel
+                // --- 2. FULL VEHICLE REPORT (Every unit listed) ---
                 Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
                     const fId = v.getAttribute("farmId");
-                    const name = v.getAttribute("filename").split('/').pop().split('.')[0];
-                    const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(0);
+                    if(fId != "1" && fId != "2") return;
+
+                    const name = v.getAttribute("filename").split('/').pop();
+                    const age = v.getAttribute("age") || "0";
                     const fuel = v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || "0";
+                    const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(2);
                     
-                    const html = `<div class="border-b border-gray-800 pb-1"><strong>${name}</strong><br>Damage: ${dmg}% | Fuel: ${Math.round(fuel)}L</div>`;
-                    if(document.getElementById(`f${fId}-fleet`)) document.getElementById(`f${fId}-fleet`).innerHTML += html;
+                    const html = `
+                        <div class="border border-zinc-800 p-2">
+                            <div class="font-bold uppercase">${name}</div>
+                            <div class="detail-row"><span class="label">Condition</span><span>${100-dmg}%</span></div>
+                            <div class="detail-row"><span class="label">Fuel Level</span><span>${Math.round(fuel)}L</span></div>
+                            <div class="detail-row"><span class="label">Age (Months)</span><span>${age}</span></div>
+                        </div>`;
+                    document.getElementById(`f${fId}-fleet-list`).innerHTML += html;
                 });
 
-                // 3. ANIMALS (from placeables.xml)
+                // --- 3. FULL PRODUCTION REPORT (Every factory pallet/storage) ---
                 Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
                     const fId = p.getAttribute("farmId");
-                    const animalType = p.getAttribute("templateName");
-                    if (animalType && animalType.includes("Barn")) {
-                        const health = p.querySelector("animal")?.getAttribute("health") || "100";
-                        const html = `<div><strong>${animalType}</strong>: Health ${health}%</div>`;
-                        if(document.getElementById(`f${fId}-animals`)) document.getElementById(`f${fId}-animals`).innerHTML += html;
-                    }
+                    if(fId != "1" && fId != "2") return;
+
+                    const title = p.getAttribute("filename").split('/').pop().replace('.xml', '');
+                    let storageHtml = `<div class="border border-zinc-800 p-2"><div class="font-bold">${title}</div>`;
+                    
+                    Array.from(p.getElementsByTagName("storage")).forEach(s => {
+                        Array.from(s.getElementsByTagName("node")).forEach(n => {
+                            const fill = n.getAttribute("fillType");
+                            const amount = Math.round(parseFloat(n.getAttribute("fillLevel")));
+                            if(amount > 0) storageHtml += `<div class="detail-row"><span class="label">${fill}</span><span>${amount}L</span></div>`;
+                        });
+                    });
+                    storageHtml += `</div>`;
+                    document.getElementById(`f${fId}-production-list`).innerHTML += storageHtml;
                 });
 
-            } catch (e) { console.error("Report Error:", e); }
+            } catch (e) { console.error("Tactical Error:", e); }
         }
-        runTacticalReport();
+        buildMegaDashboard();
     </script>
 </body>
 </html>
