@@ -1,26 +1,32 @@
-import os
 import time
 
-# Define the two groups
-CRITICAL_FILES = ['farms.xml', 'vehicles.xml', 'missions.xml', 'careerSavegame.xml']
-HEAVY_FILES = ['items.xml', 'precisionFarming.xml', 'densityMapHeight.xml', 'sales.xml']
+# TIMING CONFIG (In Seconds)
+SMALL_INTERVAL = 7 * 60  # 420 seconds
+LARGE_INTERVAL = 30 * 60 # 1800 seconds
 
-def sync_tier_1():
-    # Code to download and push CRITICAL_FILES
-    print("Syncing Tactical Data...")
+# FILE GROUPS
+SMALL_FILES = ['farms.xml', 'vehicles.xml', 'missions.xml', 'careerSavegame.xml', 'collectibles.xml']
+LARGE_FILES = ['items.xml', 'densityMapHeight.xml', 'precisionFarming.xml', 'growthState.xml']
 
-def sync_tier_2():
-    # Code to download and push HEAVY_FILES
-    print("Syncing Environmental/Map Data...")
+last_small_sync = 0
+last_large_sync = 0
 
-# Main Loop
-count = 0
 while True:
-    sync_tier_1() # Always sync the small stuff
-    
-    # Only sync the heavy stuff every 6th cycle (approx 30 mins)
-    if count % 6 == 0:
-        sync_tier_2()
-        
-    count += 1
-    time.sleep(300) # Wait 5 minutes
+    current_time = time.time()
+
+    # TRACK 1: SMALL FILES (Every 7 Mins)
+    if current_time - last_small_sync >= SMALL_INTERVAL:
+        print("--- STARTING SMALL TACTICAL SYNC (7 MIN) ---")
+        # [Download logic for SMALL_FILES goes here]
+        # [GitHub Push logic goes here]
+        last_small_sync = current_time
+
+    # TRACK 2: LARGE FILES (Every 30 Mins)
+    if current_time - last_large_sync >= LARGE_INTERVAL:
+        print("--- STARTING HEAVY DATA SYNC (30 MIN) ---")
+        # [Download logic for LARGE_FILES goes here]
+        # [GitHub Push logic goes here]
+        last_large_sync = current_time
+
+    # Wait 30 seconds before checking the clock again to save CPU
+    time.sleep(30)
