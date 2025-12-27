@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>618 Crew Tactical HQ</title>
-    <!-- React and Tailwind CDN -->
+    <!-- React and ReactDOM CDNs -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX compilation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Tailwind CSS for Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
@@ -35,7 +37,7 @@
     <script type="text/babel">
         const { useEffect, useState, useCallback } = React;
 
-        // Generic SVG Icon Component to replace broken Lucide CDN
+        // Custom SVG Icon component to replace broken Lucide CDN imports
         const SvgIcon = ({ name, size = 24, className = "" }) => {
             const icons = {
                 tractor: "M3 17h18M7 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM5 11V5a2 2 0 0 1 2-2h4l2 3h6a2 2 0 0 1 2 2v3",
@@ -108,7 +110,7 @@
             { id: "ACHIEVEMENT_46", name: "It's never too late to farm", desc: "Feels good to be home." }
         ];
 
-        // 19 Trophies for Ray | 9 Trophies for Funny
+        // Ray: 19 trophies found | Funny: 9 trophies found
         const EARNED_RAY = ["ACHIEVEMENT_01", "ACHIEVEMENT_02", "ACHIEVEMENT_03", "ACHIEVEMENT_05", "ACHIEVEMENT_06", "ACHIEVEMENT_07", "ACHIEVEMENT_08", "ACHIEVEMENT_09", "ACHIEVEMENT_11", "ACHIEVEMENT_26", "ACHIEVEMENT_27", "ACHIEVEMENT_28", "ACHIEVEMENT_29", "ACHIEVEMENT_31", "ACHIEVEMENT_32", "ACHIEVEMENT_40", "ACHIEVEMENT_41", "ACHIEVEMENT_42", "ACHIEVEMENT_43"];
         const EARNED_FUNNY = ["ACHIEVEMENT_09", "ACHIEVEMENT_31", "ACHIEVEMENT_07", "ACHIEVEMENT_05", "ACHIEVEMENT_42", "ACHIEVEMENT_41", "ACHIEVEMENT_38", "ACHIEVEMENT_39", "ACHIEVEMENT_40"];
 
@@ -129,10 +131,7 @@
                 fields: [],
                 factories: [],
                 collectibles: 12,
-                farms: { 
-                    1: { name: "Funny Farm", money: 0 }, 
-                    2: { name: "Ray Operations", money: 0 } 
-                }
+                farms: { 1: { money: 0 }, 2: { money: 0 } }
             });
 
             const fetchRealWeather = useCallback(async () => {
@@ -305,11 +304,11 @@
                                                     <div className="bg-orange-600 p-5 rounded-[1.5rem] shadow-lg shadow-orange-600/30"><SvgIcon name="target" className="text-white" size={32} /></div>
                                                     <div>
                                                         <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Strategic Progress</h3>
-                                                        <p className="text-orange-500 text-xs font-bold uppercase tracking-[0.2em] mt-1">Goal: Help me to help you (Contract Efficiency Target)</p>
+                                                        <p className="text-orange-500 text-xs font-bold uppercase tracking-[0.2em] mt-1">Contract Efficiency Target: (12 / 50 Complete)</p>
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
-                                                    <span className="text-4xl font-black text-white tabular-nums">12 <span className="text-orange-500 italic">/ 50 Complete</span></span>
+                                                    <span className="text-4xl font-black text-white tabular-nums">24% <span className="text-orange-500 italic">SYNC</span></span>
                                                 </div>
                                             </div>
                                             <div className="w-full h-6 bg-white/10 rounded-full border-2 border-white/10 overflow-hidden p-1">
@@ -326,7 +325,7 @@
                                                             <span className={`text-[10px] font-black ${v.damage > 0.5 ? 'text-red-500' : 'text-emerald-500'}`}>{Math.floor((1-v.damage)*100)}% HP</span>
                                                         </div>
                                                         <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-                                                            <div className={`h-full ${v.damage > 0.5 ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-orange-500 shadow-[0_0_8px_#f97316]'}`} style={{width: `${(1-v.damage)*100}%`}}></div>
+                                                            <div className={`h-full ${v.damage > 0.5 ? 'bg-red-500' : 'bg-orange-500 shadow-[0_0_8px_#f97316]'}`} style={{width: `${(1-v.damage)*100}%`}}></div>
                                                         </div>
                                                     </div>
                                                 ))}
@@ -365,7 +364,7 @@
                                                 {data.fields.map((f, i) => (
                                                     <div key={i} className="bg-black/40 p-5 rounded-[1.5rem] border border-white/5">
                                                         <div className="flex justify-between items-center mb-3">
-                                                            <span className="text-[11px] font-black text-white italic uppercase">Field {f.id}</span>
+                                                            <span className="text-[11px] font-black text-white italic uppercase">Sector {f.id}</span>
                                                             <span className="text-[9px] font-black text-emerald-500 uppercase bg-emerald-500/10 px-3 py-1 rounded-lg">{f.fruit}</span>
                                                         </div>
                                                         <div className="h-2 bg-white/5 rounded-full overflow-hidden mb-2">
@@ -377,7 +376,7 @@
                                             </div>
                                         </Module>
 
-                                        <Module title="Industrial Ops" icon="factory">
+                                        <Module title="Industrial Chain" icon="factory">
                                             <div className="space-y-6">
                                                 {data.factories.filter(pt => String(pt.farmId) === String(id)).map((pt, idx) => (
                                                     <div key={idx} className="bg-white/5 p-6 rounded-[2rem] border border-white/10">
@@ -403,6 +402,7 @@
                                             </div>
                                         </Module>
 
+                                        {/* ACHIEVEMENT PROGRESS WITH INDIVIDUAL BARS */}
                                         <div className="xl:col-span-4 bg-white/5 border-2 border-orange-500/40 rounded-[3rem] p-10 min-h-[600px] backdrop-blur-xl shadow-2xl">
                                             <div className="flex items-center justify-between mb-10 border-b border-white/10 pb-8">
                                                 <div className="flex items-center gap-6">
