@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <careerSavegame revision="2" valid="true">
     <settings>
         <savegameName>Speedy</savegameName>
@@ -51,8 +51,8 @@
         <foundHelpIcons>00000000000000000000</foundHelpIcons>
     </map>
     <statistics>
-        <money>51792570</money>
-        <playTime>18581.591797</playTime>
+        <money>51793723</money>
+        <playTime>18611.601562</playTime>
     </statistics>
     <slotSystem slotUsage="1395"/>
     <mapsSplitShapeFileIds count="1">
