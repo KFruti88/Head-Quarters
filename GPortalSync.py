@@ -2,13 +2,13 @@ import os
 from ftplib import FTP
 import sys
 
-# These match the 'env:' section in your sync_data.yml
+# These variables pull from your GitHub Secrets
 host = os.getenv('GPORTAL_IP')
 user = os.getenv('GPORTAL_USER')
 password = os.getenv('GPORTAL_PASS')
 
-# !!! CHANGE THIS to the actual filename on your G-Portal server !!!
-remote_filename = "data_vault.xml" 
+# IMPORTANT: This MUST match the filename on your G-Portal server
+remote_filename = "live_vault.xml" 
 local_filename = "live_vault.xml"
 
 try:
@@ -22,7 +22,6 @@ try:
     
     ftp.quit()
     print("Sync Successful!")
-
 except Exception as e:
     print(f"FAILED: {e}")
     sys.exit(1)
