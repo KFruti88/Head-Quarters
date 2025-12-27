@@ -2,100 +2,138 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>618 Tactical: Full Intelligence Report</title>
+    <title>618 Tactical Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap');
-        body { background: #000; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
-        .f1-text { color: #FF5F00; }
-        .f2-text { color: #C41E3A; }
-        .f1-border { border-color: #FF5F00; }
-        .f2-border { border-color: #C41E3A; }
-        .data-card { border: 1px solid #222; padding: 10px; margin-bottom: 10px; border-left: 4px solid; }
-        .header { font-size: 4rem; font-weight: 800; text-transform: uppercase; font-style: italic; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+        :root { --f1: #FF5F00; --f2: #C41E3A; }
+        body { background: #050505; color: #aaa; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+        .f1-text { color: var(--f1); } .f1-border { border-color: var(--f1); }
+        .f2-text { color: var(--f2); } .f2-border { border-color: var(--f2); }
+        .header-box { background: #111; border: 1px solid #333; padding: 10px; min-width: 250px; }
+        .scroll-box { height: 300px; overflow-y: auto; background: #0a0a0a; border: 1px solid #222; padding: 10px; }
+        .status-dot { height: 12px; width: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .online { background: #00ff00; box-shadow: 0 0 10px #00ff00; }
+        .offline { background: #ff0000; }
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-thumb { background: #333; }
     </style>
 </head>
-<body class="p-6">
-    <div class="grid grid-cols-2 gap-10">
-        
-        <div>
-            <h1 class="header f1-text mb-8">FARM 01</h1>
-            <div id="f1-money" class="text-4xl font-bold f1-text mb-10">$0.00</div>
-            
-            <h2 class="text-xl font-bold mb-4 underline">DETAILED FLEET INVENTORY</h2>
-            <div id="f1-fleet" class="space-y-2"></div>
+<body class="p-4">
 
-            <h2 class="text-xl font-bold mt-10 mb-4 underline">PRODUCTION & STORAGE</h2>
-            <div id="f1-production" class="space-y-2"></div>
+    <header class="flex justify-between items-start mb-6 border-b border-gray-800 pb-4">
+        <div class="flex flex-col">
+            <div class="flex items-center">
+                <span id="status-dot" class="status-dot online"></span>
+                <b id="srv-name" class="text-xl text-white uppercase">618 TACTICAL</b>
+            </div>
+            <span id="crossplay-status" class="text-xs text-gray-500 italic mt-1">CrossPlay: Enabled</span>
         </div>
 
-        <div>
-            <h1 class="header f2-text mb-8">FARM 02</h1>
-            <div id="f2-money" class="text-4xl font-bold f2-text mb-10">$0.00</div>
-            
-            <h2 class="text-xl font-bold mb-4 underline">DETAILED FLEET INVENTORY</h2>
-            <div id="f2-fleet" class="space-y-2"></div>
-
-            <h2 class="text-xl font-bold mt-10 mb-4 underline">PRODUCTION & STORAGE</h2>
-            <div id="f2-production" class="space-y-2"></div>
+        <div class="flex gap-4">
+            <div class="header-box f1-border">
+                <div class="f1-text font-bold" id="f1-head-name">FARM 1</div>
+                <div class="text-white" id="f1-head-money">$0</div>
+                <div class="text-[9px] text-gray-500" id="weather-gnv">Gainesville: Loading...</div>
+            </div>
+            <div class="header-box f2-border">
+                <div class="f2-text font-bold" id="f2-head-name">FARM 2</div>
+                <div class="text-white" id="f2-head-money">$0</div>
+                <div class="text-[9px] text-gray-500" id="weather-flora">Flora: Loading...</div>
+            </div>
+            <div class="header-box border-blue-500">
+                <div class="text-blue-400 font-bold">GAME WORLD</div>
+                <div class="text-white" id="game-time">00:00</div>
+                <div class="text-[9px] text-gray-500" id="game-weather">Sunny | Day 1</div>
+            </div>
         </div>
+
+        <div class="text-right">
+            <div class="text-gray-500 text-xs">COLLECTIBLES</div>
+            <div class="text-3xl font-bold text-yellow-500"><span id="coll-found">0</span>/50</div>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold border-b border-gray-800 mb-2">F1 TROPHIES</h3><div id="f1-trophies"></div></div>
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold border-b border-gray-800 mb-2">F1 PRODUCTION</h3><div id="f1-prod"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold border-b border-gray-800 mb-2">F2 TROPHIES</h3><div id="f2-trophies"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold border-b border-gray-800 mb-2">F2 PRODUCTION</h3><div id="f2-prod"></div></div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="scroll-box f1-border"><div class="flex justify-between"><span class="f1-text font-bold">F1 FLEET</span><span id="f1-v-count" class="text-white">0</span></div><div id="f1-fleet-detail"></div></div>
+        <div class="scroll-box f1-border"><div class="flex justify-between"><span class="f1-text font-bold">F1 ATTACHMENTS</span><span id="f1-a-count" class="text-white">0</span></div><div id="f1-attach-detail"></div></div>
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold">F1 PALLETS</h3><div id="f1-pallets"></div></div>
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold">F1 FIELDS</h3><div id="f1-fields"></div></div>
+    </div>
+
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="scroll-box f2-border"><div class="flex justify-between"><span class="f2-text font-bold">F2 FLEET</span><span id="f2-v-count" class="text-white">0</span></div><div id="f2-fleet-detail"></div></div>
+        <div class="scroll-box f2-border"><div class="flex justify-between"><span class="f2-text font-bold">F2 ATTACHMENTS</span><span id="f2-a-count" class="text-white">0</span></div><div id="f2-attach-detail"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold">F2 PALLETS</h3><div id="f2-pallets"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold">F2 FIELDS</h3><div id="f2-fields"></div></div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+        <div class="scroll-box border-gray-700 col-span-1"><h3 class="text-white font-bold mb-2">ACTIVE MISSIONS</h3><div id="mission-list"></div></div>
+        <div class="scroll-box border-gray-700 col-span-1"><h3 class="text-yellow-500 font-bold mb-2">MARKET STOCKS (HOT)</h3><div id="stock-list"></div></div>
+        <div class="scroll-box border-gray-700 col-span-1"><h3 class="text-purple-400 font-bold mb-2">COLLECTIBLE LOCATOR</h3><div id="full-collectibles"></div></div>
     </div>
 
     <script>
-        async function buildFullReport() {
-            const ts = new Date().getTime();
-            const fetchXml = f => fetch(`${f}?v=${ts}`).then(r => r.text()).then(t => new DOMParser().parseFromString(t, "text/xml"));
+        // Fetch Weather for GNV and Flora
+        async function getRealWeather() {
+            const gnv = await fetch('https://api.open-meteo.com/v1/forecast?latitude=29.6516&longitude=-82.3248&current_weather=true').then(r => r.json());
+            const flora = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.6689&longitude=-88.4851&current_weather=true').then(r => r.json());
+            document.getElementById('weather-gnv').innerText = `GNV: ${gnv.current_weather.temperature}°C | ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+            document.getElementById('weather-flora').innerText = `Flora: ${flora.current_weather.temperature}°C | ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+        }
 
+        async function updateDashboard() {
+            const ts = new Date().getTime();
+            const getXml = f => fetch(`${f}?v=${ts}`).then(r => r.text()).then(t => new DOMParser().parseFromString(t, "text/xml"));
+            
             try {
-                const [farms, vehicles, placeables] = await Promise.all([
-                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml')
+                const [farms, vehicles, placeables, career, farmland] = await Promise.all([
+                    getXml('farms.xml'), getXml('vehicles.xml'), getXml('placeables.xml'), getXml('live_vault.xml'), getXml('farmland.xml')
                 ]);
 
-                // 1. FINANCES
+                // Update Header Map/Server Info
+                const map = career.querySelector("settings mapTitle")?.textContent;
+                document.getElementById('srv-name').innerText = `618 TACTICAL | ${map}`;
+
+                // Process Farm Balances
                 Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                     const id = f.getAttribute("farmId");
                     const money = parseInt(f.getAttribute("money")).toLocaleString();
-                    if(document.getElementById(`f${id}-money`)) document.getElementById(`f${id}-money`).innerText = `$${money}`;
+                    document.getElementById(`f${id}-head-name`).innerText = f.getAttribute("name");
+                    document.getElementById(`f${id}-head-money`).innerText = `$${money}`;
                 });
 
-                // 2. FLEET (NON-COMPACT - LIST EVERY ITEM)
+                // Process Fleet (Row 2 & 3)
                 Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
                     const fId = v.getAttribute("farmId");
-                    if(fId != "1" && fId != "2") return;
-                    const name = v.getAttribute("filename").split('/').pop();
-                    const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(2);
+                    if (fId != "1" && fId != "2") return;
+                    const name = v.getAttribute("filename").split('/').pop().replace('.xml', '');
                     const fuel = Math.round(v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || 0);
-
-                    const html = `<div class="data-card ${fId=='1'?'f1-border':'f2-border'}">
-                        <strong>${name}</strong><br>
-                        > CONDITION: ${100-dmg}% | FUEL: ${fuel}L
-                    </div>`;
-                    document.getElementById(`f${fId}-fleet`).innerHTML += html;
-                });
-
-                // 3. PRODUCTION (NON-COMPACT - LIST EVERY STORAGE ITEM)
-                Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
-                    const fId = p.getAttribute("farmId");
-                    if(fId != "1" && fId != "2") return;
-                    const name = p.getAttribute("filename").split('/').pop();
+                    const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(0);
                     
-                    let storageList = "";
-                    Array.from(p.getElementsByTagName("node")).forEach(n => {
-                        const level = Math.round(parseFloat(n.getAttribute("fillLevel") || 0));
-                        if(level > 0) storageList += `<br>-- ${n.getAttribute("fillType")}: ${level}L`;
-                    });
-
-                    if(storageList) {
-                        const html = `<div class="data-card ${fId=='1'?'f1-border':'f2-border'}">
-                            <strong>${name}</strong>${storageList}
-                        </div>`;
-                        document.getElementById(`f${fId}-production`).innerHTML += html;
-                    }
+                    const html = `<div class="mb-2 border-b border-gray-900 pb-1">
+                        <span class="text-white font-bold">${name}</span><br>
+                        Fuel: ${fuel}L | Damage: <span class="${dmg > 50 ? 'text-red-500' : ''}">${dmg}%</span>
+                    </div>`;
+                    document.getElementById(`f${fId}-fleet-detail`).innerHTML += html;
                 });
 
-            } catch (e) { console.error("Report System Error", e); }
+                // (Additional logic for Production, Fields, and Trophies would go here)
+                
+            } catch (e) { console.error("Tactical Error:", e); }
         }
-        buildFullReport();
+
+        getRealWeather();
+        updateDashboard();
     </script>
 </body>
 </html>
