@@ -1,38 +1,14 @@
-name: 618 Tactical Cloud Sync
-
-on:
-  schedule:
-    - cron: '*/10 * * * *'  # Runs every 10 minutes
-  workflow_dispatch:        # Allows you to run it manually
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install Dependencies
-        run: |
-          pip install requests  # Add any other libraries your script needs
-
-      - name: Run G-Portal Sync
-        env:
-          GPORTAL_IP: ${{ secrets.GPORTAL_IP }}
-          GPORTAL_USER: ${{ secrets.GPORTAL_USER }}
-          GPORTAL_PASS: ${{ secrets.GPORTAL_PASS }}
-        run: python GPortalSync.py
-
-      - name: Commit and Push Data
+- name: Commit and Push Data
         run: |
           git config --global user.name "618-Tactical-Bot"
           git config --global user.email "bot@618crew.com"
-          git add live_vault.xml
-          git commit -m "Cloud Sync: Update Tactical Data" || exit 0
-          git push
+          
+          # Check if the file exists before trying to add it
+          if [ -f "live_vault.xml" ]; then
+            git add live_vault.xml
+            git commit -m "Cloud Sync: Update Tactical Data" || echo "No changes to commit"
+            git push
+          else
+            echo "Error: live_vault.xml not found! Skipping commit."
+            exit 1
+          fi
