@@ -2,6 +2,7 @@ name: 618 Tactical Cloud Sync
 
 on:
   schedule:
+    # Runs every 10 minutes to keep data fresh
     - cron: '*/10 * * * *'
   workflow_dispatch: 
 
@@ -20,17 +21,21 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Run Multi-File Sync
+      - name: Run Multi-File Sync Script
         env:
           GPORTAL_IP: ${{ secrets.GPORTAL_IP }}
           GPORTAL_USER: ${{ secrets.GPORTAL_USER }}
           GPORTAL_PASS: ${{ secrets.GPORTAL_PASS }}
         run: python GPortalSync.py
 
-      - name: Commit and Push All XMLs
+      - name: Commit and Push Full Tactical Data
         run: |
           git config --global user.name "618-Bot"
           git config --global user.email "bot@618crew.com"
+          
+          # This tells GitHub to grab EVERY xml file the Python script just downloaded
           git add *.xml
-          git commit -m "Full Tactical Sync [All Systems]" || exit 0
+          
+          # This saves the changes. 'exit 0' prevents failure if no data changed.
+          git commit -m "Syncing Full Tactical Data [Non-Compacted]" || exit 0
           git push
