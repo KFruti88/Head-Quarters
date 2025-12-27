@@ -1,34 +1,17 @@
-# .github/workflows/sync_data.yml
-name: 618 Tactical Cloud Sync
+import os
+import requests # or whichever library you use for the sync
 
-on:
-  schedule:
-    - cron: '*/10 * * * *'
-  workflow_dispatch: 
+# Access the secrets you defined in the YAML
+ip = os.getenv('GPORTAL_IP')
+username = os.getenv('GPORTAL_USER')
+password = os.getenv('GPORTAL_PASS')
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+def sync_data():
+    print(f"Connecting to {ip}...")
+    # Your logic to fetch data and save to live_vault.xml goes here
+    # Example:
+    # with open("live_vault.xml", "w") as f:
+    #     f.write("<data>...</data>")
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Run G-Portal Sync
-        env:
-          GPORTAL_IP: ${{ secrets.GPORTAL_IP }}
-          GPORTAL_USER: ${{ secrets.GPORTAL_USER }}
-          GPORTAL_PASS: ${{ secrets.GPORTAL_PASS }}
-        run: python GPortalSync.py
-
-      - name: Commit and Push Data
-        run: |
-          git config --global user.name "618-Tactical-Bot"
-          git config --global user.email "bot@618crew.com"
-          git add live_vault.xml
-          git commit -m "Cloud Sync: Update Tactical Data" || exit 0
-          git push
+if __name__ == "__main__":
+    sync_data()
