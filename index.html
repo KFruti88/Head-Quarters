@@ -22,7 +22,6 @@
             min-height: 100vh;
         }
 
-        /* Glossy Glass Effect */
         .glass-panel {
             background: var(--glass);
             backdrop-filter: blur(12px);
@@ -33,20 +32,12 @@
         }
 
         .f1-text { color: var(--f1); text-shadow: 0 0 8px rgba(255, 95, 0, 0.4); }
-        .f1-border { border-color: var(--f1); box-shadow: inset 0 0 15px rgba(255, 95, 0, 0.1); }
-        
+        .f1-border { border-color: var(--f1); }
         .f2-text { color: var(--f2); text-shadow: 0 0 8px rgba(196, 30, 58, 0.4); }
-        .f2-border { border-color: var(--f2); box-shadow: inset 0 0 15px rgba(196, 30, 58, 0.1); }
+        .f2-border { border-color: var(--f2); }
 
-        .header-box { padding: 12px; min-width: 280px; transition: all 0.3s ease; }
-        .header-box:hover { background: rgba(255,255,255,0.05); }
-
-        .scroll-box { 
-            height: 400px; 
-            overflow-y: auto; 
-            padding: 15px; 
-            background: rgba(0, 0, 0, 0.4);
-        }
+        .header-box { padding: 12px; min-width: 280px; }
+        .scroll-box { height: 400px; overflow-y: auto; padding: 15px; background: rgba(0, 0, 0, 0.4); }
 
         .card-inner { 
             background: rgba(255, 255, 255, 0.03); 
@@ -64,27 +55,12 @@
             box-shadow: 0 0 15px #0f0; 
             animation: pulse 2s infinite;
         }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        .trophy-earned { 
-            opacity: 0.8; 
-            border-left: 4px solid #00ff00 !important; 
-            background: rgba(0, 255, 0, 0.05);
-        }
-
-        .pinned-contract { 
-            background: rgba(234, 179, 8, 0.1); 
-            border-left: 4px solid #eab308; 
-            margin-bottom: 15px;
-        }
+        .trophy-earned { opacity: 0.8; border-left: 4px solid #00ff00 !important; background: rgba(0, 255, 0, 0.05); }
+        .pinned-contract { background: rgba(234, 179, 8, 0.1); border-left: 4px solid #eab308; margin-bottom: 15px; }
 
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
     </style>
 </head>
@@ -96,20 +72,20 @@
                 <span class="status-dot bg-green-500"></span>
                 <b class="text-4xl text-white uppercase font-black italic tracking-tighter">618 TACTICAL</b>
             </div>
-            <span class="text-xs text-blue-400 font-bold tracking-widest mt-1">OPERATIONAL CAPACITY: OPTIMAL</span>
+            <span class="text-xs text-blue-400 font-bold tracking-widest mt-1 uppercase">Operational Status: Secure</span>
         </div>
 
         <div class="flex gap-6">
             <div class="header-box glass-panel f1-border">
                 <div class="f1-text font-black text-xs uppercase tracking-widest">F1: WEREWOLF (ET)</div>
                 <div class="text-white text-4xl font-black" id="f1-head-money">$0</div>
-                <div id="time-gnv" class="text-[11px] text-gray-400 font-bold mt-1">GNV: --:--</div>
+                <div id="time-gnv" class="text-[11px] text-gray-400 font-bold mt-1">ET: --:--</div>
                 <div id="weather-gnv" class="text-[11px] text-gray-500">TEMP: --°F</div>
             </div>
             <div class="header-box glass-panel f2-border">
                 <div class="f2-text font-black text-xs uppercase tracking-widest">F2: RAY (CT)</div>
                 <div class="text-white text-4xl font-black" id="f2-head-money">$0</div>
-                <div id="time-flora" class="text-[11px] text-gray-400 font-bold mt-1">FLORA: --:--</div>
+                <div id="time-flora" class="text-[11px] text-gray-400 font-bold mt-1">CT: --:--</div>
                 <div id="weather-flora" class="text-[11px] text-gray-500">TEMP: --°F</div>
             </div>
             <div class="header-box glass-panel border-blue-500">
@@ -125,35 +101,35 @@
     </header>
 
     <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="glass-panel f1-border"><h3 class="f1-text font-black p-3 border-b border-gray-800 text-center">WEREWOLF ACHIEVEMENTS</h3><div id="f1-trophies" class="scroll-box"></div></div>
-        <div class="glass-panel f1-border"><h3 class="f1-text font-black p-3 border-b border-gray-800 text-center">WEREWOLF LOGISTICS</h3><div id="f1-prod" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-3 border-b border-gray-800 text-center">RAY ACHIEVEMENTS</h3><div id="f2-trophies" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-3 border-b border-gray-800 text-center">RAY LOGISTICS</h3><div id="f2-prod" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-black p-3 border-b border-gray-800 text-center uppercase">Werewolf Achievements</h3><div id="f1-trophies" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-black p-3 border-b border-gray-800 text-center uppercase">Werewolf Production</h3><div id="f1-prod" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-3 border-b border-gray-800 text-center uppercase">Ray Achievements</h3><div id="f2-trophies" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-3 border-b border-gray-800 text-center uppercase">Ray Production</h3><div id="f2-prod" class="scroll-box"></div></div>
     </div>
 
     <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Fleet</h3><div id="f1-fleet" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Fleet <span id="f1-v-count">0</span></h3><div id="f1-fleet" class="scroll-box"></div></div>
         <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Attach</h3><div id="f1-attach" class="scroll-box"></div></div>
         <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Pallets</h3><div id="f1-pallets" class="scroll-box"></div></div>
         <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Fields</h3><div id="f1-fields" class="scroll-box"></div></div>
     </div>
 
     <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Fleet</h3><div id="f2-fleet" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Fleet <span id="f2-v-count">0</span></h3><div id="f2-fleet" class="scroll-box"></div></div>
         <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Attach</h3><div id="f2-attach" class="scroll-box"></div></div>
         <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Pallets</h3><div id="f2-pallets" class="scroll-box"></div></div>
         <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Fields</h3><div id="f2-fields" class="scroll-box"></div></div>
     </div>
 
     <div class="grid grid-cols-3 gap-6 mb-8">
-        <div class="glass-panel border-gray-700"><h3 class="text-white font-bold p-3 border-b border-gray-800 uppercase">Tactical Missions</h3><div id="missions" class="scroll-box"></div></div>
-        <div class="glass-panel border-gray-700"><h3 class="text-yellow-600 font-bold p-3 border-b border-gray-800 uppercase">Market Volatility</h3><div id="stocks" class="scroll-box"></div></div>
+        <div class="glass-panel border-gray-700"><h3 class="text-white font-bold p-3 border-b border-gray-800 uppercase">Active Missions</h3><div id="missions" class="scroll-box"></div></div>
+        <div class="glass-panel border-gray-700"><h3 class="text-yellow-600 font-bold p-3 border-b border-gray-800 uppercase">Market Stocks</h3><div id="stocks" class="scroll-box"></div></div>
         <div class="glass-panel border-gray-700"><h3 class="text-purple-600 font-bold p-3 border-b border-gray-800 uppercase">Coordinate Uplink</h3><div id="all-coll" class="scroll-box"></div></div>
     </div>
 
     <div class="grid grid-cols-2 gap-6">
-        <div class="glass-panel f1-border"><h3 class="f1-text font-black p-4 text-lg italic uppercase tracking-tighter">Werewolf Bio-Status</h3><div id="f1-animals" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-4 text-lg italic uppercase tracking-tighter">Ray Bio-Status</h3><div id="f2-animals" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-black p-4 text-lg italic uppercase tracking-tighter">Werewolf Livestock</h3><div id="f1-animals" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-4 text-lg italic uppercase tracking-tighter">Ray Livestock</h3><div id="f2-animals" class="scroll-box"></div></div>
     </div>
 
     <script>
@@ -233,14 +209,22 @@
 
         async function updateDashboard() {
             const ts = new Date().getTime();
-            const fetchXml = f => fetch(`${f}?v=${ts}`).then(r => r.text()).then(t => new DOMParser().parseFromString(t, "text/xml"));
+            const fetchXml = async (fileName) => {
+                try {
+                    const r = await fetch(`${fileName}?v=${ts}`);
+                    if (!r.ok) { console.error(`🔴 Missing: ${fileName}`); return null; }
+                    return new DOMParser().parseFromString(await r.text(), "text/xml");
+                } catch (e) { return null; }
+            };
+
             try {
-                const [farms, vehicles, placeables, career] = await Promise.all([
-                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml')
+                const [farms, vehicles, placeables, career, farmland, missions, economy] = await Promise.all([
+                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml'), fetchXml('economy.xml')
                 ]);
 
-                // Reset only specific dynamic containers
-                ['f1-fleet','f2-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f1-attach','f2-attach'].forEach(id => {
+                if (!farms) return;
+
+                ['f1-fleet','f2-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f1-attach','f2-attach','f1-fields','f2-fields','missions','stocks','all-coll','f1-pallets','f2-pallets'].forEach(id => {
                     if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
                 });
 
@@ -250,28 +234,42 @@
                     if(document.getElementById(`f${id}-head-money`)) document.getElementById(`f${id}-head-money`).innerText = "$" + money.toLocaleString();
                 });
 
-                Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
-                    const fId = v.getAttribute("farmId"); if (fId !== "1" && fId !== "2") return;
-                    const name = v.getAttribute("filename").split('/').pop().replace('.xml','');
-                    const target = v.querySelector("consumer[type='fuel']") ? `f${fId}-fleet` : `f${fId}-attach`;
-                    document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>${name}</b></div>`;
-                });
+                if(vehicles) {
+                    let vCounts = {1:0, 2:0};
+                    Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
+                        const fId = v.getAttribute("farmId"); if (fId !== "1" && fId !== "2") return;
+                        const name = v.getAttribute("filename").split('/').pop().replace('.xml','');
+                        const target = v.querySelector("consumer[type='fuel']") ? `f${fId}-fleet` : `f${fId}-attach`;
+                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>${name}</b></div>`;
+                        if(v.querySelector("consumer[type='fuel']")) vCounts[fId]++;
+                    });
+                    document.getElementById('f1-v-count').innerText = vCounts[1];
+                    document.getElementById('f2-v-count').innerText = vCounts[2];
+                }
 
-                Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
-                    const fId = p.getAttribute("farmId"); if (fId !== "1" && fId !== "2") return;
-                    const storage = p.querySelector("storage");
-                    if(storage || p.getElementsByTagName("animal").length > 0) {
-                        let aHtml = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>BIO-LOG</b>`;
-                        if(storage) Array.from(storage.getElementsByTagName("node")).forEach(node => {
-                            const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
-                            if(level > 10) aHtml += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
-                        });
-                        document.getElementById(`f${fId}-animals`).innerHTML += aHtml + "</div>";
+                if(placeables) {
+                    Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
+                        const fId = p.getAttribute("farmId"); if (fId !== "1" && fId !== "2") return;
+                        const storage = p.querySelector("storage");
+                        if(storage || p.getElementsByTagName("animal").length > 0) {
+                            let aHtml = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>BIO-LOG</b>`;
+                            if(storage) Array.from(storage.getElementsByTagName("node")).forEach(node => {
+                                const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
+                                if(level > 10) aHtml += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
+                            });
+                            document.getElementById(`f${fId}-animals`).innerHTML += aHtml + "</div>";
+                        }
+                    });
+                }
+
+                if(career) {
+                    const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
+                    document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
+                    for(let i=0; i<50; i++) {
+                        const found = fStr[i] === '1';
+                        document.getElementById('all-coll').innerHTML += `<div class="py-1 ${found?'text-green-500':'text-red-400'}">#${i+1}: ${found?'FOUND':'MISSING'}</div>`;
                     }
-                });
-
-                const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
-                document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
+                }
 
             } catch (e) { console.error("Sync Error", e); }
         }
@@ -291,8 +289,7 @@
             } catch(e) {}
         }
 
-        renderTrophies(1, werewolfEarned); 
-        renderTrophies(2, rayEarned);
+        renderTrophies(1, werewolfEarned); renderTrophies(2, rayEarned);
         updateClocks(); setInterval(updateClocks, 10000);
         getRealWeather(); updateDashboard();
     </script>
