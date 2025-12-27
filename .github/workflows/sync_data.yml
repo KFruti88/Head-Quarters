@@ -31,10 +31,9 @@ jobs:
         run: |
           git config --global user.name "618-Bot"
           git config --global user.email "bot@618crew.com"
-          if [ -f "live_vault.xml" ]; then
-            git add live_vault.xml
-            git commit -m "Update Vault Data" || exit 0
-            git push
+          git add farms.xml vehicles.xml placeables.xml farmland.xml
+          git commit -m "Full Tactical Data Update" || exit 0
+          git push
           else
             echo "File live_vault.xml not found, skipping push."
             exit 1
