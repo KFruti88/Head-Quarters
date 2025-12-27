@@ -1,6 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <farms>
-    <farm farmId="1" name="The Funny Farm" color="1" loan="0.000000" money="17879664.000000">
+    <farm farmId="1" name="The Funny Farm" color="1" loan="0.000000" money="17880082.000000">
         <players>
             <player uniqueUserId="9CtOVu0WAR2i29PfI9RQmIR+ax+hY+U0ShVJisU1CQc=" farmManager="true" lastNickname="Werewolf3788" timeLastConnected="2025/12/25 07:25" buyVehicle="true" sellVehicle="true" buyPlaceable="true" sellPlaceable="true" manageContracts="true" tradeAnimals="true" createFields="true" landscaping="true" hireAssistant="true" resetVehicle="true" manageProductions="true" cutTrees="true" manageRights="true" transferMoney="true" updateFarm="true" manageContracting="true"/>
         </players>
@@ -41,7 +41,7 @@
             <transportMissionCount>0</transportMissionCount>
             <revenue>0.000000</revenue>
             <expenses>48093.007812</expenses>
-            <playTime>18581.591797</playTime>
+            <playTime>18641.605469</playTime>
             <plantedTreeCount>0</plantedTreeCount>
             <cutTreeCount>15</cutTreeCount>
             <woodTonsSold>0.000000</woodTonsSold>
@@ -72,8 +72,8 @@
                 <vehicleRunningCost>-7379.966309</vehicleRunningCost>
                 <vehicleLeasingCost>-2857.500488</vehicleLeasingCost>
                 <propertyMaintenance>-905.817993</propertyMaintenance>
-                <propertyIncome>266246.937500</propertyIncome>
-                <productionCosts>-320.575073</productionCosts>
+                <propertyIncome>266677.062500</propertyIncome>
+                <productionCosts>-326.828217</productionCosts>
                 <soldWood>6024.721680</soldWood>
                 <soldBales>55326.402344</soldBales>
                 <soldWool>0.000000</soldWool>
@@ -83,7 +83,7 @@
                 <purchaseSeeds>0.000000</purchaseSeeds>
                 <purchaseFertilizer>-34878.757812</purchaseFertilizer>
                 <purchaseSaplings>0.000000</purchaseSaplings>
-                <purchaseWater>-243.363098</purchaseWater>
+                <purchaseWater>-248.501984</purchaseWater>
                 <purchaseBales>-25250.000000</purchaseBales>
                 <purchasePallets>0.000000</purchasePallets>
                 <harvestIncome>4493919.000000</harvestIncome>
@@ -227,7 +227,7 @@
             </stats>
         </finances>
     </farm>
-    <farm farmId="2" name="Dumbbell&apos;s farm" color="2" loan="0.000000" money="33912908.000000">
+    <farm farmId="2" name="Dumbbell&apos;s farm" color="2" loan="0.000000" money="33913640.000000">
         <players>
             <player uniqueUserId="NE0DifHeTEE3XiAha2XqNE99mfJhUP5lNhHcjUe16qw=" farmManager="true" lastNickname="OneLIVIDMAN" timeLastConnected="2025/12/14 17:26" buyVehicle="true" sellVehicle="true" buyPlaceable="true" sellPlaceable="true" manageContracts="true" tradeAnimals="true" createFields="true" landscaping="true" hireAssistant="true" resetVehicle="true" manageProductions="true" cutTrees="true" manageRights="true" transferMoney="true" updateFarm="true" manageContracting="true"/>
         </players>
@@ -268,7 +268,7 @@
             <transportMissionCount>0</transportMissionCount>
             <revenue>0.000000</revenue>
             <expenses>33557.539062</expenses>
-            <playTime>18566.677734</playTime>
+            <playTime>18626.691406</playTime>
             <plantedTreeCount>0</plantedTreeCount>
             <cutTreeCount>1</cutTreeCount>
             <woodTonsSold>0.000000</woodTonsSold>
@@ -299,8 +299,8 @@
                 <vehicleRunningCost>-2298.753174</vehicleRunningCost>
                 <vehicleLeasingCost>0.000000</vehicleLeasingCost>
                 <propertyMaintenance>-1963.990967</propertyMaintenance>
-                <propertyIncome>561865.625000</propertyIncome>
-                <productionCosts>-1010.227783</productionCosts>
+                <propertyIncome>562604.375000</propertyIncome>
+                <productionCosts>-1015.150208</productionCosts>
                 <soldWood>0.000000</soldWood>
                 <soldBales>272932.875000</soldBales>
                 <soldWool>3362.653809</soldWool>
