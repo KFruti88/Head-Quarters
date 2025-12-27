@@ -223,16 +223,28 @@
                     fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml'), fetchXml('economy.xml')
                 ]);
 
-                if (!farms) return;
+                if (!farms || !career) return;
 
-                ['f1-fleet','f2-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f1-attach','f2-attach','f1-fields','f2-fields','missions','stocks','all-coll','f1-pallets','f2-pallets'].forEach(id => {
-                    if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
-                });
-
+                // 1. CALCULATE MONEY DIFFERENCE
+                const totalMoney = parseInt(career.querySelector("statistics money")?.textContent || 0);
+                let farm2Money = 0;
+                
                 Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                     const id = f.getAttribute("farmId");
                     const money = parseInt(f.getAttribute("money") || 0);
-                    if(document.getElementById(`f${id}-head-money`)) document.getElementById(`f${id}-head-money`).innerText = "$" + money.toLocaleString();
+                    if (id === "2") {
+                        farm2Money = money;
+                        document.getElementById("f2-head-money").innerText = "$" + money.toLocaleString();
+                    }
+                });
+                
+                // Werewolf (Farm 1) gets the remainder
+                const farm1Money = totalMoney - farm2Money;
+                document.getElementById("f1-head-money").innerText = "$" + (farm1Money > 0 ? farm1Money.toLocaleString() : "0");
+
+                // Clear dynamic containers
+                ['f1-fleet','f2-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f1-attach','f2-attach','f1-fields','f2-fields','missions','stocks','all-coll','f1-pallets','f2-pallets'].forEach(id => {
+                    if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
                 });
 
                 if(vehicles) {
@@ -253,14 +265,9 @@
                         const fId = p.getAttribute("farmId"); if (fId !== "1" && fId !== "2") return;
                         const storage = p.querySelector("storage");
                         const animals = p.getElementsByTagName("animal");
-                        
-                        // If it has animals OR storage, we display it
                         if(storage || animals.length > 0) {
-                            // Determine display name: Use customName or filename if templateName is generic
                             let displayName = p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop().replace('.xml','');
-                            
                             let aHtml = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b class="text-white uppercase">${displayName}</b>`;
-                            
                             if(storage) Array.from(storage.getElementsByTagName("node")).forEach(node => {
                                 const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
                                 if(level > 1) aHtml += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()} L</div>`;
