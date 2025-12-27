@@ -24,13 +24,16 @@ def sync_engine(file_list, message):
         
         for filename in file_list:
             try:
+                # Download from GPortal
                 local_file = filename
                 with open(local_file, 'wb') as f:
                     ftp.retrbinary(f"RETR {filename}", f.write)
 
+                # Read for GitHub
                 with open(local_file, 'rb') as f:
                     content = f.read()
 
+                # Push to GitHub
                 try:
                     contents = repo.get_contents(filename)
                     repo.update_file(contents.path, message, content, contents.sha)
@@ -47,20 +50,17 @@ def sync_engine(file_list, message):
 
 if __name__ == "__main__":
     print(f"--- 618 TACTICAL SYNC: SAVEGAME 3 [{time.ctime()}] ---")
-    
     try:
         ftp = ftplib.FTP(FTP_HOST)
         ftp.login(FTP_USER, FTP_PASS)
         ftp.cwd(SAVE_PATH)
         
-        # DISCOVERY LOGIC: Grab all Data (XML) and Visuals (PNG)
-        # We ignore the heavy .GRLE, .GDM, and .CACHE files
+        # Discovery: Find all XML and PNG icons
         all_files = ftp.nlst()
         sync_list = [f for f in all_files if f.lower().endswith(('.xml', '.png'))]
         ftp.quit()
         
         print(f"Found {len(sync_list)} data/icon files. Starting Sync...")
         sync_engine(sync_list, "Tactical Data Update [Savegame 3]")
-        
     except Exception as e:
         print(f"Discovery Error: {e}")
