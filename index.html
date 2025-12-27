@@ -2,138 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>618 Tactical Command: Full Intelligence Report</title>
+    <title>618 Tactical: Full Intelligence Report</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
-        body { background: #000; color: #aaa; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-        .f1 { color: #FF5F00; border-color: #FF5F00; }
-        .f2 { color: #C41E3A; border-color: #C41E3A; }
-        .header-large { font-size: 5rem; font-weight: 900; line-height: 1; margin-bottom: 2rem; }
-        .data-block { border-left: 2px solid; padding-left: 15px; margin-bottom: 30px; }
-        .detail-row { display: flex; justify-content: space-between; border-bottom: 1px solid #1a1a1a; padding: 4px 0; }
-        .label { text-transform: uppercase; opacity: 0.6; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;800&display=swap');
+        body { background: #000; color: #888; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+        .f1-text { color: #FF5F00; }
+        .f2-text { color: #C41E3A; }
+        .f1-border { border-color: #FF5F00; }
+        .f2-border { border-color: #C41E3A; }
+        .data-card { border: 1px solid #222; padding: 10px; margin-bottom: 10px; border-left: 4px solid; }
+        .header { font-size: 4rem; font-weight: 800; text-transform: uppercase; font-style: italic; }
     </style>
 </head>
-<body class="p-10">
-
-    <div class="grid grid-cols-2 gap-20">
-        <div id="farm1-zone">
-            <h1 class="header-large f1 italic">FARM 01</h1>
+<body class="p-6">
+    <div class="grid grid-cols-2 gap-10">
+        
+        <div>
+            <h1 class="header f1-text mb-8">FARM 01</h1>
+            <div id="f1-money" class="text-4xl font-bold f1-text mb-10">$0.00</div>
             
-            <section class="data-block f1">
-                <h2 class="text-2xl font-bold mb-4 underline">FINANCIAL INTELLIGENCE</h2>
-                <div id="f1-money" class="text-5xl font-black mb-2">$0</div>
-                <div id="f1-loan" class="text-xl opacity-70 italic">Loan: $0</div>
-            </section>
+            <h2 class="text-xl font-bold mb-4 underline">DETAILED FLEET INVENTORY</h2>
+            <div id="f1-fleet" class="space-y-2"></div>
 
-            <section class="data-block f1">
-                <h2 class="text-2xl font-bold mb-4 underline">FLEET INVENTORY (NON-COMPACT)</h2>
-                <div id="f1-fleet-list" class="space-y-4"></div>
-            </section>
-
-            <section class="data-block f1">
-                <h2 class="text-2xl font-bold mb-4 underline">LIVESTOCK & BIOMETRICS</h2>
-                <div id="f1-animal-list" class="space-y-4"></div>
-            </section>
-
-            <section class="data-block f1">
-                <h2 class="text-2xl font-bold mb-4 underline">PRODUCTION & LOGISTICS</h2>
-                <div id="f1-production-list" class="space-y-4"></div>
-            </section>
+            <h2 class="text-xl font-bold mt-10 mb-4 underline">PRODUCTION & STORAGE</h2>
+            <div id="f1-production" class="space-y-2"></div>
         </div>
 
-        <div id="farm2-zone">
-            <h1 class="header-large f2 italic">FARM 02</h1>
+        <div>
+            <h1 class="header f2-text mb-8">FARM 02</h1>
+            <div id="f2-money" class="text-4xl font-bold f2-text mb-10">$0.00</div>
             
-            <section class="data-block f2">
-                <h2 class="text-2xl font-bold mb-4 underline">FINANCIAL INTELLIGENCE</h2>
-                <div id="f2-money" class="text-5xl font-black mb-2">$0</div>
-                <div id="f2-loan" class="text-xl opacity-70 italic">Loan: $0</div>
-            </section>
+            <h2 class="text-xl font-bold mb-4 underline">DETAILED FLEET INVENTORY</h2>
+            <div id="f2-fleet" class="space-y-2"></div>
 
-            <section class="data-block f2">
-                <h2 class="text-2xl font-bold mb-4 underline">FLEET INVENTORY (NON-COMPACT)</h2>
-                <div id="f2-fleet-list" class="space-y-4"></div>
-            </section>
-
-            <section class="data-block f2">
-                <h2 class="text-2xl font-bold mb-4 underline">LIVESTOCK & BIOMETRICS</h2>
-                <div id="f2-animal-list" class="space-y-4"></div>
-            </section>
-
-            <section class="data-block f2">
-                <h2 class="text-2xl font-bold mb-4 underline">PRODUCTION & LOGISTICS</h2>
-                <div id="f2-production-list" class="space-y-4"></div>
-            </section>
+            <h2 class="text-xl font-bold mt-10 mb-4 underline">PRODUCTION & STORAGE</h2>
+            <div id="f2-production" class="space-y-2"></div>
         </div>
     </div>
 
     <script>
-        async function buildMegaDashboard() {
+        async function buildFullReport() {
             const ts = new Date().getTime();
-            const getXml = async (f) => {
-                const r = await fetch(`${f}?v=${ts}`);
-                const t = await r.text();
-                return new DOMParser().parseFromString(t, "text/xml");
-            };
+            const fetchXml = f => fetch(`${f}?v=${ts}`).then(r => r.text()).then(t => new DOMParser().parseFromString(t, "text/xml"));
 
             try {
-                const [farms, vehicles, placeables, career, players] = await Promise.all([
-                    getXml('farms.xml'), getXml('vehicles.xml'), getXml('placeables.xml'), getXml('live_vault.xml'), getXml('players.xml')
+                const [farms, vehicles, placeables] = await Promise.all([
+                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml')
                 ]);
 
-                // --- 1. DETAILED FINANCES ---
+                // 1. FINANCES
                 Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                     const id = f.getAttribute("farmId");
                     const money = parseInt(f.getAttribute("money")).toLocaleString();
-                    const loan = parseInt(f.getAttribute("loan")).toLocaleString();
                     if(document.getElementById(`f${id}-money`)) document.getElementById(`f${id}-money`).innerText = `$${money}`;
-                    if(document.getElementById(`f${id}-loan`)) document.getElementById(`f${id}-loan`).innerText = `LOAN BALANCE: $${loan}`;
                 });
 
-                // --- 2. FULL VEHICLE REPORT (Every unit listed) ---
+                // 2. FLEET (NON-COMPACT - LIST EVERY ITEM)
                 Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
                     const fId = v.getAttribute("farmId");
                     if(fId != "1" && fId != "2") return;
-
                     const name = v.getAttribute("filename").split('/').pop();
-                    const age = v.getAttribute("age") || "0";
-                    const fuel = v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || "0";
                     const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(2);
-                    
-                    const html = `
-                        <div class="border border-zinc-800 p-2">
-                            <div class="font-bold uppercase">${name}</div>
-                            <div class="detail-row"><span class="label">Condition</span><span>${100-dmg}%</span></div>
-                            <div class="detail-row"><span class="label">Fuel Level</span><span>${Math.round(fuel)}L</span></div>
-                            <div class="detail-row"><span class="label">Age (Months)</span><span>${age}</span></div>
-                        </div>`;
-                    document.getElementById(`f${fId}-fleet-list`).innerHTML += html;
+                    const fuel = Math.round(v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || 0);
+
+                    const html = `<div class="data-card ${fId=='1'?'f1-border':'f2-border'}">
+                        <strong>${name}</strong><br>
+                        > CONDITION: ${100-dmg}% | FUEL: ${fuel}L
+                    </div>`;
+                    document.getElementById(`f${fId}-fleet`).innerHTML += html;
                 });
 
-                // --- 3. FULL PRODUCTION REPORT (Every factory pallet/storage) ---
+                // 3. PRODUCTION (NON-COMPACT - LIST EVERY STORAGE ITEM)
                 Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
                     const fId = p.getAttribute("farmId");
                     if(fId != "1" && fId != "2") return;
-
-                    const title = p.getAttribute("filename").split('/').pop().replace('.xml', '');
-                    let storageHtml = `<div class="border border-zinc-800 p-2"><div class="font-bold">${title}</div>`;
+                    const name = p.getAttribute("filename").split('/').pop();
                     
-                    Array.from(p.getElementsByTagName("storage")).forEach(s => {
-                        Array.from(s.getElementsByTagName("node")).forEach(n => {
-                            const fill = n.getAttribute("fillType");
-                            const amount = Math.round(parseFloat(n.getAttribute("fillLevel")));
-                            if(amount > 0) storageHtml += `<div class="detail-row"><span class="label">${fill}</span><span>${amount}L</span></div>`;
-                        });
+                    let storageList = "";
+                    Array.from(p.getElementsByTagName("node")).forEach(n => {
+                        const level = Math.round(parseFloat(n.getAttribute("fillLevel") || 0));
+                        if(level > 0) storageList += `<br>-- ${n.getAttribute("fillType")}: ${level}L`;
                     });
-                    storageHtml += `</div>`;
-                    document.getElementById(`f${fId}-production-list`).innerHTML += storageHtml;
+
+                    if(storageList) {
+                        const html = `<div class="data-card ${fId=='1'?'f1-border':'f2-border'}">
+                            <strong>${name}</strong>${storageList}
+                        </div>`;
+                        document.getElementById(`f${fId}-production`).innerHTML += html;
+                    }
                 });
 
-            } catch (e) { console.error("Tactical Error:", e); }
+            } catch (e) { console.error("Report System Error", e); }
         }
-        buildMegaDashboard();
+        buildFullReport();
     </script>
 </body>
 </html>
