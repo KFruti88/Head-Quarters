@@ -3,62 +3,85 @@ import time
 import ftplib
 from github import Github
 
-# === CONFIGURATION ===
-FTP_HOST = "your_gportal_ip"
-FTP_USER = "your_username"
-FTP_PASS = "your_password"
+# === CONFIGURATION (PULLED FROM GITHUB SECRETS) ===
+# These match the names you put in your YAML and GitHub Secrets
+FTP_HOST = os.environ.get('FTP_HOST')
+FTP_USER = os.environ.get('FTP_USER')
+FTP_PASS = os.environ.get('FTP_PASS')
+GH_TOKEN = os.environ.get('GH_TOKEN')
+
+# Change this to your actual repo name: "Username/Repo"
+GH_REPO  = "KFruti88/Head-Quarters" 
+
+# Path on GPortal - usually "/savegame1"
 SAVE_PATH = "/savegame1" 
 
-GH_TOKEN = "your_github_token"
-GH_REPO  = "KFruti88/your_repo_name"
+# Timing Logic (Determined by which files we grab)
+# We sync "Tactical" files every time. 
+# We sync "Heavy" files based on the clock.
+SMALL_FILES = [
+    'farms.xml', 'vehicles.xml', 'missions.xml', 
+    'careerSavegame.xml', 'collectibles.xml', 
+    'placeables.xml', 'environment.xml', 'farmland.xml'
+]
 
-# Timing Tracks
-SMALL_INTERVAL = 7 * 60  
-LARGE_INTERVAL = 30 * 60 
-
-# File Groups
-SMALL_FILES = ['farms.xml', 'vehicles.xml', 'missions.xml', 'careerSavegame.xml', 'collectibles.xml', 'placeables.xml', 'environment.xml', 'farmland.xml']
-# This grabs EVERYTHING else (Density maps, items, etc.)
-HEAVY_EXTENSIONS = ['.xml', '.grle', '.png'] 
-
+# Connect to GitHub
 gh = Github(GH_TOKEN)
 repo = gh.get_repo(GH_REPO)
 
 def sync_engine(file_list, message):
     try:
+        # 1. Connect to GPortal
         ftp = ftplib.FTP(FTP_HOST)
         ftp.login(FTP_USER, FTP_PASS)
         ftp.cwd(SAVE_PATH)
+        
         for filename in file_list:
-            local_file = filename
-            with open(local_file, 'wb') as f:
-                ftp.retrbinary(f"RETR {filename}", f.write)
-            with open(local_file, 'rb') as f:
-                content = f.read()
             try:
-                contents = repo.get_contents(filename)
-                repo.update_file(contents.path, message, content, contents.sha)
-                print(f"Synced: {filename}")
-            except:
-                repo.create_file(filename, message, content)
+                # 2. Download from GPortal
+                local_file = filename
+                with open(local_file, 'wb') as f:
+                    ftp.retrbinary(f"RETR {filename}", f.write)
+
+                # 3. Read content
+                with open(local_file, 'rb') as f:
+                    content = f.read()
+
+                # 4. Push to GitHub
+                try:
+                    contents = repo.get_contents(filename)
+                    repo.update_file(contents.path, message, content, contents.sha)
+                    print(f"Success: Updated {filename}")
+                except:
+                    repo.create_file(filename, message, content)
+                    print(f"Success: Created {filename}")
+            except Exception as e:
+                print(f"Skipping {filename}: Not found or error: {e}")
+        
         ftp.quit()
     except Exception as e:
-        print(f"Sync Error: {e}")
+        print(f"Connection Error: {e}")
 
-last_small = 0
-last_large = 0
-
-while True:
-    now = time.time()
-    if now - last_small >= SMALL_INTERVAL:
-        sync_engine(SMALL_FILES, "Tactical Update [7M Track]")
-        last_small = now
-    if now - last_large >= LARGE_INTERVAL:
-        # Full scan for missing files
+# === EXECUTION LOGIC ===
+# When running in GitHub Actions, we often just run once per trigger
+if __name__ == "__main__":
+    print(f"--- 618 TACTICAL SYNC STARTING [{time.ctime()}] ---")
+    
+    # We check if this is a 'Heavy' sync day (Every 30 mins approx)
+    # Or just grab everything to be safe since GitHub handles the load
+    
+    # To ensure you get the "Missing" files you wanted:
+    try:
         ftp = ftplib.FTP(FTP_HOST)
         ftp.login(FTP_USER, FTP_PASS)
         ftp.cwd(SAVE_PATH)
-        all_xmls = [f for f in ftp.nlst() if f.endswith('.xml')]
-        sync_engine(all_xmls, "Environmental Sync [30M Track]")
-        last_large = now
-    time.sleep(30)
+        
+        # This scans GPortal and finds EVERY XML file automatically
+        all_xml_files = [f for f in ftp.nlst() if f.endswith('.xml')]
+        ftp.quit()
+        
+        print(f"Found {len(all_xml_files)} files to sync.")
+        sync_engine(all_xml_files, "Global Tactical Intelligence Update")
+        
+    except Exception as e:
+        print(f"Discovery Error: {e}")
