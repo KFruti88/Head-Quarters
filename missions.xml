@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<missions>
+    <mission type="mow_bale" reward="5674" status="0" success="false">
+        <field id="78" sprayFactor="0.000000" spraySet="false" plowFactor="1.000000" state="2" vehicleGroup="12" vehicleUseCost="196.130997" spawnedVehicles="false" growthState="4" limeFactor="1.000000" weedFactor="1.000000" stubbleFactor="0.000000" fruitTypeName="GRASS"/>
+        <bale sellPointPlaceableId="18" unloadingStationIndex="1" fillTypeName="SILAGE" depositedLiters="0.000000"/>
+    </mission>
+</missions>
