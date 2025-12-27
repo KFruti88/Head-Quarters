@@ -17,8 +17,6 @@
         .scroll-box { height: 400px; overflow-y: auto; padding: 15px; background: rgba(0, 0, 0, 0.4); }
         .card-inner { background: rgba(255, 255, 255, 0.03); padding: 10px; margin-bottom: 10px; border-radius: 4px; border-left: 4px solid; }
         .hud-bar-bg { background: #222; height: 6px; border-radius: 3px; margin-top: 6px; overflow: hidden; border: 1px solid #333; }
-        .fuel-fill { background: #3b82f6; height: 100%; }
-        .dmg-fill { background: #ef4444; height: 100%; }
         .trophy-fill { background: #22c55e; height: 100%; }
         .trophy-earned { border-left-color: #22c55e !important; background: rgba(34, 197, 94, 0.05); opacity: 0.5; }
         ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
@@ -36,19 +34,16 @@
             <div class="header-box glass-panel f1-border">
                 <div class="f1-text font-black text-xs uppercase">F1: FUNNY FARMS (Werewolf)</div>
                 <div class="text-white text-3xl font-black" id="f1-head-money">$0</div>
-                <div id="time-gnv" class="text-[10px] text-gray-400 font-bold mt-1">ET: --:--</div>
-                <div id="weather-gnv" class="text-[10px] text-gray-500 uppercase">WEATHER: --</div>
+                <div id="game-date" class="text-[10px] text-gray-400 font-bold mt-1 uppercase">DATE: -- --</div>
             </div>
             <div class="header-box glass-panel f2-border">
                 <div class="f2-text font-black text-xs uppercase">F2: DUMBBELL'S FARM (Ray)</div>
                 <div class="text-white text-3xl font-black" id="f2-head-money">$0</div>
-                <div id="time-flora" class="text-[10px] text-gray-400 font-bold mt-1">CT: --:--</div>
-                <div id="weather-flora" class="text-[10px] text-gray-500 uppercase">WEATHER: --</div>
+                <div id="weather-display" class="text-[10px] text-gray-500 uppercase mt-1">WEATHER: --</div>
             </div>
             <div class="header-box glass-panel border-blue-500 p-3 min-w-[150px]">
                 <div class="text-blue-400 font-black text-xs uppercase tracking-widest">Game Sync</div>
                 <div id="game-time" class="text-white text-3xl font-black">00:00</div>
-                <div id="game-date" class="text-[10px] text-gray-400 font-bold italic uppercase">--</div>
             </div>
         </div>
         <div class="text-right">
@@ -100,197 +95,141 @@
     </div>
 
     <script>
-        const fillLabels = { 'SOUPCANSBEETROOT': 'Beetroot Soup', 'BEETROOT': 'Beetroot', 'SOUPCANSPOTATO': 'Potato Soup', 'POTATO': 'Potato', 'SOUPCANSCARROTS': 'Carrot Soup', 'CARROT': 'Carrot', 'TMR': 'TMR', 'SILAGE': 'Silage', 'DRYGRASS_WINDROW': 'Hay', 'GRASS_WINDROW': 'Grass', 'MILK': 'Milk', 'LIQUIDMANURE': 'Slurry', 'MANURE': 'Manure', 'EGG': 'Eggs' };
-        function cleanLabel(raw) { return fillLabels[raw] || raw; }
-
-        const masterTrophyList = [
-            { id: "nature", name: "Farming is in our nature", desc: "Plant today - harvest tomorrow." },
-            { id: "road", name: "Road Trip", desc: "That thing wouldn't have fit onto the street anyway." },
-            { id: "plant", name: "Plant get enough", desc: "A little help can go a long way." },
-            { id: "thickens", name: "The plot thickens", desc: "Reached maximum efficiency." },
-            { id: "hopp", name: "Allez hopp", desc: "Oh, they can do THAT as well?" },
-            { id: "kangaroo", name: "You are not a kangaroo", desc: "Seriously, think of the poor animal!" },
-            { id: "giddy", name: "Giddy-up!", desc: "I could get used to getting around like this…" },
-            { id: "thorough", name: "Thoroughbred!", desc: "I'm a real cowboy, mom!" },
-            { id: "help", name: "Help me to help you", desc: "Sure, I can take care of that, neighbour." },
-            { id: "helper", name: "Helper A does not stop", desc: "What do you mean 'take care of my own farm'?" },
-            { id: "beginning", name: "It's just the beginning", desc: "I've never felt happier than here." },
-            { id: "sprinkle", name: "Just a sprinkle", desc: "You have to think about the future." },
-            { id: "sow", name: "It's sow easy", desc: "Planting one bean will yield much green." },
-            { id: "own", name: "Own use", desc: "Reap what you sow." },
-            { id: "supplier", name: "Large-scale supplier", desc: "Fruits of your labour." },
-            { id: "field", name: "Field Trip", desc: "One vehicle for all of your needs." },
-            { id: "haul", name: "Long haul", desc: "In it for the long game, I see." },
-            { id: "gogh", name: "van Gogh", desc: "Look at Mr. Fancypants over there." },
-            { id: "fell", name: "It just fell off", desc: "Only a matter of time…" },
-            { id: "fix", name: "Fix me up", desc: "Consider a membership card." },
-            { id: "fluff", name: "Fluffiness", desc: "Building up my wool empire." },
-            { id: "piggies", name: "Three little piggies…", desc: "Food they need." },
-            { id: "clucky", name: "Clucky Streak", desc: "Now that's a lot of Easter eggs." },
-            { id: "honey", name: "Bringing in the Honey", desc: "Busy bee." },
-            { id: "cowherd", name: "Cowherd", desc: "Bet you didn't think they'd be that much work." },
-            { id: "switch", name: "I like to switch it up", desc: "We're slowly getting there." },
-            { id: "weekend", name: "Weekend vehicle", desc: "I need each and every one." },
-            { id: "fleet", name: "Vehicle fleet", desc: "I might have a problem…" },
-            { id: "shakespeare", name: "Shakespeare and stuff", desc: "First step." },
-            { id: "cultivated", name: "Highly cultivated", desc: "Proud of this one." },
-            { id: "paw", name: "Ultimutt Pawesomeness", desc: "Who's a good boy?" },
-            { id: "wrap", name: "That's a wrap", desc: "What's in the bale?" },
-            { id: "cotton", name: "Gone but not for cotton", desc: "Where would you even store them?!" },
-            { id: "raisin", name: "Raisin the stakes", desc: "Californian gold!" },
-            { id: "olea", name: "Olea europaea", desc: "Fruit, not vegetable!" },
-            { id: "grain", name: "Original grain", desc: "Horses crazy for it." },
-            { id: "rock", name: "Rock on", desc: "Paved with rocks." },
-            { id: "wood", name: "You wood not believe it", desc: "Leaf of absence." },
-            { id: "stumped", name: "I'm stumped", desc: "Does one hand clap?" },
-            { id: "hard", name: "Hard work pays off", desc: "Spend it, right?" },
-            { id: "land", name: "All out of Land", desc: "Everything is mine." },
-            { id: "machine", name: "Well-Oiled Machine", desc: "Franchise this…" },
-            { id: "colourful", name: "Pretty colourful", desc: "Childhood memories." },
-            { id: "gameon", name: "Game on", desc: "Collector myself." },
-            { id: "cheese", name: "Cheese it", desc: "Fondue?" },
-            { id: "late", name: "Never too late", desc: "It feels good to be home." }
+        const trophyConfig = [ 
+            {id:"help", name:"Contracts Completed", target: 50, tag: "missionsFinished"},
+            {id:"nature", name:"Hectares Thrashed", target: 100, tag: "thrashedArea"},
+            {id:"wood", name:"Trees Cut", target: 25, tag: "treeCapsCut"},
+            {id:"hard", name:"Millionaire Race", target: 1000000, tag: "money"},
+            {id:"road", name:"Distance Traveled", target: 100, tag: "traveledDistance"}
         ];
-
-        const werewolfStats = {
-            help: 100, paw: 100, giddy: 100, hopp: 100, machine: 100, land: 100, wood: 100, stumped: 100,
-            weekend: 90, switch: 60, cowherd: 45, fleet: 45, kangaroo: 36, clucky: 31, beginning: 10, helper: 8, field: 7, thorough: 4, shakespeare: 4, road: 2
-        };
-
-        const rayEarned = ["road", "plant", "hopp", "kangaroo", "giddy", "thorough", "help", "beginning", "own", "switch", "weekend", "fleet", "shakespeare", "paw", "wrap", "hard", "land", "machine", "colourful"];
-
-        function updateClocks() {
-            const now = new Date();
-            document.getElementById('time-gnv').innerText = `ET: ` + now.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit' });
-            document.getElementById('time-flora').innerText = `CT: ` + now.toLocaleTimeString('en-US', { timeZone: 'America/Chicago', hour: '2-digit', minute: '2-digit' });
-        }
-
-        async function getRealWeather() {
-            try {
-                const gnv = await fetch('https://api.open-meteo.com/v1/forecast?latitude=29.65&longitude=-82.32&current_weather=true&temperature_unit=fahrenheit').then(r => r.json());
-                const flora = await fetch('https://api.open-meteo.com/v1/forecast?latitude=38.67&longitude=-88.49&current_weather=true&temperature_unit=fahrenheit').then(r => r.json());
-                document.getElementById('weather-gnv').innerText = `TEMP: ${Math.round(gnv.current_weather.temperature)}°F | SUNNY`;
-                document.getElementById('weather-flora').innerText = `TEMP: ${Math.round(flora.current_weather.temperature)}°F | SUNNY`;
-            } catch(e) {}
-        }
 
         async function updateDashboard() {
             const ts = new Date().getTime();
             const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
-            const [farms, vehicles, placeables, career, farmland, missions, collectibles] = await Promise.all([ 
-                fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), 
-                fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml'),
-                fetchXml('collectibles.xml')
+            
+            const [farms, vehicles, career, missions, collectibles, env, placeables, items, land] = await Promise.all([ 
+                fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('careerSavegame.xml'), 
+                fetchXml('missions.xml'), fetchXml('collectibles.xml'), fetchXml('environment.xml'),
+                fetchXml('placeables.xml'), fetchXml('items.xml'), fetchXml('farmland.xml')
             ]);
 
-            if(farms && career) {
-                const globalMoney = Math.floor(parseFloat(career.querySelector("statistics money")?.textContent || 0));
-                let farm2Money = 0;
-                Array.from(farms.getElementsByTagName("farm")).forEach(f => {
-                    if(f.getAttribute("farmId") == "2") farm2Money = Math.floor(parseFloat(f.getAttribute("money") || 0));
+            if(career) {
+                // TROPHY MATH
+                const stats = career.querySelector("statistics");
+                const liveProgress = {};
+                trophyConfig.forEach(t => {
+                    let val = parseFloat(stats?.querySelector(t.tag)?.textContent || 0);
+                    liveProgress[t.id] = Math.min(100, Math.floor((val / t.target) * 100));
                 });
-                document.getElementById(`f2-head-money`).innerText = "$" + farm2Money.toLocaleString();
-                document.getElementById(`f1-head-money`).innerText = "$" + (globalMoney - farm2Money).toLocaleString();
-                document.getElementById("game-time").innerText = career.querySelector("dayTime")?.textContent || "00:00";
-                const day = career.querySelector("gameRuntime")?.textContent || "0";
-                document.getElementById("game-date").innerText = `Runtime: ${Math.floor(day/3600)} Hours`;
+
+                // TIME & DATE
+                const rawTime = parseFloat(career.querySelector("dayTime")?.textContent || 0);
+                const h = Math.floor(rawTime / 3600000); const m = Math.floor((rawTime % 3600000) / 60000);
+                document.getElementById("game-time").innerText = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}`;
+                
+                const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+                const dayP = parseInt(career.querySelector("dayOfPeriod")?.textContent || 1);
+                document.getElementById("game-date").innerText = `DATE: ${months[Math.floor((dayP - 1) / 3) % 12]} DAY ${((dayP - 1) % 3) + 1}`;
+
+                // MONEY
+                const globalMoney = parseFloat(stats?.querySelector("money")?.textContent || 0);
+                let f2Money = 0;
+                if(farms) Array.from(farms.getElementsByTagName("farm")).forEach(f => { if(f.getAttribute("farmId")=="2") f2Money = Math.floor(parseFloat(f.getAttribute("money")||0)); });
+                document.getElementById('f2-head-money').innerText = "$" + f2Money.toLocaleString();
+                document.getElementById('f1-head-money').innerText = "$" + (globalMoney - f2Money).toLocaleString();
 
                 // MODS
-                const modsBox = document.getElementById('active-mods');
-                modsBox.innerHTML = "";
-                Array.from(career.getElementsByTagName("mod")).forEach(m => {
-                    const title = m.getAttribute("title") || m.getAttribute("modName");
-                    modsBox.innerHTML += `<div class="card-inner border-blue-900"><b>${title.toUpperCase()}</b></div>`;
-                });
+                const modsBox = document.getElementById('active-mods'); modsBox.innerHTML = "";
+                Array.from(career.getElementsByTagName("mod")).forEach(m => { modsBox.innerHTML += `<div class="card-inner border-blue-900">${m.getAttribute("title")||m.getAttribute("modName")}</div>`; });
+
+                renderTrophies('f1-trophies', liveProgress, 'f1-border');
+                renderTrophies('f2-trophies', liveProgress, 'f2-border');
             }
 
-            // MISSIONS
-            const missionBox = document.getElementById('missions');
-            missionBox.innerHTML = "";
-            if(missions) {
-                Array.from(missions.getElementsByTagName("mission")).forEach(m => {
-                    if(m.getAttribute("status") == "2") {
-                        missionBox.innerHTML += `<div class="card-inner border-blue-500"><b>FIELD ${m.getAttribute("fieldId")}: ${m.getAttribute("type").toUpperCase()}</b><br>$${parseInt(m.getAttribute("reward")).toLocaleString()}</div>`;
+            if(env) {
+                const weather = env.querySelector("weather currentTypeName")?.textContent || "SUNNY";
+                document.getElementById('weather-display').innerText = `WEATHER: ${weather.toUpperCase()}`;
+            }
+
+            // FLEET (F1, F2, and F0)
+            if(vehicles) {
+                document.getElementById('f1-fleet').innerHTML = ""; document.getElementById('f2-fleet').innerHTML = ""; document.getElementById('f0-fleet').innerHTML = "";
+                document.getElementById('f1-attach').innerHTML = ""; document.getElementById('f2-attach').innerHTML = "";
+                Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
+                    const fId = v.getAttribute("farmId");
+                    const name = v.getAttribute("filename").split('/').pop().replace('.xml','').toUpperCase();
+                    const isMotorized = v.querySelector("consumer") !== null;
+                    let target = `f${fId}-fleet`;
+                    if (fId !== "0" && !isMotorized) target = `f${fId}-attach`;
+                    
+                    if(document.getElementById(target)) {
+                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">${name}</div>`;
                     }
                 });
             }
 
-            // COLLECTIBLES
-            if(collectibles) {
-                const colls = Array.from(collectibles.getElementsByTagName("collectible"));
-                const found = colls.filter(c => c.getAttribute("found") === "true").length;
-                document.getElementById('coll-found').innerText = found;
-                const collBox = document.getElementById('all-coll');
-                collBox.innerHTML = "";
-                colls.forEach((c, i) => {
-                    const isFound = c.getAttribute("found") === "true";
-                    collBox.innerHTML += `<div class="card-inner border-purple-900 ${isFound ? 'opacity-100' : 'opacity-40'}">#${i+1}: ${isFound ? 'FOUND' : 'MISSING'}</div>`;
-                });
-            }
-
-            renderSortedTrophies('f1-trophies', werewolfStats, null, 'f1-border');
-            renderSortedTrophies('f2-trophies', null, rayEarned, 'f2-border');
-
-            ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
-            
-            if(vehicles) {
-                Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
-                    const fId = v.getAttribute("farmId");
-                    const path = v.getAttribute("filename");
-                    const name = path.split('/').pop().replace('.xml','').replace(/_/g, ' ').toUpperCase();
-                    const fuel = Math.round(v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || 0);
-                    const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(1);
-                    let target = (fId == "1" || fId == "2") ? (fuel > 0 ? `f${fId}-fleet` : `f${fId}-attach`) : "f0-fleet";
-                    if(document.getElementById(target)) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='0'?'border-gray-800':(fId=='1'?'f1-border':'f2-border')}"><b>${name}</b><br>FUEL: ${fuel}L | DMG: ${dmg}%<div class="hud-bar-bg"><div class="fuel-fill" style="width:${Math.min(100,(fuel/400)*100)}%"></div><div class="dmg-fill" style="width:${dmg}%"></div></div></div>`;
-                });
-            }
-
+            // ASSETS & ANIMALS
             if(placeables) {
+                ['f1-prod','f2-prod','f0-prod','f1-animals','f2-animals'].forEach(id => document.getElementById(id).innerHTML = "");
                 Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
                     const fId = p.getAttribute("farmId");
-                    const storage = p.querySelector("storage");
-                    if(!storage) return;
-                    const displayName = p.getAttribute("customName") || p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop().replace('.xml','').replace(/_/g, ' ');
-                    let target = (fId == "1" || fId == "2") ? (p.getElementsByTagName("animal").length > 0 ? `f${fId}-animals` : `f${fId}-prod`) : "f0-prod";
-                    let h = `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}"><b>${displayName.toUpperCase()}</b><br>`;
-                    Array.from(storage.getElementsByTagName("node")).forEach(node => {
-                        const lvl = Math.round(parseFloat(node.getAttribute("fillLevel")));
-                        if(lvl > 1) h += `<div class="flex justify-between border-b border-gray-900 mt-1"><span>${cleanLabel(node.getAttribute("fillType"))}</span><span>${lvl.toLocaleString()}L</span></div>`;
-                    });
-                    if(document.getElementById(target)) document.getElementById(target).innerHTML += h + "</div>";
+                    const name = (p.getAttribute("customName") || p.getAttribute("templateName") || "Asset").toUpperCase();
+                    const hasAnimals = p.getElementsByTagName("animal").length > 0;
+                    let target = hasAnimals ? `f${fId}-animals` : `f${fId}-prod`;
+                    if(document.getElementById(target)) {
+                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">${name}</div>`;
+                    }
                 });
             }
 
-            if(farmland) {
-                Array.from(farmland.getElementsByTagName("land")).forEach(l => {
+            // FIELDS
+            if(land) {
+                ['f1-fields','f2-fields','f0-fields'].forEach(id => document.getElementById(id).innerHTML = "");
+                Array.from(land.getElementsByTagName("land")).forEach(l => {
                     const fId = l.getAttribute("farmId");
-                    let target = (fId == "1" || fId == "2") ? `f${fId}-fields` : "f0-fields";
-                    if(document.getElementById(target)) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}"><b>FIELD ${l.getAttribute("id")}</b></div>`;
+                    const target = `f${fId}-fields`;
+                    if(document.getElementById(target)) {
+                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">FIELD ${l.getAttribute("id")}</div>`;
+                    }
                 });
+            }
+
+            // PALLETS & MISSIONS
+            if(items) {
+                document.getElementById('f1-pallets').innerHTML = ""; document.getElementById('f2-pallets').innerHTML = "";
+                Array.from(items.getElementsByTagName("item")).forEach(it => {
+                    const fId = it.getAttribute("farmId");
+                    const type = it.getAttribute("filename").split('/').pop().replace('.xml','').toUpperCase();
+                    if(document.getElementById(`f${fId}-pallets`)) {
+                        document.getElementById(`f${fId}-pallets`).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}">${type}</div>`;
+                    }
+                });
+            }
+
+            if(missions) {
+                const mBox = document.getElementById('missions'); mBox.innerHTML = "";
+                Array.from(missions.getElementsByTagName("mission")).forEach(m => {
+                    if(m.getAttribute("status")=="2") mBox.innerHTML += `<div class="card-inner border-gray-600"><b>FLD ${m.getAttribute("fieldId")}</b>: ${m.getAttribute("type")}</div>`;
+                });
+            }
+
+            if(collectibles) {
+                const colls = Array.from(collectibles.getElementsByTagName("collectible"));
+                document.getElementById('coll-found').innerText = colls.filter(c => c.getAttribute("found")=="true").length;
+                const cBox = document.getElementById('all-coll'); cBox.innerHTML = "";
+                colls.forEach((c, i) => { if(c.getAttribute("found")=="true") cBox.innerHTML += `<div class="card-inner border-purple-900">COLLECTIBLE #${i+1} FOUND</div>`; });
             }
         }
 
-        function renderSortedTrophies(containerId, stats, earnedList, farmColorClass) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = "";
-            const list = masterTrophyList.map(t => {
-                let prog = earnedList ? (earnedList.includes(t.id) ? 100 : 0) : (stats[t.id] || 0);
-                return { ...t, prog };
-            });
-            list.sort((a, b) => {
-                if (a.prog === 100 && b.prog < 100) return 1;
-                if (a.prog < 100 && b.prog === 100) return -1;
-                return b.prog - a.prog;
-            });
-            list.forEach(t => {
-                const isDone = t.prog === 100;
-                container.innerHTML += `<div class="card-inner ${farmColorClass} ${isDone ? 'trophy-earned' : ''}"><div class="flex justify-between"><b>${t.name}</b> <span class="font-bold">${t.prog}%</span></div><div class="text-[9px] text-gray-500 italic">${t.desc}</div><div class="hud-bar-bg"><div class="trophy-fill" style="width:${t.prog}%"></div></div></div>`;
+        function renderTrophies(containerId, stats, color) {
+            const container = document.getElementById(containerId); container.innerHTML = "";
+            trophyConfig.forEach(t => {
+                const p = stats[t.id] || 0;
+                container.innerHTML += `<div class="card-inner ${color} ${p==100?'trophy-earned':''}"><div class="flex justify-between"><b>${t.name}</b><span>${p}%</span></div><div class="hud-bar-bg"><div class="trophy-fill" style="width:${p}%"></div></div></div>`;
             });
         }
 
-        updateClocks(); setInterval(updateClocks, 1000); 
-        getRealWeather(); setInterval(getRealWeather, 600000); 
-        updateDashboard();
+        updateDashboard(); setInterval(updateDashboard, 60000);
     </script>
 </body>
 </html>
