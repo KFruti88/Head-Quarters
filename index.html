@@ -2,73 +2,139 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>618 Tactical - Live Vault</title>
+    <title>618 Tactical Farm Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: white; }
-        .card { background-color: #1e293b; border: 1px solid #334155; }
+        :root { --farm1: #FF5F00; --farm2: #C41E3A; }
+        body { background: #0a0a0c; color: #e2e8f0; font-family: 'Inter', sans-serif; }
+        .farm1-text { color: var(--farm1); font-family: 'JetBrains Mono', monospace; }
+        .farm2-text { color: var(--farm2); font-family: 'JetBrains Mono', monospace; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .grid-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 20px; }
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
+<body>
 
-    <div class="max-w-md w-full p-6 card rounded-xl shadow-2xl">
-        <h1 class="text-2xl font-bold text-center mb-6 text-blue-400">618 TACTICAL VAULT</h1>
-        
-        <div class="space-y-4">
-            <div class="p-4 rounded-lg bg-slate-800">
-                <p class="text-sm text-slate-400 uppercase tracking-wider">Available Funds</p>
-                <p id="vault-money" class="text-3xl font-mono text-green-400">Loading...</p>
-            </div>
+    <h1 class="text-4xl font-black text-center py-8 border-b border-gray-800">TACTICAL FARM INTELLIGENCE</h1>
 
-            <div class="p-4 rounded-lg bg-slate-800">
-                <p class="text-sm text-slate-400 uppercase tracking-wider">Server Age</p>
-                <p id="vault-hours" class="text-3xl font-mono text-blue-300">Loading...</p>
+    <div class="grid-container">
+        <div id="farm1-container">
+            <h2 class="text-3xl font-bold farm1-text mb-4">FARM 01: [LOADING]</h2>
+            <div id="farm1-content">
+                <div class="card">
+                    <h3 class="farm1-text text-xl">Balance: <span id="f1-balance">Loading...</span></h3>
+                </div>
+                <div class="card">
+                    <h3 class="text-gray-400 uppercase text-sm mb-2">Fleet Status</h3>
+                    <div id="f1-fleet" class="text-xs space-y-1"></div>
+                </div>
+                <div class="card">
+                    <h3 class="text-gray-400 uppercase text-sm mb-2">Livestock & Feed</h3>
+                    <div id="f1-animals" class="text-xs"></div>
+                </div>
+                <div class="card">
+                    <h3 class="text-gray-400 uppercase text-sm mb-2">Production & Factories</h3>
+                    <div id="f1-factories" class="text-xs"></div>
+                </div>
             </div>
         </div>
 
-        <div class="mt-6 text-center">
-            <p id="last-update" class="text-xs text-slate-500 italic">Syncing with G-Portal...</p>
+        <div id="farm2-container">
+            <h2 class="text-3xl font-bold farm2-text mb-4">FARM 02: [LOADING]</h2>
+            <div id="farm2-content">
+                <div class="card">
+                    <h3 class="farm2-text text-xl">Balance: <span id="f2-balance">Loading...</span></h3>
+                </div>
+                <div class="card">
+                    <h3 class="text-gray-400 uppercase text-sm mb-2">Fleet Status</h3>
+                    <div id="f2-fleet" class="text-xs space-y-1"></div>
+                </div>
+                <div class="card">
+                    <h3 class="text-gray-400 uppercase text-sm mb-2">Livestock & Feed</h3>
+                    <div id="f2-animals" class="text-xs"></div>
+                </div>
+                <div class="card">
+                    <h3 class="text-gray-400 uppercase text-sm mb-2">Production & Factories</h3>
+                    <div id="f2-factories" class="text-xs"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        async function fetchVaultData() {
+        async function loadAllData() {
+            const timestamp = new Date().getTime();
+            const fetchXml = async (file) => {
+                const r = await fetch(`${file}?v=${timestamp}`);
+                const t = await r.text();
+                return new DOMParser().parseFromString(t, "text/xml");
+            };
+
             try {
-                // Fetch the XML file (cache-busting added)
-                const response = await fetch('live_vault.xml?v=' + new Date().getTime());
-                if (!response.ok) throw new Error('Network response was not ok');
+                const [farms, vehicles, placeables, career] = await Promise.all([
+                    fetchXml('farms.xml'),
+                    fetchXml('vehicles.xml'),
+                    fetchXml('placeables.xml'),
+                    fetchXml('live_vault.xml')
+                ]);
+
+                // 1. PROCESS BALANCES
+                const farmNodes = farms.getElementsByTagName("farm");
+                for (let f of farmNodes) {
+                    const id = f.getAttribute("farmId");
+                    const name = f.getAttribute("name");
+                    const money = parseInt(f.getAttribute("money"));
+                    if (id == "1") {
+                        document.querySelector("#farm1-container h2").innerText = `FARM 01: ${name}`;
+                        document.getElementById("f1-balance").innerText = `$${money.toLocaleString()}`;
+                    } else if (id == "2") {
+                        document.querySelector("#farm2-container h2").innerText = `FARM 02: ${name}`;
+                        document.getElementById("f2-balance").innerText = `$${money.toLocaleString()}`;
+                    }
+                }
+
+                // 2. PROCESS VEHICLES (Fleet, Damage, Fuel)
+                const vNodes = vehicles.getElementsByTagName("vehicle");
+                document.getElementById("f1-fleet").innerHTML = "";
+                document.getElementById("f2-fleet").innerHTML = "";
                 
-                const xmlText = await response.text();
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                for (let v of vNodes) {
+                    const fId = v.getAttribute("farmId");
+                    const name = v.getAttribute("filename").split('/').pop().replace('.xml', '');
+                    const fuel = v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || "N/A";
+                    const damage = v.querySelector("component")?.getAttribute("damage") || "0";
+                    const dmgPct = (parseFloat(damage) * 100).toFixed(0);
+                    
+                    const html = `<div><strong>${name}</strong> | Fuel: ${fuel} | Condition: ${100-dmgPct}%</div>`;
+                    if (fId == "1") document.getElementById("f1-fleet").innerHTML += html;
+                    if (fId == "2") document.getElementById("f2-fleet").innerHTML += html;
+                }
 
-                // --- FS22 XML TARGETING ---
-                // Money is located in <statistics><money>
-                const moneyElement = xmlDoc.getElementsByTagName("money")[0];
-                const moneyValue = moneyElement ? parseInt(moneyElement.textContent) : 0;
+                // 3. PROCESS FACTORIES (Production & Storage)
+                const pNodes = placeables.getElementsByTagName("placeable");
+                for (let p of pNodes) {
+                    const fId = p.getAttribute("farmId");
+                    const type = p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop();
+                    const productions = p.getElementsByTagName("production");
+                    
+                    let factoryHtml = `<div class='mb-2'><strong>${type}</strong>`;
+                    for (let prod of productions) {
+                        const prodName = prod.getAttribute("id");
+                        const status = prod.getAttribute("isEnabled") == "true" ? "ACTIVE" : "IDLE";
+                        factoryHtml += `<br> - ${prodName}: ${status}`;
+                    }
+                    factoryHtml += `</div>`;
+                    
+                    if (fId == "1") document.getElementById("f1-factories").innerHTML += factoryHtml;
+                    if (fId == "2") document.getElementById("f2-factories").innerHTML += factoryHtml;
+                }
 
-                // Playtime is in minutes in <statistics><playTime>
-                const playTimeElement = xmlDoc.getElementsByTagName("playTime")[0];
-                const minutes = playTimeElement ? parseInt(playTimeElement.textContent) : 0;
-                const hours = Math.floor(minutes / 60);
-
-                // Update the UI
-                document.getElementById('vault-money').innerText = "$" + moneyValue.toLocaleString();
-                document.getElementById('vault-hours').innerText = hours + " Hours";
-                document.getElementById('last-update').innerText = "Last Updated: " + new Date().toLocaleTimeString();
-
-            } catch (error) {
-                console.error("Failed to load vault:", error);
-                document.getElementById('vault-money').innerText = "Error";
-                document.getElementById('vault-hours').innerText = "Offline";
-            }
+            } catch (e) { console.error("Data Load Error:", e); }
         }
 
-        // Run once on load
-        fetchVaultData();
-        // Refresh every 5 minutes while the page is open
-        setInterval(fetchVaultData, 300000);
+        loadAllData();
+        setInterval(loadAllData, 300000); // Update every 5 mins
     </script>
 </body>
 </html>
