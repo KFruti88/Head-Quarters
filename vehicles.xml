@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <vehicles>
-    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/locomotive/locomotive.xml" id="1" isAbsolute="true" age="9.000000" price="164000.000000" farmId="0" propertyState="0" operatingTime="1110193.250000" selectedObjectIndex="5" subSelectedObjectIndex="1">
-        <component index="1" position="659.86328125 72.619728088379 547.287109375" rotation="-179.97805278096 -54.984067837546 -179.99999134858"/>
+    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/locomotive/locomotive.xml" id="1" isAbsolute="true" age="9.000000" price="164000.000000" farmId="0" propertyState="0" operatingTime="1111993.625000" selectedObjectIndex="5" subSelectedObjectIndex="1">
+        <component index="1" position="1332.0559082031 46.048751831055 -377.28802490234" rotation="0.00040655886551951 4.0049480141814 0"/>
         <configuration name="motor" id="1"/>
         <configuration name="wheel" id="1"/>
         <boughtConfiguration name="motor" id="1"/>
@@ -14,8 +14,8 @@
         <drivable cruiseControl="80" cruiseControlReverse="80"/>
         <attacherJoints comboDirection="-1"/>
     </vehicle>
-    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonGrain/wagonGrain.xml" id="2" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1110192.625000">
-        <component index="1" position="672.99487304688 72.625907897949 556.48522949219" rotation="-179.99999134858 -55.009578594096 -179.99999134858"/>
+    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonGrain/wagonGrain.xml" id="2" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1111993.000000">
+        <component index="1" position="1330.9256591797 46.048873901367 -393.28283691406" rotation="0.00047604587362283 4.1986030870583 0"/>
         <configuration name="fillVolume" id="1"/>
         <configuration name="cover" id="1"/>
         <configuration name="trailer" id="1"/>
@@ -34,8 +34,8 @@
         <trailer doorState="false" tipAnimationTime="0.000000" tipState="0"/>
         <cover state="1"/>
     </vehicle>
-    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonSugarbeets/wagonSugarbeets.xml" id="3" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1110192.625000">
-        <component index="1" position="687.76672363281 72.623115539551 566.82434082031" rotation="179.94525421257 -55.015353519039 -179.99999134858"/>
+    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonSugarbeets/wagonSugarbeets.xml" id="3" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1111993.000000">
+        <component index="1" position="1329.5958251953 46.049030303955 -411.26406860352" rotation="0.0005223308898235 4.4221833531231 0"/>
         <configuration name="fillVolume" id="1"/>
         <configuration name="cover" id="1"/>
         <configuration name="trailer" id="1"/>
@@ -54,8 +54,8 @@
         <trailer doorState="false" tipAnimationTime="0.000000" tipState="0"/>
         <cover state="1"/>
     </vehicle>
-    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonTimber/wagonTimber.xml" id="4" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1110192.625000">
-        <component index="1" position="705.94830322266 72.601890563965 579.54809570313" rotation="179.97239738433 -55.01180865086 -179.99999134858"/>
+    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonTimber/wagonTimber.xml" id="4" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1111993.000000">
+        <component index="1" position="1327.8717041016 46.04923248291 -433.39022827148" rotation="0.00060744462890689 4.7063768523168 0"/>
         <configuration name="wheel" id="1"/>
         <configuration name="tensionBelts" id="1"/>
         <boughtConfiguration name="wheel" id="1"/>
@@ -74,8 +74,8 @@
             <belt isActive="false"/>
         </tensionBelts>
     </vehicle>
-    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonWoodChips/wagonWoodChips.xml" id="5" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1110192.625000">
-        <component index="1" position="728.44567871094 72.592185974121 595.29437255859" rotation="-179.97388636557 -55.007106065616 -179.99999134858"/>
+    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonWoodChips/wagonWoodChips.xml" id="5" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1111993.000000">
+        <component index="1" position="1325.6010742188 46.049533843994 -460.75469970703" rotation="0.00068952769040895 4.9804872847482 0"/>
         <configuration name="fillUnit" id="1"/>
         <configuration name="fillVolume" id="1"/>
         <configuration name="wheel" id="1"/>
@@ -91,8 +91,8 @@
         </fillUnit>
         <trailer doorState="false" tipAnimationTime="0.000000" tipState="0"/>
     </vehicle>
-    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonVehicles/wagonVehicles.xml" id="6" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1110192.625000">
-        <component index="1" position="743.28784179688 72.602424621582 605.68438720703" rotation="-179.93190802293 -55.003889046517 -179.99999134858"/>
+    <vehicle modName="pdlc_premiumExpansion" filename="$pdlcdir$premiumExpansion/vehicles/train/wagonVehicles/wagonVehicles.xml" id="6" isAbsolute="true" age="9.000000" price="1.000000" farmId="0" propertyState="0" operatingTime="1111993.000000">
+        <component index="1" position="1324.0163574219 46.049751281738 -478.81137084961" rotation="0.00075592755952069 5.2626850880437 0"/>
         <configuration name="wheel" id="1"/>
         <configuration name="tensionBelts" id="1"/>
         <boughtConfiguration name="wheel" id="1"/>
@@ -4097,7 +4097,7 @@
         <configuration name="fillUnit" id="1"/>
         <boughtConfiguration name="fillUnit" id="1"/>
         <fillUnit>
-            <unit index="1" fillType="EGG" fillLevel="137.899994"/>
+            <unit index="1" fillType="EGG" fillLevel="144.899994"/>
         </fillUnit>
     </vehicle>
     <vehicle modName="FS22_LiftablePallets" filename="$moddir$FS22_LiftablePallets/xml/flourPallet.xml" id="110" isAbsolute="true" age="0.000000" price="0.000000" farmId="1" propertyState="1" operatingTime="0.000000" selectedObjectIndex="1" subSelectedObjectIndex="1">

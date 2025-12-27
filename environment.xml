@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <environment>
-    <dayTime>234.663620</dayTime>
+    <dayTime>264.670288</dayTime>
     <currentDay>145</currentDay>
     <currentMonotonicDay>24</currentMonotonicDay>
-    <realHourTimer>3500000</realHourTimer>
+    <realHourTimer>1699600</realHourTimer>
     <daysPerPeriod>10</daysPerPeriod>
-    <weather timeSinceLastRain="497">
+    <weather timeSinceLastRain="527">
         <forecast>
-            <instance durationLeft="2.638940" typeName="SUN" variationIndex="3" duration="11.000000" season="3"/>
+            <instance durationLeft="2.138829" typeName="SUN" variationIndex="3" duration="11.000000" season="3"/>
             <instance typeName="SNOW" variationIndex="1" duration="8.000000" season="3"/>
             <instance typeName="CLOUDY" variationIndex="1" duration="7.000000" season="0"/>
             <instance typeName="RAIN" variationIndex="1" duration="3.000000" season="0"/>
@@ -39,7 +39,7 @@
             <instance typeName="CLOUDY" variationIndex="1" duration="6.000000" season="1"/>
             <instance typeName="CLOUDY" variationIndex="3" duration="10.000000" season="1"/>
         </forecast>
-        <fog currentMieScale="1.000000" lastMieScale="40.000000" targetMieScale="1.000000" alpha="1.000000" duration="1800000.000000" nightFactor="1.000000" dayFactor="0.000000"/>
+        <fog currentMieScale="11.074944" lastMieScale="1.000000" targetMieScale="25.500000" alpha="0.411222" duration="3600000.000000" nightFactor="1.000000" dayFactor="0.000000"/>
         <snow height="0.198979"/>
     </weather>
     <snow physicalHeight="0.190000" height="0.198979"/>
