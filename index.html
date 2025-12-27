@@ -52,6 +52,12 @@
         }
         .card-inner:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.07); }
 
+        /* Trophy Progress Bar Styles */
+        .trophy-progress-bg { background: rgba(255, 255, 255, 0.05); height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+        .f1-bar { background: linear-gradient(90deg, var(--f1), #ff9f43); height: 100%; transition: width 1s ease-in-out; }
+        .f2-bar { background: linear-gradient(90deg, var(--f2), #ff4d4d); height: 100%; transition: width 1s ease-in-out; }
+        .trophy-percent { font-size: 9px; font-weight: bold; float: right; margin-top: -14px; color: #888; }
+
         .status-dot { 
             height: 12px; width: 12px; border-radius: 50%; 
             display: inline-block; margin-right: 8px; 
@@ -205,17 +211,30 @@
             { name: "It's never too late to farm", desc: "The journey begins." }
         ];
 
-        const werewolfEarned = ["Help me to help you", "Ultimutt Pawesomeness", "Giddy-up!", "Allez hopp", "Well-Oiled Machine", "All out of Land", "You wood not believe it", "I'm stumped", "Farming is in our nature"];
-        const rayEarned = ["Help me to help you", "Ultimutt Pawesomeness", "Giddy-up!", "Allez hopp", "Well-Oiled Machine", "All out of Land", "You wood not believe it", "I'm stumped", "Road Trip", "Plant get enough", "The plot thickens", "Helper A does not stop … ever", "It's just the beginning", "Just a sprinkle", "It's sow easy", "Own use", "Large-scale supplier", "Field Trip", "Long haul"];
+        // Demo earned lists - in production, these should be synced to your XML
+        const werewolfEarned = ["Help me to help you", "Ultimutt Pawesomeness", "Farming is in our nature"];
+        const rayEarned = ["Help me to help you", "Ultimutt Pawesomeness", "Road Trip", "Long haul"];
 
-        function renderTrophies(farmId, earnedList) {
+        function calculateProgress(trophyName, stats) {
+            if (!stats) return 0;
+            const targets = { "Road Trip": 100000, "Long haul": 1000000, "Large-scale supplier": 100, "Own use": 1, "Help me to help you": 1 };
+            const target = targets[trophyName] || 100;
+            let current = 0;
+            if (trophyName.includes("Trip") || trophyName.includes("haul")) current = parseFloat(stats.querySelector("traveledDistance")?.textContent || 0);
+            else if (trophyName.includes("supplier") || trophyName.includes("use")) current = parseFloat(stats.querySelector("harvestedHectares")?.textContent || 0);
+            return Math.min(100, Math.round((current / target) * 100));
+        }
+
+        function renderTrophies(farmId, earnedList, stats) {
             const container = document.getElementById(`f${farmId}-trophies`);
             const borderClass = farmId === 1 ? 'f1-border' : 'f2-border';
+            const barClass = farmId === 1 ? 'f1-bar' : 'f2-bar';
             let html = `<div class="card-inner pinned-contract"><b class="text-yellow-500 uppercase">Mission Contracts</b><br>Progress: 12 / 50 Completed</div>`;
             let eHtml = ""; let uHtml = "";
             trophyList.forEach(t => {
                 const isE = earnedList.includes(t.name);
-                const block = `<div class="card-inner ${borderClass} ${isE ? 'trophy-earned' : ''}"><b>${t.name}</b><br><span class="italic text-[9px] text-gray-400">${t.desc}</span><br>${isE ? '<span class="text-green-500 font-bold">[EARNED]</span>' : 'Progress: 0%'}</div>`;
+                const progress = isE ? 100 : calculateProgress(t.name, stats);
+                const block = `<div class="card-inner ${borderClass} ${isE ? 'trophy-earned' : ''}"><b>${t.name}</b><span class="trophy-percent">${progress}%</span><br><span class="italic text-[9px] text-gray-400">${t.desc}</span><div class="trophy-progress-bg"><div class="${barClass}" style="width: ${progress}%"></div></div></div>`;
                 if (isE) eHtml += block; else uHtml += block;
             });
             container.innerHTML = html + uHtml + eHtml;
@@ -223,79 +242,52 @@
 
         async function updateDashboard() {
             const ts = new Date().getTime();
-            const fetchXml = async (fileName) => {
-                try {
-                    const r = await fetch(`${fileName}?v=${ts}`);
-                    if (!r.ok) { console.error(`🔴 TACTICAL ERROR: ${fileName} NOT FOUND`); return null; }
-                    return new DOMParser().parseFromString(await r.text(), "text/xml");
-                } catch (e) { return null; }
-            };
-
+            const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
             try {
                 const [farms, vehicles, placeables, career, farmland] = await Promise.all([
-                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), 
-                    fetchXml('careerSavegame.xml'), fetchXml('farmland.xml')
+                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml')
                 ]);
 
-                if (!farms) return;
+                if (!farms || !career) return;
 
-                // 1. FINANCIAL LOGIC (Fixing $0 Balance)
-                let totalPlayerWealth = 0;
-                let f1Money = 0; let f2Money = 0;
-
+                // Finance logic - Direct pull from farms.xml
+                let playerTotal = 0;
                 Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                     const id = f.getAttribute("farmId");
-                    const moneyValue = Math.floor(parseFloat(f.getAttribute("money") || 0));
-                    
-                    if (id === "1") {
-                        f1Money = moneyValue;
-                        document.getElementById("f1-head-money").innerText = "$" + f1Money.toLocaleString();
-                    } else if (id === "2") {
-                        f2Money = moneyValue;
-                        document.getElementById("f2-head-money").innerText = "$" + f2Money.toLocaleString();
-                    }
-                    if (id !== "0") totalPlayerWealth += moneyValue;
+                    const money = Math.floor(parseFloat(f.getAttribute("money") || 0));
+                    const stats = f.querySelector("statistics");
+                    if (id === "1") { document.getElementById("f1-head-money").innerText = "$" + money.toLocaleString(); renderTrophies(1, werewolfEarned, stats); playerTotal += money; }
+                    if (id === "2") { document.getElementById("f2-head-money").innerText = "$" + money.toLocaleString(); renderTrophies(2, rayEarned, stats); playerTotal += money; }
                 });
+                const globalMoney = Math.floor(parseFloat(career.querySelector("statistics money")?.textContent || 0));
+                document.getElementById("f0-money").innerText = "$" + Math.max(0, globalMoney - playerTotal).toLocaleString();
 
-                if (career) {
-                    const globalStatsMoney = Math.floor(parseFloat(career.querySelector("statistics money")?.textContent || 0));
-                    const systemBalance = globalStatsMoney - totalPlayerWealth;
-                    document.getElementById("f0-money").innerText = "$" + (systemBalance > 0 ? systemBalance.toLocaleString() : "0");
-                }
+                // Clear containers
+                ['f1-fleet','f2-fleet','f0-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields','f1-attach','f2-attach','f1-pallets','f2-pallets'].forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerHTML = ""; });
 
-                // Reset dynamic containers
-                ['f1-fleet','f2-fleet','f0-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields','f1-attach','f2-attach','f1-pallets','f2-pallets'].forEach(id => {
-                    if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
-                });
-
-                // 2. FLEET / VEHICLES
+                // Fleet
                 if (vehicles) {
                     let vCounts = {1:0, 2:0};
                     Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
                         const fId = v.getAttribute("farmId");
                         const name = v.getAttribute("filename").split('/').pop().replace('.xml','');
-                        let target = "";
-                        if (fId === "1" || fId === "2") {
-                            target = v.querySelector("consumer[type='fuel']") ? `f${fId}-fleet` : `f${fId}-attach`;
-                            if(v.querySelector("consumer[type='fuel']")) vCounts[fId]++;
-                        } else { target = "f0-fleet"; }
+                        let target = (fId === "1" || fId === "2") ? (v.querySelector("consumer[type='fuel']") ? `f${fId}-fleet` : `f${fId}-attach`) : "f0-fleet";
                         if (target) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${name}</b></div>`;
+                        if((fId === "1" || fId === "2") && v.querySelector("consumer[type='fuel']")) vCounts[fId]++;
                     });
                     document.getElementById('f1-v-count').innerText = vCounts[1];
                     document.getElementById('f2-v-count').innerText = vCounts[2];
                 }
 
-                // 3. FACILITIES (Detail Logic Included)
+                // Placeables (Facilities)
                 if (placeables) {
                     Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
                         const fId = p.getAttribute("farmId");
                         const storage = p.querySelector("storage");
                         if (!storage) return;
-
-                        let facilityName = p.getAttribute("customName") || p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop().replace('.xml','');
+                        let name = p.getAttribute("customName") || p.getAttribute("templateName") || "Facility";
                         let target = (fId === "1" || fId === "2") ? (p.getElementsByTagName("animal").length > 0 ? `f${fId}-animals` : `f${fId}-prod`) : "f0-prod";
-
-                        let html = `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${facilityName.toUpperCase()}</b>`;
+                        let html = `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${name.toUpperCase()}</b>`;
                         Array.from(storage.getElementsByTagName("node")).forEach(node => {
                             const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
                             if(level > 1) html += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
@@ -304,7 +296,7 @@
                     });
                 }
 
-                // 4. FIELDS
+                // Fields
                 if (farmland) {
                     Array.from(farmland.getElementsByTagName("land")).forEach(l => {
                         const fId = l.getAttribute("farmId");
@@ -313,11 +305,9 @@
                     });
                 }
 
-                // 5. COLLECTIBLES
-                if (career) {
-                    const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
-                    document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
-                }
+                // Collectibles
+                const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
+                document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
 
             } catch (e) { console.error("Sync Error", e); }
         }
@@ -337,7 +327,6 @@
             } catch(e) {}
         }
 
-        renderTrophies(1, werewolfEarned); renderTrophies(2, rayEarned);
         updateClocks(); setInterval(updateClocks, 10000);
         getRealWeather(); updateDashboard();
     </script>
