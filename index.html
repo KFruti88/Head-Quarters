@@ -28,7 +28,7 @@
                 <span class="status-dot bg-green-500"></span>
                 <b id="srv-name" class="text-3xl text-white uppercase font-black italic">618 TACTICAL</b>
             </div>
-            <span class="text-xs text-gray-500 italic mt-1">CrossPlay: ACTIVE | Status: SECURE</span>
+            <span class="text-xs text-gray-500 italic mt-1 underline">CrossPlay: ACTIVE | Status: SECURE</span>
         </div>
 
         <div class="flex gap-6">
@@ -47,7 +47,7 @@
             <div class="header-box border-blue-600">
                 <div class="text-blue-500 font-extrabold text-sm uppercase">In-Game World</div>
                 <div id="game-time" class="text-white text-3xl font-black">00:00</div>
-                <div id="game-date" class="text-[11px] text-gray-400 italic">Day 1 | Sunny</div>
+                <div id="game-date" class="text-[11px] text-gray-400 font-bold">Day 1 | Sunny</div>
             </div>
         </div>
 
@@ -58,39 +58,38 @@
     </header>
 
     <div class="grid grid-cols-4 gap-4 mb-6">
-        <div class="scroll-box f1-border"><h3 class="f1-text font-bold border-b border-gray-900 mb-2 underline uppercase">F1 Trophies</h3><div id="f1-trophies"></div></div>
-        <div class="scroll-box f1-border"><h3 class="f1-text font-bold border-b border-gray-900 mb-2 underline uppercase">F1 Production</h3><div id="f1-prod"></div></div>
-        <div class="scroll-box f2-border"><h3 class="f2-text font-bold border-b border-gray-900 mb-2 underline uppercase">F2 Trophies</h3><div id="f2-trophies"></div></div>
-        <div class="scroll-box f2-border"><h3 class="f2-text font-bold border-b border-gray-900 mb-2 underline uppercase">F2 Production</h3><div id="f2-prod"></div></div>
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold mb-2 uppercase underline">F1 Trophies</h3><div id="f1-trophies"></div></div>
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold mb-2 uppercase underline">F1 Production</h3><div id="f1-prod"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold mb-2 uppercase underline">F2 Trophies</h3><div id="f2-trophies"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold mb-2 uppercase underline">F2 Production</h3><div id="f2-prod"></div></div>
     </div>
 
     <div class="grid grid-cols-4 gap-4 mb-6">
-        <div class="scroll-box f1-border"><div class="flex justify-between f1-text font-bold uppercase"><span>F1 FLEET</span><span id="f1-v-count">0</span></div><div id="f1-fleet"></div></div>
-        <div class="scroll-box f1-border"><div class="flex justify-between f1-text font-bold uppercase"><span>F1 ATTACHMENTS</span><span id="f1-a-count">0</span></div><div id="f1-attach"></div></div>
-        <div class="scroll-box f1-border"><h3 class="f1-text font-bold mb-2 uppercase">F1 PALLETS</h3><div id="f1-pallets"></div></div>
-        <div class="scroll-box f1-border"><h3 class="f1-text font-bold mb-2 uppercase">F1 FIELDS</h3><div id="f1-fields"></div></div>
+        <div class="scroll-box f1-border"><div class="flex justify-between f1-text font-bold"><span>F1 FLEET</span><span id="f1-v-count">0</span></div><div id="f1-fleet"></div></div>
+        <div class="scroll-box f1-border"><div class="flex justify-between f1-text font-bold"><span>F1 ATTACHMENTS</span><span id="f1-a-count">0</span></div><div id="f1-attach"></div></div>
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold uppercase">F1 Pallets</h3><div id="f1-pallets"></div></div>
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold uppercase">F1 Fields</h3><div id="f1-fields"></div></div>
     </div>
 
     <div class="grid grid-cols-4 gap-4 mb-6">
-        <div class="scroll-box f2-border"><div class="flex justify-between f2-text font-bold uppercase"><span>F2 FLEET</span><span id="f2-v-count">0</span></div><div id="f2-fleet"></div></div>
-        <div class="scroll-box f2-border"><div class="flex justify-between f2-text font-bold uppercase"><span>F2 ATTACHMENTS</span><span id="f2-a-count">0</span></div><div id="f2-attach"></div></div>
-        <div class="scroll-box f2-border"><h3 class="f2-text font-bold mb-2 uppercase">F2 PALLETS</h3><div id="f2-pallets"></div></div>
-        <div class="scroll-box f2-border"><h3 class="f2-text font-bold mb-2 uppercase">F2 FIELDS</h3><div id="f2-fields"></div></div>
+        <div class="scroll-box f2-border"><div class="flex justify-between f2-text font-bold"><span>F2 FLEET</span><span id="f2-v-count">0</span></div><div id="f2-fleet"></div></div>
+        <div class="scroll-box f2-border"><div class="flex justify-between f2-text font-bold"><span>F2 ATTACHMENTS</span><span id="f2-a-count">0</span></div><div id="f2-attach"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold uppercase">F2 Pallets</h3><div id="f2-pallets"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold uppercase">F2 Fields</h3><div id="f2-fields"></div></div>
     </div>
 
     <div class="grid grid-cols-3 gap-4 mb-6">
-        <div class="scroll-box border-gray-800"><h3 class="text-white font-bold mb-2 uppercase">Active Missions</h3><div id="missions"></div></div>
-        <div class="scroll-box border-gray-800"><h3 class="text-yellow-600 font-bold mb-2 uppercase">Hot Market Stocks</h3><div id="stocks"></div></div>
-        <div class="scroll-box border-gray-800"><h3 class="text-purple-600 font-bold mb-2 uppercase">Collectible Locator</h3><div id="all-coll"></div></div>
+        <div class="scroll-box border-gray-800"><h3 class="text-white font-bold mb-2 uppercase underline">Active Missions</h3><div id="missions"></div></div>
+        <div class="scroll-box border-gray-800"><h3 class="text-yellow-600 font-bold mb-2 uppercase underline">Market Stocks</h3><div id="stocks"></div></div>
+        <div class="scroll-box border-gray-800"><h3 class="text-purple-600 font-bold mb-2 uppercase underline">Collectible Locator</h3><div id="all-coll"></div></div>
     </div>
 
     <div class="grid grid-cols-2 gap-4">
-        <div class="scroll-box f1-border"><h3 class="f1-text font-bold mb-2 text-lg italic uppercase">F1 Livestock Productivity & Feed</h3><div id="f1-animals"></div></div>
-        <div class="scroll-box f2-border"><h3 class="f2-text font-bold mb-2 text-lg italic uppercase">F2 Livestock Productivity & Feed</h3><div id="f2-animals"></div></div>
+        <div class="scroll-box f1-border"><h3 class="f1-text font-bold mb-2 text-lg italic uppercase">F1 Livestock & Feed</h3><div id="f1-animals"></div></div>
+        <div class="scroll-box f2-border"><h3 class="f2-text font-bold mb-2 text-lg italic uppercase">F2 Livestock & Feed</h3><div id="f2-animals"></div></div>
     </div>
 
     <script>
-        // Trophy logic locked as per previous prompt
         const trophyList = [
             { name: "Farming is in our nature", desc: "Plant today - harvest tomorrow." },
             { name: "Road Trip", desc: "That thing wouldn't have fit onto the street anyway." },
@@ -173,89 +172,83 @@
 
         async function updateDashboard() {
             const ts = new Date().getTime();
-            const fetchXml = async f => {
-                const r = await fetch(`${f}?v=${ts}`);
-                if (!r.ok) return null;
-                return new DOMParser().parseFromString(await r.text(), "text/xml");
-            };
+            const fetchXml = f => fetch(`${f}?v=${ts}`).then(r => r.text()).then(t => new DOMParser().parseFromString(t, "text/xml"));
             
-            const [farms, vehicles, placeables, career, farmland, missions, economy] = await Promise.all([
-                fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml'), fetchXml('economy.xml')
-            ]);
+            try {
+                const [farms, vehicles, placeables, career, farmland, missions, economy] = await Promise.all([
+                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml'), fetchXml('economy.xml')
+                ]);
 
-            // DYNAMIC CLEAR
-            ['f1-fleet','f2-fleet','f1-attach','f2-attach','f1-prod','f2-prod','f1-pallets','f2-pallets','f1-fields','f2-fields','f1-animals','f2-animals','missions','stocks','all-coll'].forEach(id => {
-                if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
-            });
-
-            // 1. FINANCES
-            if(farms) Array.from(farms.getElementsByTagName("farm")).forEach(f => {
-                const id = f.getAttribute("farmId");
-                const money = parseInt(f.getAttribute("money") || 0);
-                if(document.getElementById(`f${id}-head-money`)) document.getElementById(`f${id}-head-money`).innerText = "$" + money.toLocaleString();
-            });
-
-            // 2. FLEET & ATTACHMENTS (NON-COMPACT)
-            let vCounts = {1:0, 2:0};
-            if(vehicles) Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
-                const fId = v.getAttribute("farmId"); if(fId !== "1" && fId !== "2") return;
-                const name = v.getAttribute("filename").split('/').pop().replace('.xml','');
-                const fuel = Math.round(v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || 0);
-                const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(1);
-                const html = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>${name}</b><br>FUEL: ${fuel}L | DMG: ${dmg}%</div>`;
-                if(fuel > 0) { document.getElementById(`f${fId}-fleet`).innerHTML += html; vCounts[fId]++; }
-                else { document.getElementById(`f${fId}-attach`).innerHTML += html; }
-            });
-            document.getElementById('f1-v-count').innerText = vCounts[1];
-            document.getElementById('f2-v-count').innerText = vCounts[2];
-
-            // 3. PRODUCTION & PALLETS (DEEP SEARCH)
-            if(placeables) Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
-                const fId = p.getAttribute("farmId"); if(fId !== "1" && fId !== "2") return;
-                const name = p.getAttribute("filename").split('/').pop().replace('.xml','');
-                let prodData = "";
-                Array.from(p.querySelectorAll("storage node, productionPoint storage node")).forEach(node => {
-                    const level = Math.round(parseFloat(node.getAttribute("fillLevel") || 0));
-                    if(level > 1) prodData += `<br>-- ${node.getAttribute("fillType")}: ${level}L`;
+                // Reset all containers
+                ['f1-fleet','f2-fleet','f1-attach','f2-attach','f1-prod','f2-prod','f1-animals','f2-animals','f1-fields','f2-fields','missions','stocks','all-coll','f1-pallets','f2-pallets'].forEach(id => {
+                    if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
                 });
-                if(prodData) document.getElementById(`f${fId}-prod`).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>${name}</b>${prodData}</div>`;
-            });
 
-            // 4. FIELDS (CROP TYPE & GROWTH)
-            if(farmland) Array.from(farmland.getElementsByTagName("land")).forEach(l => {
-                const fId = l.getAttribute("farmId"); if(fId !== "1" && fId !== "2") return;
-                document.getElementById(`f${fId}-fields`).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>FIELD ${l.getAttribute("id")}</b><br>SCANNING GROWTH...</div>`;
-            });
+                // 1. Finances
+                Array.from(farms.getElementsByTagName("farm")).forEach(f => {
+                    const id = f.getAttribute("farmId");
+                    const money = parseInt(f.getAttribute("money") || 0);
+                    if(document.getElementById(`f${id}-head-money`)) document.getElementById(`f${id}-head-money`).innerText = "$" + money.toLocaleString();
+                });
 
-            // 5. ANIMALS (FIXED: MULTIPLE ANIMALS)
-            if(placeables) Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
-                const fId = p.getAttribute("farmId"); if(fId !== "1" && fId !== "2") return;
-                const animalNodes = p.getElementsByTagName("animal");
-                if(animalNodes.length > 0) {
-                    let barnHtml = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>BARN / PASTURE</b>`;
-                    Array.from(animalNodes).forEach((a, index) => {
-                        barnHtml += `<br><span class="text-white">Animal #${index+1}</span>: Health ${a.getAttribute("health")}% | Prod ${a.getAttribute("productivity")}%`;
-                    });
-                    document.getElementById(`f${fId}-animals`).innerHTML += barnHtml + "</div>";
-                }
-            });
+                // 2. Fleet & Attachments
+                let vCounts = {1:0, 2:0};
+                Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
+                    const fId = v.getAttribute("farmId"); if(fId !== "1" && fId !== "2") return;
+                    const name = v.getAttribute("filename").split('/').pop().replace('.xml','');
+                    const fuel = Math.round(v.querySelector("consumer[type='fuel']")?.getAttribute("usage") || 0);
+                    const dmg = (parseFloat(v.querySelector("component")?.getAttribute("damage") || 0) * 100).toFixed(1);
+                    const html = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>${name}</b><br>FUEL: ${fuel}L | DMG: ${dmg}%</div>`;
+                    if(fuel > 0) { document.getElementById(`f${fId}-fleet`).innerHTML += html; vCounts[fId]++; }
+                    else { document.getElementById(`f${fId}-attach`).innerHTML += html; }
+                });
+                document.getElementById('f1-v-count').innerText = vCounts[1];
+                document.getElementById('f2-v-count').innerText = vCounts[2];
 
-            // 6. MISSIONS
-            if(missions) Array.from(missions.getElementsByTagName("mission")).forEach(m => {
-                if(m.getAttribute("status") === "1") {
-                    document.getElementById('missions').innerHTML += `<div class="card-inner border-blue-500"><b>${m.getAttribute("type")}</b><br>Reward: $${m.getAttribute("reward")}</div>`;
-                }
-            });
+                // 3. Missions (DEEP MAPPED)
+                Array.from(missions.getElementsByTagName("mission")).forEach(m => {
+                    const fId = m.getAttribute("farmId");
+                    if ((fId === "1" || fId === "2") && m.getAttribute("status") === "1") {
+                        const reward = m.getAttribute("reward");
+                        const type = m.getAttribute("type");
+                        document.getElementById('missions').innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>${type.toUpperCase()}</b><br>Reward: $${reward}</div>`;
+                    }
+                });
 
-            // 7. COLLECTIBLES
-            if(career) {
+                // 4. Animals & Feed (DEEP MAPPED)
+                Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
+                    const fId = p.getAttribute("farmId"); if(fId !== "1" && fId !== "2") return;
+                    const animals = p.getElementsByTagName("animal");
+                    const storage = p.querySelector("storage");
+                    if(animals.length > 0 || storage) {
+                        let html = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>BARN: ${p.getAttribute("templateName") || 'Livestock'}</b>`;
+                        if(storage) {
+                            let feed = "<br>FEED BALANCE: ";
+                            Array.from(storage.getElementsByTagName("node")).forEach(node => {
+                                const level = Math.round(node.getAttribute("fillLevel"));
+                                if(level > 0) feed += `${node.getAttribute("fillType")}: ${level}L | `;
+                            });
+                            html += feed;
+                        }
+                        document.getElementById(`f${fId}-animals`).innerHTML += html + "</div>";
+                    }
+                });
+
+                // 5. Fields
+                Array.from(farmland.getElementsByTagName("land")).forEach(l => {
+                    const fId = l.getAttribute("farmId"); if(fId !== "1" && fId !== "2") return;
+                    document.getElementById(`f${fId}-fields`).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>FIELD ${l.getAttribute("id")}</b><br>OWNED | SCANNING...</div>`;
+                });
+
+                // 6. Collectibles Locator
                 const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
                 document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
                 for(let i=0; i<50; i++) {
                     const found = fStr[i] === '1';
-                    document.getElementById('all-coll').innerHTML += `<div class="py-1 ${found?'text-green-500':'text-red-400'}">#${i+1}: ${found?'FOUND':'MISSING (LAT: 0 / LNG: 0)'}</div>`;
+                    document.getElementById('all-coll').innerHTML += `<div class="py-1 ${found?'text-green-500':'text-red-400'}">#${i+1}: ${found?'FOUND':'MISSING (COORD SCAN...)'}</div>`;
                 }
-            }
+
+            } catch (e) { console.error("Sync Error", e); }
         }
 
         renderTrophies(1, f1Earned); renderTrophies(2, f2Earned);
