@@ -10,7 +10,8 @@
         :root { 
             --f1: #FF5F00; 
             --f2: #C41E3A; 
-            --glass: rgba(15, 15, 15, 0.7);
+            --f0: #444444;
+            --glass: rgba(15, 15, 15, 0.75);
             --glow: rgba(255, 255, 255, 0.05);
         }
 
@@ -35,6 +36,8 @@
         .f1-border { border-color: var(--f1); }
         .f2-text { color: var(--f2); text-shadow: 0 0 8px rgba(196, 30, 58, 0.4); }
         .f2-border { border-color: var(--f2); }
+        .f0-text { color: #888; }
+        .f0-border { border-color: #333; }
 
         .header-box { padding: 12px; min-width: 280px; }
         .scroll-box { height: 400px; overflow-y: auto; padding: 15px; background: rgba(0, 0, 0, 0.4); }
@@ -83,7 +86,7 @@
                 <div id="weather-gnv" class="text-[11px] text-gray-500">TEMP: --°F</div>
             </div>
             <div class="header-box glass-panel f2-border">
-                <div class="f2-text font-black text-xs uppercase tracking-widest">F2: RAY (CT)</div>
+                <div class="f2-text font-black text-xs uppercase tracking-widest">F2: FUNNY FARMS (CT)</div>
                 <div class="text-white text-4xl font-black" id="f2-head-money">$0</div>
                 <div id="time-flora" class="text-[11px] text-gray-400 font-bold mt-1">CT: --:--</div>
                 <div id="weather-flora" class="text-[11px] text-gray-500">TEMP: --°F</div>
@@ -103,8 +106,8 @@
     <div class="grid grid-cols-4 gap-6 mb-8">
         <div class="glass-panel f1-border"><h3 class="f1-text font-black p-3 border-b border-gray-800 text-center uppercase">Werewolf Achievements</h3><div id="f1-trophies" class="scroll-box"></div></div>
         <div class="glass-panel f1-border"><h3 class="f1-text font-black p-3 border-b border-gray-800 text-center uppercase">Werewolf Production</h3><div id="f1-prod" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-3 border-b border-gray-800 text-center uppercase">Ray Achievements</h3><div id="f2-trophies" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-3 border-b border-gray-800 text-center uppercase">Ray Production</h3><div id="f2-prod" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-3 border-b border-gray-800 text-center uppercase">Funny Farms Achievements</h3><div id="f2-trophies" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-3 border-b border-gray-800 text-center uppercase">Funny Farms Production</h3><div id="f2-prod" class="scroll-box"></div></div>
     </div>
 
     <div class="grid grid-cols-4 gap-6 mb-8">
@@ -124,12 +127,22 @@
     <div class="grid grid-cols-3 gap-6 mb-8">
         <div class="glass-panel border-gray-700"><h3 class="text-white font-bold p-3 border-b border-gray-800 uppercase">Active Missions</h3><div id="missions" class="scroll-box"></div></div>
         <div class="glass-panel border-gray-700"><h3 class="text-yellow-600 font-bold p-3 border-b border-gray-800 uppercase">Market Stocks</h3><div id="stocks" class="scroll-box"></div></div>
-        <div class="glass-panel border-gray-700"><h3 class="text-purple-600 font-bold p-3 border-b border-gray-800 uppercase">Coordinate Uplink</h3><div id="all-coll" class="scroll-box"></div></div>
+        <div class="glass-panel border-gray-700"><h3 class="text-purple-600 font-bold p-3 border-b border-gray-800 uppercase">Collectible Locator</h3><div id="all-coll" class="scroll-box"></div></div>
     </div>
 
-    <div class="grid grid-cols-2 gap-6">
+    <div class="grid grid-cols-2 gap-6 mb-8">
         <div class="glass-panel f1-border"><h3 class="f1-text font-black p-4 text-lg italic uppercase tracking-tighter">Werewolf Livestock & Feed</h3><div id="f1-animals" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-4 text-lg italic uppercase tracking-tighter">Ray Livestock & Feed</h3><div id="f2-animals" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-4 text-lg italic uppercase tracking-tighter">Funny Farms Livestock & Feed</h3><div id="f2-animals" class="scroll-box"></div></div>
+    </div>
+
+    <div class="mt-12 border-t border-gray-800 pt-8">
+        <h2 class="text-gray-600 font-black italic mb-4 tracking-widest uppercase">Uplink: Global Map Data (Farm 0 / NPC System)</h2>
+        <div class="grid grid-cols-4 gap-6">
+            <div class="glass-panel f0-border"><h3 class="f0-text font-bold p-3 border-b border-gray-800 uppercase">System Fleet</h3><div id="f0-fleet" class="scroll-box opacity-40"></div></div>
+            <div class="glass-panel f0-border"><h3 class="f0-text font-bold p-3 border-b border-gray-800 uppercase">System Assets</h3><div id="f0-prod" class="scroll-box opacity-40"></div></div>
+            <div class="glass-panel f0-border"><h3 class="f0-text font-bold p-3 border-b border-gray-800 uppercase">NPC / Public Land</h3><div id="f0-fields" class="scroll-box opacity-40"></div></div>
+            <div class="glass-panel f0-border"><h3 class="f0-text font-bold p-3 border-b border-gray-800 uppercase">Global Vault</h3><div class="scroll-box opacity-60"><div class="card-inner f0-border"><b>SYSTEM BALANCE</b><br><span id="f0-money" class="text-white font-bold">$0</span></div></div></div>
+        </div>
     </div>
 
     <script>
@@ -210,80 +223,87 @@
 
         async function updateDashboard() {
             const ts = new Date().getTime();
-            const fetchXml = async (fileName) => {
-                try {
-                    const r = await fetch(`${fileName}?v=${ts}`);
-                    if (!r.ok) { console.error(`🔴 Missing: ${fileName}`); return null; }
-                    return new DOMParser().parseFromString(await r.text(), "text/xml");
-                } catch (e) { return null; }
-            };
+            const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
 
             try {
-                const [farms, vehicles, placeables, career, farmland, missions, economy] = await Promise.all([
-                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml'), fetchXml('economy.xml')
+                const [farms, vehicles, placeables, career, farmland, missions] = await Promise.all([
+                    fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('placeables.xml'), 
+                    fetchXml('careerSavegame.xml'), fetchXml('farmland.xml'), fetchXml('missions.xml')
                 ]);
 
                 if (!farms || !career) return;
 
-                // 1. CALCULATE MONEY DIFFERENCE
+                // 1. FINANCIAL LOGIC (ISOLATING F1, F2, and F0)
                 const totalMoney = parseInt(career.querySelector("statistics money")?.textContent || 0);
-                let farm2Money = 0;
-                
+                let f1Money = 0; let f2Money = 0;
+
                 Array.from(farms.getElementsByTagName("farm")).forEach(f => {
                     const id = f.getAttribute("farmId");
-                    const money = parseInt(f.getAttribute("money") || 0);
-                    if (id === "2") {
-                        farm2Money = money;
-                        document.getElementById("f2-head-money").innerText = "$" + money.toLocaleString();
-                    }
+                    const m = parseInt(f.getAttribute("money") || 0);
+                    if (id === "1") f1Money = m;
+                    if (id === "2") f2Money = m;
                 });
-                
-                // Werewolf (Farm 1) gets the remainder
-                const farm1Money = totalMoney - farm2Money;
-                document.getElementById("f1-head-money").innerText = "$" + (farm1Money > 0 ? farm1Money.toLocaleString() : "0");
+
+                document.getElementById("f1-head-money").innerText = "$" + f1Money.toLocaleString();
+                document.getElementById("f2-head-money").innerText = "$" + f2Money.toLocaleString();
+                const systemBalance = totalMoney - (f1Money + f2Money);
+                document.getElementById("f0-money").innerText = "$" + (systemBalance > 0 ? systemBalance.toLocaleString() : "0");
 
                 // Clear dynamic containers
-                ['f1-fleet','f2-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f1-attach','f2-attach','f1-fields','f2-fields','missions','stocks','all-coll','f1-pallets','f2-pallets'].forEach(id => {
+                ['f1-fleet','f2-fleet','f0-fleet','f1-animals','f2-animals','f1-prod','f2-prod','f0-prod','f1-fields','f2-fields','f0-fields','f1-attach','f2-attach','f1-pallets','f2-pallets'].forEach(id => {
                     if(document.getElementById(id)) document.getElementById(id).innerHTML = "";
                 });
 
-                if(vehicles) {
+                // 2. FLEET SORTING (F1, F2, and F0)
+                if (vehicles) {
                     let vCounts = {1:0, 2:0};
                     Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
-                        const fId = v.getAttribute("farmId"); if (fId !== "1" && fId !== "2") return;
+                        const fId = v.getAttribute("farmId");
                         const name = v.getAttribute("filename").split('/').pop().replace('.xml','');
-                        const target = v.querySelector("consumer[type='fuel']") ? `f${fId}-fleet` : `f${fId}-attach`;
-                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>${name}</b></div>`;
-                        if(v.querySelector("consumer[type='fuel']")) vCounts[fId]++;
+                        let target = "";
+                        if (fId === "1" || fId === "2") {
+                            target = v.querySelector("consumer[type='fuel']") ? `f${fId}-fleet` : `f${fId}-attach`;
+                            if(v.querySelector("consumer[type='fuel']")) vCounts[fId]++;
+                        } else if (fId === "0") {
+                            target = "f0-fleet";
+                        }
+                        if (target) document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${name}</b></div>`;
                     });
                     document.getElementById('f1-v-count').innerText = vCounts[1];
                     document.getElementById('f2-v-count').innerText = vCounts[2];
                 }
 
-                if(placeables) {
-                    Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
-                        const fId = p.getAttribute("farmId"); if (fId !== "1" && fId !== "2") return;
-                        const storage = p.querySelector("storage");
-                        const animals = p.getElementsByTagName("animal");
-                        if(storage || animals.length > 0) {
-                            let displayName = p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop().replace('.xml','');
-                            let aHtml = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b class="text-white uppercase">${displayName}</b>`;
-                            if(storage) Array.from(storage.getElementsByTagName("node")).forEach(node => {
-                                const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
-                                if(level > 1) aHtml += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()} L</div>`;
-                            });
-                            document.getElementById(`f${fId}-animals`).innerHTML += aHtml + "</div>";
-                        }
+                // 3. FIELD SORTING (F1, F2, and F0/NPC)
+                if (farmland) {
+                    Array.from(farmland.getElementsByTagName("land")).forEach(l => {
+                        const fId = l.getAttribute("farmId");
+                        let target = (fId === "1" || fId === "2") ? `f${fId}-fields` : "f0-fields";
+                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>FIELD ${l.getAttribute("id")}</b></div>`;
                     });
                 }
 
-                if(career) {
-                    const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
-                    document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
-                    for(let i=0; i<50; i++) {
-                        const found = fStr[i] === '1';
-                        document.getElementById('all-coll').innerHTML += `<div class="py-1 ${found?'text-green-500':'text-red-400'}">#${i+1}: ${found?'FOUND':'MISSING'}</div>`;
-                    }
+                // 4. PRODUCTION / ASSETS (F1, F2, and F0)
+                if (placeables) {
+                    Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
+                        const fId = p.getAttribute("farmId");
+                        const storage = p.querySelector("storage");
+                        if (!storage) return;
+                        let target = (fId === "1" || fId === "2") ? `f${fId}-animals` : "f0-prod";
+                        let html = `<div class="card-inner ${fId=='0'?'f0-border':(fId=='1'?'f1-border':'f2-border')}"><b>${p.getAttribute("templateName") || "Facility"}</b>`;
+                        Array.from(storage.getElementsByTagName("node")).forEach(node => {
+                            const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
+                            if(level > 1) html += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
+                        });
+                        document.getElementById(target).innerHTML += html + "</div>";
+                    });
+                }
+
+                // 5. COLLECTIBLES
+                const fStr = career.querySelector("map foundHelpIcons")?.textContent || "";
+                document.getElementById('coll-found').innerText = (fStr.split('1').length - 1);
+                for(let i=0; i<50; i++) {
+                    const found = fStr[i] === '1';
+                    document.getElementById('all-coll').innerHTML += `<div class="py-1 ${found?'text-green-500':'text-red-400'}">#${i+1}: ${found?'FOUND':'MISSING'}</div>`;
                 }
 
             } catch (e) { console.error("Sync Error", e); }
