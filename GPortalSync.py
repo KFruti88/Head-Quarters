@@ -1,17 +1,14 @@
-import os
-import requests # or whichever library you use for the sync
-
-# Access the secrets you defined in the YAML
-ip = os.getenv('GPORTAL_IP')
-username = os.getenv('GPORTAL_USER')
-password = os.getenv('GPORTAL_PASS')
-
-def sync_data():
-    print(f"Connecting to {ip}...")
-    # Your logic to fetch data and save to live_vault.xml goes here
-    # Example:
-    # with open("live_vault.xml", "w") as f:
-    #     f.write("<data>...</data>")
-
-if __name__ == "__main__":
-    sync_data()
+- name: Commit and Push Data
+        run: |
+          git config --global user.name "618-Tactical-Bot"
+          git config --global user.email "bot@618crew.com"
+          
+          # Check if the file exists before trying to add it
+          if [ -f "live_vault.xml" ]; then
+            git add live_vault.xml
+            git commit -m "Cloud Sync: Update Tactical Data" || echo "No changes to commit"
+            git push
+          else
+            echo "Error: live_vault.xml not found! Skipping commit."
+            exit 1
+          fi
