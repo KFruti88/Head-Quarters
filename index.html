@@ -128,8 +128,8 @@
     </div>
 
     <div class="grid grid-cols-2 gap-6">
-        <div class="glass-panel f1-border"><h3 class="f1-text font-black p-4 text-lg italic uppercase tracking-tighter">Werewolf Livestock</h3><div id="f1-animals" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-4 text-lg italic uppercase tracking-tighter">Ray Livestock</h3><div id="f2-animals" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-black p-4 text-lg italic uppercase tracking-tighter">Werewolf Livestock & Feed</h3><div id="f1-animals" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-black p-4 text-lg italic uppercase tracking-tighter">Ray Livestock & Feed</h3><div id="f2-animals" class="scroll-box"></div></div>
     </div>
 
     <script>
@@ -137,7 +137,8 @@
             'SOUPCANSBEETROOT': 'Beetroot Soup', 'BEETROOT': 'Beetroot',
             'SOUPCANSPOTATO': 'Potato Soup', 'POTATO': 'Potato',
             'SOUPCANSCARROTS': 'Carrot Soup', 'CARROT': 'Carrot',
-            'TMR': 'TMR', 'SILAGE': 'Silage', 'DRYGRASS_WINDROW': 'Hay', 'GRASS_WINDROW': 'Grass'
+            'TMR': 'TMR', 'SILAGE': 'Silage', 'DRYGRASS_WINDROW': 'Hay', 'GRASS_WINDROW': 'Grass',
+            'MILK': 'Milk', 'LIQUIDMANURE': 'Slurry', 'MANURE': 'Manure', 'EGG': 'Eggs'
         };
 
         function cleanLabel(raw) { return fillLabels[raw] || raw; }
@@ -251,11 +252,18 @@
                     Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
                         const fId = p.getAttribute("farmId"); if (fId !== "1" && fId !== "2") return;
                         const storage = p.querySelector("storage");
-                        if(storage || p.getElementsByTagName("animal").length > 0) {
-                            let aHtml = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b>BIO-LOG</b>`;
+                        const animals = p.getElementsByTagName("animal");
+                        
+                        // If it has animals OR storage, we display it
+                        if(storage || animals.length > 0) {
+                            // Determine display name: Use customName or filename if templateName is generic
+                            let displayName = p.getAttribute("templateName") || p.getAttribute("filename").split('/').pop().replace('.xml','');
+                            
+                            let aHtml = `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}"><b class="text-white uppercase">${displayName}</b>`;
+                            
                             if(storage) Array.from(storage.getElementsByTagName("node")).forEach(node => {
                                 const level = Math.round(parseFloat(node.getAttribute("fillLevel")));
-                                if(level > 10) aHtml += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()}L</div>`;
+                                if(level > 1) aHtml += `<div class="mt-1">${cleanLabel(node.getAttribute("fillType"))}: ${level.toLocaleString()} L</div>`;
                             });
                             document.getElementById(`f${fId}-animals`).innerHTML += aHtml + "</div>";
                         }
