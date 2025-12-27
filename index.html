@@ -2,24 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>618 Tactical Command Center</title>
+    <title>618 TACTICAL COMMAND</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
-        :root { --f1: #FF5F00; --f2: #C41E3A; --f0: #444444; --glass: rgba(15, 15, 15, 0.85); }
-        body { background: radial-gradient(circle at top right, #1a1a1a, #000); color: #ccc; font-family: 'JetBrains Mono', monospace; font-size: 11px; min-height: 100vh; }
-        .glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8); }
-        .f1-text { color: var(--f1); text-shadow: 0 0 8px rgba(255, 95, 0, 0.4); }
-        .f1-border { border-color: var(--f1); }
-        .f2-text { color: var(--f2); text-shadow: 0 0 8px rgba(196, 30, 58, 0.4); }
-        .f2-border { border-color: var(--f2); }
-        .header-box { padding: 12px; min-width: 250px; }
-        .scroll-box { height: 400px; overflow-y: auto; padding: 15px; background: rgba(0, 0, 0, 0.4); }
-        .card-inner { background: rgba(255, 255, 255, 0.03); padding: 10px; margin-bottom: 10px; border-radius: 4px; border-left: 4px solid; }
-        .hud-bar-bg { background: #222; height: 6px; border-radius: 3px; margin-top: 6px; overflow: hidden; border: 1px solid #333; }
-        .trophy-fill { background: #22c55e; height: 100%; }
-        .trophy-earned { border-left-color: #22c55e !important; background: rgba(34, 197, 94, 0.05); opacity: 0.5; }
-        ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+        :root { --f1: #FF5F00; --f2: #C41E3A; --f0: #444444; --glass: rgba(10, 10, 10, 0.9); }
+        body { background: #050505; color: #ccc; font-family: 'JetBrains Mono', monospace; font-size: 10px; min-height: 100vh; }
+        .glass-panel { background: var(--glass); border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 0 20px rgba(0,0,0,1); border-radius: 4px; }
+        .f1-text { color: var(--f1); text-shadow: 0 0 5px rgba(255, 95, 0, 0.3); } .f1-border { border-color: var(--f1); }
+        .f2-text { color: var(--f2); text-shadow: 0 0 5px rgba(196, 30, 58, 0.3); } .f2-border { border-color: var(--f2); }
+        .scroll-box { height: 400px; overflow-y: auto; padding: 10px; background: rgba(0,0,0,0.3); }
+        .card-inner { background: rgba(255, 255, 255, 0.02); padding: 8px; margin-bottom: 6px; border-left: 3px solid; position: relative; overflow: hidden; }
+        .png-bg { position: absolute; right: -5px; bottom: -5px; opacity: 0.15; height: 50px; pointer-events: none; filter: grayscale(1); }
+        .stat-line { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); margin-bottom: 2px; }
+        .bar-bg { background: #1a1a1a; height: 4px; width: 100%; border-radius: 2px; margin-top: 4px; border: 1px solid #333; }
+        .bar-fill { height: 100%; border-radius: 2px; transition: width 1s; }
+        ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-thumb { background: #444; }
     </style>
 </head>
 <body class="p-8">
@@ -27,100 +25,94 @@
     <header class="flex justify-between items-start mb-10 border-b border-gray-800 pb-8">
         <div class="flex flex-col">
             <b class="text-4xl text-white uppercase font-black italic tracking-tighter">618 TACTICAL</b>
-            <span class="text-xs text-blue-400 font-bold tracking-widest uppercase">Operational Status: Secure</span>
+            <span class="text-[9px] text-blue-500 font-bold tracking-widest uppercase">Operational Status: Secure | Savegame 3 Uplink</span>
         </div>
 
-        <div class="flex gap-6">
-            <div class="header-box glass-panel f1-border">
-                <div class="f1-text font-black text-xs uppercase">F1: FUNNY FARMS (Werewolf)</div>
-                <div class="text-white text-3xl font-black" id="f1-head-money">$0</div>
-                <div id="game-date" class="text-[10px] text-gray-400 font-bold mt-1 uppercase">DATE: -- --</div>
+        <div class="flex gap-4">
+            <div class="glass-panel f1-border p-3 min-w-[220px]">
+                <div class="f1-text font-black text-[9px] uppercase tracking-widest">F1: FUNNY FARMS (Werewolf)</div>
+                <div id="f1-head-money" class="text-3xl font-black text-white">$0</div>
+                <div id="game-date" class="text-[9px] text-gray-400 font-bold mt-1 uppercase">DATE: -- --</div>
             </div>
-            <div class="header-box glass-panel f2-border">
-                <div class="f2-text font-black text-xs uppercase">F2: DUMBBELL'S FARM (Ray)</div>
-                <div class="text-white text-3xl font-black" id="f2-head-money">$0</div>
-                <div id="weather-display" class="text-[10px] text-gray-500 uppercase mt-1">WEATHER: --</div>
+            <div class="glass-panel f2-border p-3 min-w-[220px]">
+                <div class="f2-text font-black text-[9px] uppercase tracking-widest">F2: DUMBBELL'S FARM (Ray)</div>
+                <div id="f2-head-money" class="text-3xl font-black text-white">$0</div>
+                <div id="weather-display" class="text-[9px] text-gray-500 uppercase mt-1">WEATHER: --</div>
             </div>
-            <div class="header-box glass-panel border-blue-500 p-3 min-w-[150px]">
-                <div class="text-blue-400 font-black text-xs uppercase tracking-widest">Game Sync</div>
-                <div id="game-time" class="text-white text-3xl font-black">00:00</div>
+            <div class="glass-panel border-blue-500 p-3 min-w-[140px] text-center">
+                <div class="text-blue-400 font-black text-[9px] uppercase tracking-widest">Game Sync</div>
+                <div id="game-time" class="text-3xl font-black text-white">00:00</div>
             </div>
         </div>
         <div class="text-right">
-            <div class="text-gray-500 text-xs font-bold uppercase">Map Collectibles</div>
+            <div class="text-gray-500 text-[9px] font-bold uppercase">Map Collectibles</div>
             <div class="text-5xl font-black text-yellow-500"><span id="coll-found">0</span>/50</div>
         </div>
     </header>
 
-    <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase text-center">F1 Trophies</h3><div id="f1-trophies" class="scroll-box"></div></div>
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase text-center">F1 Production</h3><div id="f1-prod" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase text-center">F2 Trophies</h3><div id="f2-trophies" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase text-center">F2 Production</h3><div id="f2-prod" class="scroll-box"></div></div>
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase">F1 Trophies</h3><div id="f1-trophies" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase">F1 Production</h3><div id="f1-prod" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase">F2 Trophies</h3><div id="f2-trophies" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase">F2 Production</h3><div id="f2-prod" class="scroll-box"></div></div>
     </div>
 
-    <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Fleet</h3><div id="f1-fleet" class="scroll-box"></div></div>
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Attach</h3><div id="f1-attach" class="scroll-box"></div></div>
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Pallets</h3><div id="f1-pallets" class="scroll-box"></div></div>
-        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-3 border-b border-gray-800 uppercase">F1 Fields</h3><div id="f1-fields" class="scroll-box"></div></div>
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase">F1 Fleet</h3><div id="f1-fleet" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase">F1 Attach</h3><div id="f1-attach" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase">F1 Pallets</h3><div id="f1-pallets" class="scroll-box"></div></div>
+        <div class="glass-panel f1-border"><h3 class="f1-text font-bold p-2 border-b border-gray-900 uppercase">F1 Fields</h3><div id="f1-fields" class="scroll-box"></div></div>
     </div>
 
-    <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Fleet</h3><div id="f2-fleet" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Attach</h3><div id="f2-attach" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Pallets</h3><div id="f2-pallets" class="scroll-box"></div></div>
-        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-3 border-b border-gray-800 uppercase">F2 Fields</h3><div id="f2-fields" class="scroll-box"></div></div>
+    <div class="grid grid-cols-4 gap-4 mb-6">
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase">F2 Fleet</h3><div id="f2-fleet" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase">F2 Attach</h3><div id="f2-attach" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-900 uppercase">F2 Pallets</h3><div id="f2-pallets" class="scroll-box"></div></div>
+        <div class="glass-panel f2-border"><h3 class="f2-text font-bold p-2 border-b border-gray-800 uppercase">F2 Fields</h3><div id="f2-fields" class="scroll-box"></div></div>
     </div>
 
-    <div class="grid grid-cols-3 gap-6 mb-8">
-        <div class="glass-panel border-gray-700"><h3 class="text-white font-bold p-3 border-b border-gray-800 uppercase">Active Missions</h3><div id="missions" class="scroll-box"></div></div>
-        <div class="glass-panel border-gray-700"><h3 class="text-yellow-600 font-bold p-3 border-b border-gray-800 uppercase">Market Stocks</h3><div id="stocks" class="scroll-box"></div></div>
-        <div class="glass-panel border-purple-800"><h3 class="text-purple-500 font-bold p-3 border-b border-gray-800 uppercase">Collectible Locator</h3><div id="all-coll" class="scroll-box"></div></div>
+    <div class="grid grid-cols-3 gap-4 mb-6">
+        <div class="glass-panel border-gray-700"><h3 class="text-white font-bold p-2 border-b border-gray-900 uppercase">Active Missions</h3><div id="missions" class="scroll-box"></div></div>
+        <div class="glass-panel border-gray-700"><h3 class="text-yellow-600 font-bold p-2 border-b border-gray-900 uppercase">Market Stocks</h3><div id="stocks" class="scroll-box"></div></div>
+        <div class="glass-panel border-purple-800"><h3 class="text-purple-500 font-bold p-2 border-b border-gray-900 uppercase">Collectible Locator</h3><div id="all-coll" class="scroll-box"></div></div>
     </div>
 
-    <div class="grid grid-cols-2 gap-6 mb-8">
+    <div class="grid grid-cols-2 gap-4 mb-10">
         <div class="glass-panel f1-border"><h3 class="f1-text font-black p-4 uppercase">Funny Farms Livestock</h3><div id="f1-animals" class="scroll-box"></div></div>
         <div class="glass-panel f2-border"><h3 class="f2-text font-black p-4 uppercase">Dumbbell Livestock</h3><div id="f2-animals" class="scroll-box"></div></div>
     </div>
 
-    <div class="mt-12 border-t border-gray-800 pt-8">
+    <div class="border-t border-gray-800 pt-8">
         <h2 class="text-gray-600 font-black mb-4 uppercase text-center italic">Global Uplink (Farm 0)</h2>
-        <div class="grid grid-cols-4 gap-6">
-            <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">System Fleet</h3><div id="f0-fleet" class="scroll-box opacity-40"></div></div>
-            <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">System Assets</h3><div id="f0-prod" class="scroll-box opacity-40"></div></div>
-            <div class="glass-panel border-gray-800"><h3 class="text-gray-500 font-bold p-3 border-b border-gray-800 uppercase">NPC Land</h3><div id="f0-fields" class="scroll-box opacity-40"></div></div>
-            <div class="glass-panel border-blue-900"><h3 class="text-blue-500 font-bold p-3 border-b border-gray-800 uppercase">Active Mods</h3><div id="active-mods" class="scroll-box"></div></div>
+        <div class="grid grid-cols-4 gap-4">
+            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-900 uppercase">System Fleet</h3><div id="f0-fleet" class="scroll-box"></div></div>
+            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-900 uppercase">System Assets</h3><div id="f0-prod" class="scroll-box"></div></div>
+            <div class="glass-panel border-gray-800 opacity-50"><h3 class="text-gray-500 font-bold p-2 border-b border-gray-900 uppercase">NPC Land</h3><div id="f0-fields" class="scroll-box"></div></div>
+            <div class="glass-panel border-blue-900"><h3 class="text-blue-500 font-bold p-2 border-b border-gray-800 uppercase">Active Mods</h3><div id="active-mods" class="scroll-box"></div></div>
         </div>
     </div>
 
     <script>
-        const trophyConfig = [ 
+        const trophyTargets = [ 
             {id:"help", name:"Contracts Completed", target: 50, tag: "missionsFinished"},
             {id:"nature", name:"Hectares Thrashed", target: 100, tag: "thrashedArea"},
             {id:"wood", name:"Trees Cut", target: 25, tag: "treeCapsCut"},
-            {id:"hard", name:"Millionaire Race", target: 1000000, tag: "money"},
-            {id:"road", name:"Distance Traveled", target: 100, tag: "traveledDistance"}
+            {id:"hard", name:"Millionaire Race", target: 1000000, tag: "money"}
         ];
 
         async function updateDashboard() {
             const ts = new Date().getTime();
             const fetchXml = async (f) => { try { const r = await fetch(`${f}?v=${ts}`); return r.ok ? new DOMParser().parseFromString(await r.text(), "text/xml") : null; } catch(e) { return null; } };
             
-            const [farms, vehicles, career, missions, collectibles, env, placeables, items, land] = await Promise.all([ 
+            const [farms, vehicles, career, env, placeables, items, land, missions] = await Promise.all([ 
                 fetchXml('farms.xml'), fetchXml('vehicles.xml'), fetchXml('careerSavegame.xml'), 
-                fetchXml('missions.xml'), fetchXml('collectibles.xml'), fetchXml('environment.xml'),
-                fetchXml('placeables.xml'), fetchXml('items.xml'), fetchXml('farmland.xml')
+                fetchXml('environment.xml'), fetchXml('placeables.xml'), fetchXml('items.xml'),
+                fetchXml('farmland.xml'), fetchXml('missions.xml')
             ]);
 
             if(career) {
-                // TROPHY MATH
                 const stats = career.querySelector("statistics");
-                const liveProgress = {};
-                trophyConfig.forEach(t => {
-                    let val = parseFloat(stats?.querySelector(t.tag)?.textContent || 0);
-                    liveProgress[t.id] = Math.min(100, Math.floor((val / t.target) * 100));
-                });
+                const getVal = (tag) => parseFloat(stats?.querySelector(tag)?.textContent || 0);
 
                 // TIME & DATE
                 const rawTime = parseFloat(career.querySelector("dayTime")?.textContent || 0);
@@ -132,18 +124,21 @@
                 document.getElementById("game-date").innerText = `DATE: ${months[Math.floor((dayP - 1) / 3) % 12]} DAY ${((dayP - 1) % 3) + 1}`;
 
                 // MONEY
-                const globalMoney = parseFloat(stats?.querySelector("money")?.textContent || 0);
+                const globalMoney = getVal("money");
                 let f2Money = 0;
                 if(farms) Array.from(farms.getElementsByTagName("farm")).forEach(f => { if(f.getAttribute("farmId")=="2") f2Money = Math.floor(parseFloat(f.getAttribute("money")||0)); });
                 document.getElementById('f2-head-money').innerText = "$" + f2Money.toLocaleString();
                 document.getElementById('f1-head-money').innerText = "$" + (globalMoney - f2Money).toLocaleString();
 
+                // TROPHIES
+                const liveTrophies = {};
+                trophyTargets.forEach(t => { liveTrophies[t.id] = Math.min(100, Math.floor((getVal(t.tag) / t.target) * 100)); });
+                renderTrophies('f1-trophies', liveTrophies, 'f1-border');
+                renderTrophies('f2-trophies', liveTrophies, 'f2-border');
+
                 // MODS
                 const modsBox = document.getElementById('active-mods'); modsBox.innerHTML = "";
                 Array.from(career.getElementsByTagName("mod")).forEach(m => { modsBox.innerHTML += `<div class="card-inner border-blue-900">${m.getAttribute("title")||m.getAttribute("modName")}</div>`; });
-
-                renderTrophies('f1-trophies', liveProgress, 'f1-border');
-                renderTrophies('f2-trophies', liveProgress, 'f2-border');
             }
 
             if(env) {
@@ -151,57 +146,62 @@
                 document.getElementById('weather-display').innerText = `WEATHER: ${weather.toUpperCase()}`;
             }
 
-            // FLEET (F1, F2, and F0)
             if(vehicles) {
-                document.getElementById('f1-fleet').innerHTML = ""; document.getElementById('f2-fleet').innerHTML = ""; document.getElementById('f0-fleet').innerHTML = "";
-                document.getElementById('f1-attach').innerHTML = ""; document.getElementById('f2-attach').innerHTML = "";
+                ['f1-fleet','f2-fleet','f0-fleet','f1-attach','f2-attach'].forEach(id => document.getElementById(id).innerHTML = "");
                 Array.from(vehicles.getElementsByTagName("vehicle")).forEach(v => {
                     const fId = v.getAttribute("farmId");
                     const name = v.getAttribute("filename").split('/').pop().replace('.xml','').toUpperCase();
+                    const fuel = Math.round(parseFloat(v.querySelector("consumer")?.getAttribute("fillLevel") || 0));
                     const isMotorized = v.querySelector("consumer") !== null;
                     let target = `f${fId}-fleet`;
                     if (fId !== "0" && !isMotorized) target = `f${fId}-attach`;
                     
                     if(document.getElementById(target)) {
-                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">${name}</div>`;
+                        document.getElementById(target).innerHTML += `
+                        <div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">
+                            <img src="${name.toLowerCase()}.png" class="png-bg" onerror="this.style.display='none'">
+                            <b>${name}</b>
+                            ${isMotorized ? `<div class="stat-line"><span>FUEL</span><span>${fuel}L</span></div><div class="bar-bg"><div class="bar-fill bg-blue-500" style="width:${Math.min(100, fuel/5)}%"></div></div>` : ''}
+                        </div>`;
                     }
                 });
             }
 
-            // ASSETS & ANIMALS
             if(placeables) {
                 ['f1-prod','f2-prod','f0-prod','f1-animals','f2-animals'].forEach(id => document.getElementById(id).innerHTML = "");
                 Array.from(placeables.getElementsByTagName("placeable")).forEach(p => {
                     const fId = p.getAttribute("farmId");
-                    const name = (p.getAttribute("customName") || p.getAttribute("templateName") || "Asset").toUpperCase();
-                    const hasAnimals = p.getElementsByTagName("animal").length > 0;
-                    let target = hasAnimals ? `f${fId}-animals` : `f${fId}-prod`;
+                    const name = (p.getAttribute("customName") || p.getAttribute("templateName") || "STATION").toUpperCase();
+                    const animalNodes = p.getElementsByTagName("animal");
+                    const target = animalNodes.length > 0 ? `f${fId}-animals` : `f${fId}-prod`;
+                    
                     if(document.getElementById(target)) {
-                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">${name}</div>`;
+                        document.getElementById(target).innerHTML += `
+                        <div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">
+                            <b>${name}</b>
+                            ${animalNodes.length > 0 ? `<div class="stat-line"><span>COUNT</span><span>${animalNodes.length} UNITS</span></div>` : ''}
+                        </div>`;
                     }
                 });
             }
 
-            // FIELDS
-            if(land) {
-                ['f1-fields','f2-fields','f0-fields'].forEach(id => document.getElementById(id).innerHTML = "");
-                Array.from(land.getElementsByTagName("land")).forEach(l => {
-                    const fId = l.getAttribute("farmId");
-                    const target = `f${fId}-fields`;
-                    if(document.getElementById(target)) {
-                        document.getElementById(target).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':(fId=='2'?'f2-border':'border-gray-800')}">FIELD ${l.getAttribute("id")}</div>`;
-                    }
-                });
-            }
-
-            // PALLETS & MISSIONS
             if(items) {
-                document.getElementById('f1-pallets').innerHTML = ""; document.getElementById('f2-pallets').innerHTML = "";
+                ['f1-pallets','f2-pallets'].forEach(id => document.getElementById(id).innerHTML = "");
                 Array.from(items.getElementsByTagName("item")).forEach(it => {
                     const fId = it.getAttribute("farmId");
                     const type = it.getAttribute("filename").split('/').pop().replace('.xml','').toUpperCase();
                     if(document.getElementById(`f${fId}-pallets`)) {
-                        document.getElementById(`f${fId}-pallets`).innerHTML += `<div class="card-inner ${fId=='1'?'f1-border':'f2-border'}">${type}</div>`;
+                        document.getElementById(`f${fId}-pallets`).innerHTML += `<div class="card-inner border-yellow-700">${type}</div>`;
+                    }
+                });
+            }
+
+            if(land) {
+                ['f1-fields','f2-fields','f0-fields'].forEach(id => document.getElementById(id).innerHTML = "");
+                Array.from(land.getElementsByTagName("land")).forEach(l => {
+                    const fId = l.getAttribute("farmId");
+                    if(document.getElementById(`f${fId}-fields`)) {
+                        document.getElementById(`f${fId}-fields`).innerHTML += `<div class="card-inner border-gray-700">FIELD ${l.getAttribute("id")}</div>`;
                     }
                 });
             }
@@ -216,16 +216,17 @@
             if(collectibles) {
                 const colls = Array.from(collectibles.getElementsByTagName("collectible"));
                 document.getElementById('coll-found').innerText = colls.filter(c => c.getAttribute("found")=="true").length;
-                const cBox = document.getElementById('all-coll'); cBox.innerHTML = "";
-                colls.forEach((c, i) => { if(c.getAttribute("found")=="true") cBox.innerHTML += `<div class="card-inner border-purple-900">COLLECTIBLE #${i+1} FOUND</div>`; });
             }
         }
 
         function renderTrophies(containerId, stats, color) {
             const container = document.getElementById(containerId); container.innerHTML = "";
-            trophyConfig.forEach(t => {
+            trophyTargets.forEach(t => {
                 const p = stats[t.id] || 0;
-                container.innerHTML += `<div class="card-inner ${color} ${p==100?'trophy-earned':''}"><div class="flex justify-between"><b>${t.name}</b><span>${p}%</span></div><div class="hud-bar-bg"><div class="trophy-fill" style="width:${p}%"></div></div></div>`;
+                container.innerHTML += `<div class="card-inner ${color} ${p==100?'opacity-50':''}">
+                    <div class="flex justify-between"><b>${t.name}</b><span>${p}%</span></div>
+                    <div class="bar-bg"><div class="bar-fill bg-green-500" style="width:${p}%"></div></div>
+                </div>`;
             });
         }
 
