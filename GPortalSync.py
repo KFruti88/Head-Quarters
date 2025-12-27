@@ -3,34 +3,37 @@ from ftplib import FTP
 import sys
 
 # Get credentials from GitHub Secrets
-host = os.getenv('GPORTAL_IP')        # 176.57.165.81
-user = os.getenv('GPORTAL_USER')      # your username
-password = os.getenv('GPORTAL_PASS')  # your password
+host = os.getenv('GPORTAL_IP')
+user = os.getenv('GPORTAL_USER')
+password = os.getenv('GPORTAL_PASS')
+port = 50021
 
-# Configuration
-port = 50021  # <--- WE ADDED THIS
-remote_filename = "live_vault.xml" 
+# CONFIGURATION
+# I am using careerSavegame.xml as the source. 
+# You can change this to "farms.xml" or "players.xml" if you prefer.
+remote_filename = "careerSavegame.xml" 
 local_filename = "live_vault.xml"
 
 try:
     print(f"Connecting to {host} on port {port}...")
     ftp = FTP()
-    # We explicitly tell it to use port 50021 here
-    ftp.connect(host, port, timeout=30) 
+    ftp.connect(host, port, timeout=30)
     
-    print("Logging in...")
+    print(f"Logging in as {user}...")
     ftp.login(user=user, passwd=password)
     
-    # Still use Passive Mode to get through the GitHub firewall
-    ftp.set_pasv(True) 
+    ftp.set_pasv(True)
     
-    print(f"Downloading {remote_filename}...")
+    # Farming Simulator files are often inside a savegame folder
+    # If the script fails, we might need to add: ftp.cwd('savegame1')
+    
+    print(f"Downloading {remote_filename} and saving as {local_filename}...")
     with open(local_filename, 'wb') as fp:
         ftp.retrbinary(f'RETR {remote_filename}', fp.write)
     
     ftp.quit()
-    print("Sync Successful!")
+    print("Sync Successful! live_vault.xml is ready.")
 
 except Exception as e:
-    print(f"CONNECTION FAILED: {e}")
+    print(f"SYNC FAILED: {e}")
     sys.exit(1)
