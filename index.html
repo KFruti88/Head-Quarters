@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>618 Crew Tactical HQ</title>
-    <!-- React and Tailwind CDNs -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -35,7 +34,6 @@
     <script type="text/babel">
         const { useEffect, useState, useCallback } = React;
 
-        // Robust SVG Icon System
         const SvgIcon = ({ name, size = 24, className = "" }) => {
             const icons = {
                 tractor: "M3 17h18M7 17a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm10 0a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM5 11V5a2 2 0 0 1 2-2h4l2 3h6a2 2 0 0 1 2 2v3",
@@ -46,7 +44,6 @@
                 leaf: "M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8a13 13 0 0 1-13 13M19 2c-1.5 3-2 3.5-7 8",
                 trophy: "M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.45 1-1 1H7v2h10v-2h-2c-.55 0-1-.45-1-1v-2.34c3.12-.49 5.5-3.18 5.5-6.32V4H6v4.34c0 3.14 2.38 5.83 5.5 6.32Z",
                 target: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Zm0-13a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z",
-                shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z",
                 radio: "M12 12h.01M19.07 4.93a10 10 0 0 0-14.14 0M16.24 7.76a6 6 0 0 0-8.48 0M14.83 9.17a2 2 0 0 0-2.83 0",
                 box: "M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z",
                 check: "M20 6 9 17l-5-5",
@@ -61,56 +58,57 @@
         };
 
         const TROPHY_DEFINITIONS = [
-            { id: "ACHIEVEMENT_01", name: "Farming is in our nature", desc: "Plant today - harvest tomorrow." },
-            { id: "ACHIEVEMENT_02", name: "Road Trip", desc: "That thing wouldn't have fit onto the street anyway." },
-            { id: "ACHIEVEMENT_03", name: "Plant get enough", desc: "A little help can go a long way." },
-            { id: "ACHIEVEMENT_04", name: "The plot thickens", desc: "Efficiency maximum reached." },
-            { id: "ACHIEVEMENT_05", name: "Allez hopp", desc: "Oh, they can do THAT as well?" },
-            { id: "ACHIEVEMENT_06", name: "You are not a kangaroo", desc: "Think of the poor animal!" },
-            { id: "ACHIEVEMENT_07", name: "Giddy-up!", desc: "Getting around like this..." },
-            { id: "ACHIEVEMENT_08", name: "Thoroughbred!", desc: "I'm a real cowboy, mom!" },
-            { id: "ACHIEVEMENT_09", name: "Help me to help you", desc: "Sure, I can take care of that." },
-            { id: "ACHIEVEMENT_10", name: "Helper A does not stop", desc: "Helper efficiency module." },
-            { id: "ACHIEVEMENT_11", name: "It's just the beginning", desc: "Happier than ever here." },
-            { id: "ACHIEVEMENT_12", name: "Just a sprinkle", desc: "Future planning engaged." },
-            { id: "ACHIEVEMENT_13", name: "It's sow easy", desc: "Planting beans for green." },
-            { id: "ACHIEVEMENT_14", name: "Own use", desc: "Reap what you sow." },
-            { id: "ACHIEVEMENT_15", name: "Large-scale supplier", desc: "Fruits of your labour." },
-            { id: "ACHIEVEMENT_16", name: "Field Trip", desc: "One vehicle for all needs." },
-            { id: "ACHIEVEMENT_17", name: "Long haul", desc: "In it for the long game." },
-            { id: "ACHIEVEMENT_18", name: "van Gogh", desc: "Look at Mr. Fancypants." },
-            { id: "ACHIEVEMENT_19", name: "It just fell off", desc: "Only a matter of time." },
-            { id: "ACHIEVEMENT_20", name: "Fix me up", desc: "Consider a membership card." },
-            { id: "ACHIEVEMENT_21", name: "Fluffiness", desc: "Wool empire construction." },
-            { id: "ACHIEVEMENT_22", name: "Three little piggies", desc: "Food consumption high." },
-            { id: "ACHIEVEMENT_23", name: "Clucky Streak", desc: "Lot of Easter eggs." },
-            { id: "ACHIEVEMENT_24", name: "Bringing in the Honey", desc: "Busy bee operations." },
-            { id: "ACHIEVEMENT_25", name: "Cowherd", desc: "Lot of work for these cows." },
-            { id: "ACHIEVEMENT_26", name: "I like to switch it up", desc: "Switching gear constantly." },
-            { id: "ACHIEVEMENT_27", name: "This is just my weekend vehicle", desc: "Need each and every one." },
-            { id: "ACHIEVEMENT_28", name: "Vehicle fleet", desc: "I might have a problem." },
-            { id: "ACHIEVEMENT_29", name: "I read Shakespeare", desc: "The first step of a farmer." },
-            { id: "ACHIEVEMENT_30", name: "Highly cultivated", desc: "Proud of this cultivation." },
-            { id: "ACHIEVEMENT_31", name: "Ultimutt Pawesomeness", desc: "Who's a good boy?" },
-            { id: "ACHIEVEMENT_32", name: "That's a wrap", desc: "What's in the bale?" },
-            { id: "ACHIEVEMENT_33", name: "Gone but not for cotton", desc: "Where to store these?" },
-            { id: "ACHIEVEMENT_34", name: "Raisin the stakes", desc: "Californian gold!" },
-            { id: "ACHIEVEMENT_35", name: "Olea europaea", desc: "Fruit, not a vegetable!" },
-            { id: "ACHIEVEMENT_36", name: "Original grain", desc: "Horses are crazy for it." },
-            { id: "ACHIEVEMENT_37", name: "Rock on", desc: "Paved with rocks." },
-            { id: "ACHIEVEMENT_38", name: "You wood not believe it", desc: "Taking a leaf of absence." },
-            { id: "ACHIEVEMENT_39", name: "I'm stumped", desc: "Forest sound analysis." },
-            { id: "ACHIEVEMENT_40", name: "Hard work pays off", desc: "You can also spend it!" },
-            { id: "ACHIEVEMENT_41", name: "All out of Land", desc: "Everything is mine." },
-            { id: "ACHIEVEMENT_42", name: "Well-Oiled Machine", desc: "Franchise potential." },
-            { id: "ACHIEVEMENT_43", name: "Pretty colourful", desc: "Childhood memories." },
-            { id: "ACHIEVEMENT_44", name: "Game on", desc: "I'm a collector myself." },
-            { id: "ACHIEVEMENT_45", name: "Cheese it", desc: "Fondue time!" },
-            { id: "ACHIEVEMENT_46", name: "It's never too late to farm", desc: "Feels good to be home." }
+            { id: "ACH_01", name: "Farming is in our nature", desc: "Plant today - harvest tomorrow." },
+            { id: "ACH_02", name: "Road Trip", desc: "Doesn't fit on the street." },
+            { id: "ACH_03", name: "Plant get enough", desc: "A little help goes a long way." },
+            { id: "ACH_04", name: "The plot thickens", desc: "Efficiency maximum reached." },
+            { id: "ACH_05", name: "Allez hopp", desc: "Oh, they can do THAT as well?" },
+            { id: "ACH_06", name: "You are not a kangaroo", desc: "Think of the poor animal!" },
+            { id: "ACH_07", name: "Giddy-up!", desc: "Getting around like this..." },
+            { id: "ACH_08", name: "Thoroughbred!", desc: "I'm a real cowboy, mom!" },
+            { id: "ACH_09", name: "Help me to help you", desc: "Take care of that, neighbour." },
+            { id: "ACH_10", name: "Helper A does not stop", desc: "Helper efficiency module." },
+            { id: "ACH_11", name: "It's just the beginning", desc: "Happier than ever here." },
+            { id: "ACH_12", name: "Just a sprinkle", desc: "Future planning engaged." },
+            { id: "ACH_13", name: "It's sow easy", desc: "Planting beans for green." },
+            { id: "ACH_14", name: "Own use", desc: "Reap what you sow." },
+            { id: "ACH_15", name: "Large-scale supplier", desc: "Fruits of your labour." },
+            { id: "ACH_16", name: "Field Trip", desc: "One vehicle for all needs." },
+            { id: "ACH_17", name: "Long haul", desc: "In it for the long game." },
+            { id: "ACH_18", name: "van Gogh", desc: "Look at Mr. Fancypants." },
+            { id: "ACH_19", name: "It just fell off", desc: "Only a matter of time." },
+            { id: "ACH_20", name: "Fix me up", desc: "Consider a membership card." },
+            { id: "ACH_21", name: "Fluffiness", desc: "Wool empire construction." },
+            { id: "ACH_22", name: "Three little piggies", desc: "Food consumption high." },
+            { id: "ACH_23", name: "Clucky Streak", desc: "Lot of Easter eggs." },
+            { id: "ACH_24", name: "Bringing in the Honey", desc: "Busy bee operations." },
+            { id: "ACH_25", name: "Cowherd", desc: "Lot of work for these cows." },
+            { id: "ACH_26", name: "I like to switch it up", desc: "Slowly getting there." },
+            { id: "ACH_27", name: "Weekend vehicle", desc: "Need each and every one." },
+            { id: "ACH_28", name: "Vehicle fleet", desc: "I might have a problem." },
+            { id: "ACH_29", name: "I read Shakespeare", desc: "The first step of a farmer." },
+            { id: "ACH_30", name: "Highly cultivated", desc: "Proud of this cultivation." },
+            { id: "ACH_31", name: "Ultimutt Pawesomeness", desc: "Who's a good boy?" },
+            { id: "ACH_32", name: "That's a wrap", desc: "What's in the bale?" },
+            { id: "ACH_33", name: "Gone but not for cotton", desc: "Where to store these?" },
+            { id: "ACH_34", name: "Raisin the stakes", desc: "Californian gold!" },
+            { id: "ACH_35", name: "Olea europaea", desc: "Fruit, not a vegetable!" },
+            { id: "ACH_36", name: "Original grain", desc: "Horses are crazy for it." },
+            { id: "ACH_37", name: "Rock on", desc: "Paved with rocks." },
+            { id: "ACH_38", name: "You wood not believe it", desc: "Taking a leaf of absence." },
+            { id: "ACH_39", name: "I'm stumped", desc: "Forest sound analysis." },
+            { id: "ACH_40", name: "Hard work pays off", desc: "You can also spend it!" },
+            { id: "ACH_41", name: "All out of Land", desc: "Everything is mine." },
+            { id: "ACH_42", name: "Well-Oiled Machine", desc: "Franchise potential." },
+            { id: "ACH_43", name: "Pretty colourful", desc: "Childhood memories." },
+            { id: "ACH_44", name: "Game on", desc: "I'm a collector myself." },
+            { id: "ACH_45", name: "Cheese it", desc: "Fondue time!" },
+            { id: "ACH_46", name: "Never too late to farm", desc: "Feels good to be home." }
         ];
 
-        const EARNED_RAY = ["ACHIEVEMENT_01", "ACHIEVEMENT_02", "ACHIEVEMENT_03", "ACHIEVEMENT_05", "ACHIEVEMENT_06", "ACHIEVEMENT_07", "ACHIEVEMENT_08", "ACHIEVEMENT_09", "ACHIEVEMENT_11", "ACHIEVEMENT_26", "ACHIEVEMENT_27", "ACHIEVEMENT_28", "ACHIEVEMENT_29", "ACHIEVEMENT_31", "ACHIEVEMENT_32", "ACHIEVEMENT_40", "ACHIEVEMENT_41", "ACHIEVEMENT_42", "ACHIEVEMENT_43"];
-        const EARNED_FUNNY = ["ACHIEVEMENT_09", "ACHIEVEMENT_31", "ACHIEVEMENT_07", "ACHIEVEMENT_05", "ACHIEVEMENT_42", "ACHIEVEMENT_41", "ACHIEVEMENT_38", "ACHIEVEMENT_39", "ACHIEVEMENT_40"];
+        // Updated counts: W(31) and R(36)
+        const EARNED_W = ["ACH_17", "ACH_23", "ACH_36", "ACH_35", "ACH_34", "ACH_37", "ACH_19", "ACH_24", "ACH_30", "ACH_12", "ACH_08", "ACH_11", "ACH_28", "ACH_26", "ACH_46", "ACH_29", "ACH_03", "ACH_14", "ACH_27", "ACH_06", "ACH_09", "ACH_31", "ACH_07", "ACH_05", "ACH_42", "ACH_41", "ACH_38", "ACH_39", "ACH_40", "ACH_01", "ACH_43"];
+        const EARNED_R = ["ACH_01", "ACH_02", "ACH_03", "ACH_04", "ACH_05", "ACH_06", "ACH_07", "ACH_08", "ACH_09", "ACH_10", "ACH_11", "ACH_12", "ACH_13", "ACH_14", "ACH_15", "ACH_16", "ACH_17", "ACH_18", "ACH_19", "ACH_20", "ACH_21", "ACH_22", "ACH_23", "ACH_24", "ACH_25", "ACH_26", "ACH_27", "ACH_28", "ACH_29", "ACH_30", "ACH_31", "ACH_32", "ACH_40", "ACH_41", "ACH_42", "ACH_46"];
 
         const App = () => {
             const [status, setStatus] = useState('offline');
@@ -201,12 +199,13 @@
 
             return (
                 <div className="min-h-screen bg-[#020617] text-slate-300 font-sans p-6 transition-all duration-1000 overflow-x-hidden">
+                    {/* Background Glows */}
                     <div className="fixed inset-0 pointer-events-none opacity-40">
                         <div className="absolute top-[-5%] left-[-5%] w-[40%] h-[40%] bg-blue-900 rounded-full blur-[120px] animate-pulse"></div>
                         <div className="absolute bottom-[-5%] right-[-5%] w-[40%] h-[40%] bg-blue-700 rounded-full blur-[120px]"></div>
                     </div>
 
-                    <div className="max-w-[1920px] mx-auto space-y-10 relative z-10">
+                    <div className="max-w-[2400px] mx-auto space-y-10 relative z-10">
                         
                         <header className="bg-white/5 backdrop-blur-3xl border-2 border-orange-500/50 p-8 rounded-[3rem] shadow-[0_0_50px_-15px_rgba(255,79,0,0.4)] flex flex-col xl:flex-row justify-between items-center gap-8">
                             <div className="flex items-center gap-8">
@@ -221,157 +220,154 @@
                                     </div>
                                 </div>
                             </div>
+                            
+                            {/* Player Global Progress in Header */}
                             <div className="flex flex-wrap justify-center gap-6">
-                                <div className="bg-white/5 border border-orange-500/30 p-4 rounded-3xl min-w-[160px]">
-                                    <p className="text-[10px] font-black text-slate-500 uppercase mb-1 tracking-tighter">Flora, IL</p>
-                                    <span className="text-sm font-bold text-white italic">{localWeather.flora.time} // {localWeather.flora.temp}°F</span>
+                                <div className="bg-orange-500/10 border border-orange-500/40 p-4 rounded-3xl min-w-[220px]">
+                                    <p className="text-[10px] font-black text-orange-500 uppercase mb-1 tracking-widest">Werewolf Progress</p>
+                                    <span className="text-2xl font-black text-white italic">{EARNED_W.length} / 45</span>
+                                    <div className="h-1 bg-white/10 mt-2 rounded-full overflow-hidden">
+                                        <div className="h-full bg-orange-500" style={{width: `${(EARNED_W.length/45)*100}%`}}></div>
+                                    </div>
                                 </div>
-                                <div className="bg-white/5 border border-orange-500/30 p-4 rounded-3xl min-w-[160px]">
-                                    <p className="text-[10px] font-black text-slate-500 uppercase mb-1 tracking-tighter">Gainesville, FL</p>
-                                    <span className="text-sm font-bold text-white italic">{localWeather.gainesville.time} // {localWeather.gainesville.temp}°F</span>
+                                <div className="bg-blue-500/10 border border-blue-500/40 p-4 rounded-3xl min-w-[220px]">
+                                    <p className="text-[10px] font-black text-blue-400 uppercase mb-1 tracking-widest">Ray Progress</p>
+                                    <span className="text-2xl font-black text-white italic">{EARNED_R.length} / 46</span>
+                                    <div className="h-1 bg-white/10 mt-2 rounded-full overflow-hidden">
+                                        <div className="h-full bg-blue-500" style={{width: `${(EARNED_R.length/46)*100}%`}}></div>
+                                    </div>
                                 </div>
-                                <div className="bg-orange-500/10 border border-orange-500/40 p-4 rounded-3xl flex items-center gap-4">
-                                    <SvgIcon name="box" size={24} className="text-orange-500" />
-                                    <div><p className="text-[10px] font-black text-orange-500/60 uppercase tracking-tighter">Collectibles</p><span className="text-2xl font-black text-orange-500 italic tabular-nums">{data.collectibles} / 50</span></div>
-                                </div>
-                                <div className="bg-orange-500/10 border border-orange-500/40 p-4 rounded-3xl flex items-center gap-4 shadow-lg shadow-orange-500/10">
-                                    <SvgIcon name="clock" size={24} className="text-orange-500" />
-                                    <div><p className="text-[10px] font-black text-orange-500/60 uppercase tracking-tighter">Server Time</p><span className="text-2xl font-black text-orange-500 tabular-nums italic">{data.env.time}</span></div>
+                                <div className="bg-white/5 border border-white/10 p-4 rounded-3xl min-w-[140px]">
+                                    <p className="text-[10px] font-black text-slate-500 uppercase mb-1 tracking-tighter">Server Time</p>
+                                    <span className="text-xl font-bold text-orange-500 italic tabular-nums">{data.env.time}</span>
                                 </div>
                             </div>
                         </header>
 
-                        {[1, 2].map(id => {
-                            const earned = id === 1 ? EARNED_FUNNY : EARNED_RAY;
-                            const sortedTrophies = [...TROPHY_DEFINITIONS].sort((a, b) => {
-                                const aE = earned.includes(a.id);
-                                const bE = earned.includes(b.id);
-                                return (aE === bE) ? 0 : aE ? 1 : -1;
-                            });
-
-                            return (
-                                <div key={id} className="space-y-10 animate-in fade-in duration-1000 pb-12">
-                                    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-6">
-                                        <div className="border-l-[12px] border-orange-600 pl-10">
-                                            <h2 className="text-7xl font-black text-white italic uppercase tracking-tighter leading-none">{id === 1 ? 'Funny Farm' : 'Ray Operations'}</h2>
-                                            <p className="text-orange-500 font-bold tracking-[0.5em] uppercase mt-4 text-sm italic">Tactical Grid Telemetry</p>
-                                        </div>
-                                        <div className="bg-white/5 border-2 border-orange-500/40 p-8 rounded-[2.5rem] text-right min-w-[340px] backdrop-blur-xl shadow-xl">
-                                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-2">Liquid Funds Balance</span>
-                                            <div className="text-5xl font-black text-orange-500 tabular-nums">${data.farms[id].money.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
-                                        </div>
+                        {[1, 2].map(id => (
+                            <div key={id} className="space-y-10 pb-12">
+                                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 px-6">
+                                    <div className="border-l-[12px] border-orange-600 pl-10">
+                                        <h2 className="text-7xl font-black text-white italic uppercase tracking-tighter leading-none">{id === 1 ? 'Funny Farm' : 'Ray Operations'}</h2>
+                                        <p className="text-orange-500 font-bold tracking-[0.5em] uppercase mt-4 text-sm italic">Sector Visual Telemetry</p>
                                     </div>
-
-                                    <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 px-6">
-                                        {/* PINNED CONTRACTS */}
-                                        <div className="xl:col-span-4 bg-white/5 border-2 border-orange-500/60 rounded-[3rem] p-10 flex flex-col shadow-2xl relative overflow-hidden backdrop-blur-xl">
-                                            <div className="flex items-center justify-between mb-6">
-                                                <div className="flex items-center gap-6">
-                                                    <div className="bg-orange-600 p-5 rounded-[1.5rem] shadow-lg shadow-orange-600/30"><SvgIcon name="target" className="text-white" size={32} /></div>
-                                                    <div>
-                                                        <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Strategic Mission Progress</h3>
-                                                        <p className="text-orange-500 text-xs font-bold uppercase tracking-[0.2em] mt-1">Goal: Help me to help you (12 / 50 Complete)</p>
-                                                    </div>
-                                                </div>
-                                                <div className="text-right">
-                                                    <span className="text-4xl font-black text-white tabular-nums">24% <span className="text-orange-500 italic">SYNC</span></span>
-                                                </div>
-                                            </div>
-                                            <div className="w-full h-6 bg-white/10 rounded-full border-2 border-white/10 overflow-hidden p-1">
-                                                <div className="h-full bg-gradient-to-r from-orange-600 to-orange-400 rounded-full shadow-[0_0_20px_#f97316] transition-all duration-2000" style={{width: '24%'}}></div>
-                                            </div>
-                                        </div>
-
-                                        <Module title="Unit Deployment" icon="tractor" badge={`${data.assets[id].v.length} Units`}>
-                                            <div className="space-y-4">
-                                                {data.assets[id].v.map((v, i) => (
-                                                    <div key={i} className="bg-black/40 p-5 rounded-[1.5rem] border border-white/5">
-                                                        <div className="flex justify-between items-center mb-3">
-                                                            <span className="text-[11px] font-black text-slate-100 uppercase truncate w-36">{v.name}</span>
-                                                            <span className={`text-[10px] font-black ${v.damage > 0.5 ? 'text-red-500' : 'text-emerald-500'}`}>{Math.floor((1-v.damage)*100)}% HP</span>
-                                                        </div>
-                                                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden"><div className={`h-full ${v.damage > 0.5 ? 'bg-red-500' : 'bg-orange-500 shadow-[0_0_8px_#f97316]'}`} style={{width: `${(1-v.damage)*100}%`}}></div></div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </Module>
-
-                                        <Module title="Asset Logistics" icon="wrench">
-                                            <div className="space-y-8">
-                                                <div><p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 border-l-2 border-orange-500 pl-3">Attachments</p><div className="space-y-3">
-                                                        {data.assets[id].i.map((v, i) => (<div key={i} className="bg-black/30 p-4 rounded-2xl border border-white/5 flex justify-between items-center"><span className="text-[10px] font-bold text-slate-300 truncate w-32">{v.name}</span><SvgIcon name="wrench" size={16} className="text-orange-900" /></div>))}
-                                                </div></div>
-                                                <div><p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 border-l-2 border-blue-500 pl-3">Pallets & Storage</p><div className="space-y-3">
-                                                        {data.assets[id].p.map((v, i) => (<div key={i} className="bg-black/30 p-4 rounded-2xl border border-white/5 flex justify-between items-center"><span className="text-[10px] font-bold text-slate-400 truncate w-32">{v.name}</span><SvgIcon name="package" size={16} className="text-blue-900" /></div>))}
-                                                </div></div>
-                                            </div>
-                                        </Module>
-
-                                        <Module title="Bio-Intel Feed" icon="leaf" color="emerald">
-                                            <div className="space-y-4">
-                                                {data.fields.map((f, i) => (
-                                                    <div key={i} className="bg-black/40 p-5 rounded-[1.5rem] border border-white/5">
-                                                        <div className="flex justify-between items-center mb-3">
-                                                            <span className="text-[11px] font-black text-white italic uppercase">Sector {f.id}</span>
-                                                            <span className="text-[9px] font-black text-emerald-500 uppercase bg-emerald-500/10 px-3 py-1 rounded-lg">{f.fruit}</span>
-                                                        </div>
-                                                        <div className="h-2 bg-white/5 rounded-full overflow-hidden mb-2"><div className="h-full bg-emerald-500 shadow-[0_0_10px_#10b981]" style={{width: `${f.growth}%`}}></div></div>
-                                                        <span className="text-[10px] font-black text-slate-600 uppercase">Integrity: {f.growth}%</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </Module>
-
-                                        <Module title="Industrial Ops" icon="factory">
-                                            <div className="space-y-6">
-                                                {data.factories.filter(pt => String(pt.farmId) === String(id)).map((pt, idx) => (
-                                                    <div key={idx} className="bg-white/5 p-6 rounded-[2rem] border border-white/10">
-                                                        <div className="flex justify-between items-center mb-4">
-                                                            <div className="flex items-center gap-2">
-                                                                <SvgIcon name="utensils" size={16} className="text-orange-400" />
-                                                                <h4 className="text-[10px] font-black text-white uppercase truncate w-32 tracking-tighter">{pt.name}</h4>
-                                                            </div>
-                                                            <span className={`text-[8px] font-black px-3 py-1 rounded-lg ${pt.active ? 'bg-orange-500/20 text-orange-400' : 'bg-red-500/20 text-red-400'}`}>{pt.active ? 'ONLINE' : 'IDLE'}</span>
-                                                        </div>
-                                                        <div className="space-y-4">
-                                                            {pt.inputs.map((inp, i) => (
-                                                                <div key={i} className="space-y-1.5">
-                                                                    <div className="flex justify-between text-[9px] font-black uppercase text-slate-500"><span>{inp.type}</span><span className="text-white italic">{Math.floor(inp.pct)}%</span></div>
-                                                                    <div className="h-1 bg-white/5 rounded-full overflow-hidden"><div className={`h-full ${inp.pct < 20 ? 'bg-red-500' : 'bg-orange-500'}`} style={{width: `${inp.pct}%`}}></div></div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </Module>
-
-                                        {/* PROGRESSIVE ARCHIVE */}
-                                        <div className="xl:col-span-4 bg-white/5 border-2 border-orange-500/40 rounded-[3rem] p-10 min-h-[600px] backdrop-blur-xl shadow-2xl">
-                                            <div className="flex items-center justify-between mb-10 border-b border-white/10 pb-8">
-                                                <div className="flex items-center gap-6"><SvgIcon name="trophy" size={32} className="text-orange-500" /><div><h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Achievement Progress Archive</h3><p className="text-orange-500 text-[10px] font-bold uppercase tracking-[0.4em] mt-1">Status: {earned.length} / 46 Secured</p></div></div>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                                {sortedTrophies.map((trophy, i) => {
-                                                    const isE = earned.includes(trophy.id);
-                                                    return (
-                                                        <div key={i} className={`p-6 rounded-[2rem] border-2 transition-all flex flex-col justify-between h-44 group/item ${isE ? 'bg-orange-500/10 border-orange-500/40 shadow-xl' : 'bg-white/5 border-white/5 opacity-40 grayscale hover:opacity-100 hover:grayscale-0'}`}>
-                                                            <div className="flex justify-between items-start"><div className={`p-3 rounded-xl ${isE ? 'bg-orange-500 text-white shadow-[0_0_15px_#f97316]' : 'bg-white/10 text-slate-700'}`}>{isE ? <SvgIcon name="check" size={18}/> : <SvgIcon name="trophy" size={18}/>}</div><span className={`text-[10px] font-black tracking-widest ${isE ? 'text-orange-500' : 'text-slate-800'}`}>{isE ? 'SECURED' : 'LOCKED'}</span></div>
-                                                            <div className="mt-4 flex-1"><h4 className="text-[12px] font-black uppercase text-white leading-tight tracking-tighter group-hover/item:text-orange-500 transition-colors">{trophy.name}</h4><p className="text-[9px] font-bold text-slate-500 mt-1 italic leading-tight">{trophy.desc}</p></div>
-                                                            <div className="mt-4"><div className="w-full h-1 bg-white/5 rounded-full overflow-hidden border border-white/5"><div className={`h-full transition-all duration-1000 ${isE ? 'bg-orange-500 shadow-[0_0_10px_#f97316]' : 'bg-slate-800'}`} style={{width: isE ? '100%' : '5%'}}></div></div><div className="flex justify-between mt-1"><span className="text-[8px] font-black uppercase text-slate-600 tracking-tighter">Integrity</span><span className="text-[8px] font-black uppercase text-orange-500 tracking-tighter">{isE ? '100%' : '0%'}</span></div></div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
+                                    <div className="bg-white/5 border-2 border-orange-500/40 p-8 rounded-[2.5rem] text-right min-w-[340px] backdrop-blur-xl shadow-xl">
+                                        <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block mb-2">Liquid Funds Balance</span>
+                                        <div className="text-5xl font-black text-orange-500 tabular-nums">${data.farms[id].money.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
                                     </div>
                                 </div>
-                            );
-                        })}
+
+                                <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 px-6">
+                                    <Module title="Unit Deployment" icon="tractor" badge={`${data.assets[id].v.length} Units`}>
+                                        <div className="space-y-4">
+                                            {data.assets[id].v.map((v, i) => (
+                                                <div key={i} className="bg-black/40 p-5 rounded-[1.5rem] border border-white/5">
+                                                    <div className="flex justify-between items-center mb-3">
+                                                        <span className="text-[11px] font-black text-slate-100 uppercase truncate w-36">{v.name}</span>
+                                                        <span className={`text-[10px] font-black ${v.damage > 0.5 ? 'text-red-500' : 'text-emerald-500'}`}>{Math.floor((1-v.damage)*100)}% HP</span>
+                                                    </div>
+                                                    <div className="h-1.5 bg-white/5 rounded-full overflow-hidden"><div className={`h-full ${v.damage > 0.5 ? 'bg-red-500' : 'bg-orange-500 shadow-[0_0_8px_#f97316]'}`} style={{width: `${(1-v.damage)*100}%`}}></div></div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </Module>
+
+                                    <Module title="Asset Logistics" icon="wrench">
+                                        <div className="space-y-8">
+                                            <div><p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4 border-l-2 border-orange-500 pl-3">Attachments</p><div className="space-y-3">
+                                                {data.assets[id].i.map((v, i) => (<div key={i} className="bg-black/30 p-4 rounded-2xl border border-white/5 flex justify-between items-center"><span className="text-[10px] font-bold text-slate-300 truncate w-32">{v.name}</span><SvgIcon name="wrench" size={16} className="text-orange-900" /></div>))}
+                                            </div></div>
+                                        </div>
+                                    </Module>
+
+                                    <Module title="Bio-Intel Feed" icon="leaf" color="emerald">
+                                        <div className="space-y-4">
+                                            {data.fields.map((f, i) => (
+                                                <div key={i} className="bg-black/40 p-5 rounded-[1.5rem] border border-white/5">
+                                                    <div className="flex justify-between items-center mb-3">
+                                                        <span className="text-[11px] font-black text-white italic uppercase">Sector {f.id}</span>
+                                                        <span className="text-[9px] font-black text-emerald-500 uppercase bg-emerald-500/10 px-3 py-1 rounded-lg">{f.fruit}</span>
+                                                    </div>
+                                                    <div className="h-2 bg-white/5 rounded-full overflow-hidden mb-2"><div className="h-full bg-emerald-500 shadow-[0_0_10px_#10b981]" style={{width: `${f.growth}%`}}></div></div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </Module>
+
+                                    <Module title="Industrial Ops" icon="factory">
+                                        <div className="space-y-6">
+                                            {data.factories.filter(pt => String(pt.farmId) === String(id)).map((pt, idx) => (
+                                                <div key={idx} className="bg-white/5 p-6 rounded-[2rem] border border-white/10">
+                                                    <div className="flex justify-between items-center mb-4">
+                                                        <h4 className="text-[10px] font-black text-white uppercase truncate w-32 tracking-tighter">{pt.name}</h4>
+                                                        <span className={`text-[8px] font-black px-3 py-1 rounded-lg ${pt.active ? 'bg-orange-500/20 text-orange-400' : 'bg-red-500/20 text-red-400'}`}>{pt.active ? 'ONLINE' : 'IDLE'}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </Module>
+                                </div>
+                            </div>
+                        ))}
+
+                        {/* UNIFIED TROPHY COMMAND CENTER */}
+                        <div className="xl:col-span-4 bg-white/5 border-2 border-orange-500/40 rounded-[3rem] p-10 backdrop-blur-xl shadow-2xl mx-6">
+                            <div className="flex items-center gap-6 mb-10 border-b border-white/10 pb-8">
+                                <SvgIcon name="trophy" size={32} className="text-orange-500" />
+                                <div>
+                                    <h3 className="text-3xl font-black text-white uppercase italic tracking-tighter">Unified Trophy Command</h3>
+                                    <p className="text-orange-500 text-[10px] font-bold uppercase tracking-[0.4em] mt-1">Status: Cross-Player Achievement Sync Enabled</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+                                {TROPHY_DEFINITIONS.map((t) => {
+                                    const hasW = EARNED_W.includes(t.id);
+                                    const hasR = EARNED_R.includes(t.id);
+                                    
+                                    return (
+                                        <div key={t.id} className={`bg-black/40 border p-6 rounded-[2rem] flex flex-col justify-between transition-all group ${hasW || hasR ? 'border-white/10 opacity-100' : 'border-white/5 opacity-40'}`}>
+                                            <div>
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <SvgIcon name="trophy" size={20} className={hasW && hasR ? "text-emerald-500" : "text-orange-500"} />
+                                                    <div className="flex gap-1.5">
+                                                        <div className={`w-3 h-3 rounded-full ${hasW ? 'bg-orange-500' : 'bg-white/10'}`}></div>
+                                                        <div className={`w-3 h-3 rounded-full ${hasR ? 'bg-blue-500' : 'bg-white/10'}`}></div>
+                                                    </div>
+                                                </div>
+                                                <h3 className="text-[13px] font-black text-white uppercase leading-tight mb-1">{t.name}</h3>
+                                                <p className="text-[10px] text-slate-500 italic font-medium leading-tight h-8 overflow-hidden">{t.desc}</p>
+                                            </div>
+
+                                            <div className="mt-6 space-y-3 border-t border-white/5 pt-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black ${hasW ? 'bg-orange-500 text-white' : 'bg-white/5 text-slate-700'}`}>
+                                                        {hasW ? <SvgIcon name="check" size={12} /> : "W"}
+                                                    </div>
+                                                    <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+                                                        <div className={`h-full ${hasW ? 'bg-orange-500' : 'bg-transparent'}`} style={{width: '100%'}}></div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center gap-3">
+                                                    <div className={`w-6 h-6 rounded-lg flex items-center justify-center text-[10px] font-black ${hasR ? 'bg-blue-500 text-white' : 'bg-white/5 text-slate-700'}`}>
+                                                        {hasR ? <SvgIcon name="check" size={12} /> : "R"}
+                                                    </div>
+                                                    <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+                                                        <div className={`h-full ${hasR ? 'bg-blue-500' : 'bg-transparent'}`} style={{width: '100%'}}></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
                     </div>
                 </div>
             );
         };
+
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
