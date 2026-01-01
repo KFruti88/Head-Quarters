@@ -22,7 +22,7 @@
     "road": 2
   },
   "ray": {
-    "help": 12,
+    "help": 100,
     "road": 100,
     "plant": 100,
     "hopp": 100,
@@ -40,6 +40,33 @@
     "hard": 100,
     "land": 100,
     "machine": 100,
-    "colourful": 100
+    "colourful": 100,
+    "farming_nature": 100,
+    "plot_thickens": 100,
+    "helper_a": 100,
+    "sprinkle": 100,
+    "sow_easy": 100,
+    "large_scale": 100,
+    "field": 100,
+    "long_haul": 100,
+    "van_gogh": 100,
+    "fell_off": 100,
+    "fix_me": 100,
+    "fluffiness": 100,
+    "three_piggies": 100,
+    "clucky": 100,
+    "honey": 100,
+    "cowherd": 100,
+    "highly_cultivated": 100,
+    "gone_cotton": 100,
+    "raisin_stakes": 100,
+    "olea": 100,
+    "grain": 100,
+    "rock_on": 100,
+    "wood": 100,
+    "stumped": 100,
+    "game_on": 100,
+    "cheese_it": 100,
+    "never_too_late": 100
   }
 }
